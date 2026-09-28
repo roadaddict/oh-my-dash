@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Must match the Worker's name in the Cloudflare dashboard (Workers Builds checks this).
+  "name": "oh-my-dashboard",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  // No id/name on purpose: wrangler inherits the D1 database already bound as "DB"
+  // in the dashboard (or creates one on first deploy if there is none).
+  "d1_databases": [{ "binding": "DB" }],
+  // ACCESS_TEAM_DOMAIN and ACCESS_AUD identify *your* Cloudflare Access application, so
+  // they are set as dashboard variables (Worker → Settings → Variables and Secrets),
+  // not here — every fork/deployment needs its own values. They aren't secret (both
+  // appear in every Access login redirect), only per-deployment:
+  //   ACCESS_TEAM_DOMAIN = "<your-team>.cloudflareaccess.com"
+  //   ACCESS_AUD         = Access → your application → Overview → "Application Audience (AUD) Tag"
+  // Keep variables set in the dashboard (the two above, plus e.g. ALLOWED_IPS) across deploys.
+  "keep_vars": true,
+  "observability": { "enabled": true }
+}
