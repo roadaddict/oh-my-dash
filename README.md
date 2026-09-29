@@ -1,26 +1,29 @@
 # FLORA-HOME
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/roadaddict/oh-my-dash) · [MIT licensed](LICENSE)
+**A family smart display that runs on your own Cloudflare account.** Clock, weather, calendar, shared lists, chores, meal plan, transit, music and smart-home tiles on one dark, glassy dashboard. It's a plain web app, so it works on any device with a browser, and **your data never leaves your Cloudflare account.**
 
-A DAKboard-style smart display with dark glassmorphism styling and four swipeable screens. **It's a web app, not an Android app:** it runs in any modern browser on any device (Android, iPhone/iPad, Windows, macOS, Linux, a Raspberry Pi kiosk, a smart-TV browser…). A wall-mounted tablet is just the main use case it's tuned for. The page is a single `public/index.html` (HTML, CSS and vanilla JS, no build step). A small Cloudflare Worker serves it and adds **family sync**: open the same URL on all your devices and they share the same lists, chores, meal plan, note and settings.
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/roadaddict/oh-my-dash)
+
+![License: MIT](https://img.shields.io/badge/license-MIT-blue) ![Runs on Cloudflare Workers](https://img.shields.io/badge/runs%20on-Cloudflare%20Workers-F38020) ![No build step](https://img.shields.io/badge/build-none-brightgreen) ![Web app: any browser](https://img.shields.io/badge/platform-any%20browser-informational)
 
 ![FLORA-HOME on a portrait tablet: the Home screen (clock, weather, transit, calendar, sensors, Now Playing) and the Family screen (calendar, lists, chores, meal plan). Demo data.](docs/screenshot.jpg)
 
 *Home and Family screens at 800×1333, the portrait tablet size it's tuned for. Demo data; the sample widgets are marked **Demo** until you connect real sources.*
 
-## ⚡ TL;DR
-- **What:** a smart display with four swipeable screens (Home · Family · Frame · Info). It's a **web app, so it's cross-platform**: any browser on any OS works. **Family sync** keeps lists, chores, the meal plan and settings in step across all your devices (tablet, phones, laptop) automatically.
-- **Stack:** one `public/index.html` (vanilla JS, no build step) plus a small **Cloudflare Worker** with a **D1** database, protected by **Cloudflare Access**.
-- **Try it in 30 seconds:** open `public/index.html` in a browser. No install; it runs in *local mode* with demo data, kept on that device only.
-- **Run it for real:** follow **[First 10 minutes](#-first-10-minutes)** (Deploy button → D1 → Access → sign in). Everything else (calendar, Spotify, Strava, Aqara, commute…) is optional and added later from the **⚙** drawer.
-- **On a device:** just open your Worker's URL and sign in. On a wall-mounted Android tablet, [Fully Kiosk Browser](#-tablet-fully-kiosk-browser) makes it a full-screen kiosk (optional; any browser works).
+## Why FLORA-HOME
+- 🔒 **Your data stays in your Cloudflare account.** Settings, lists, chores, meals and layouts live in *your* D1 database, behind *your* Cloudflare Access login. No third-party backend, no sign-up with the author, no analytics or telemetry. See [Privacy & your data](#privacy--your-data).
+- 🌍 **Cross-platform.** A web app, not an Android app: it runs in any modern browser on Android, iPhone/iPad, Windows, macOS, Linux or a Raspberry Pi kiosk. See [Where it works](#where-it-works).
+- 🔄 **Family sync.** Open the same URL on every device and lists, chores, the meal plan, notes and settings stay in step (about 15 s).
+- 🧩 **Yours to arrange.** Four swipeable screens and a tiling-style layout editor (▦): drag, swap, add or remove any widget, per device and orientation.
+- 🪶 **Light and simple.** One `public/index.html` (vanilla JS, no build step) plus a small Worker. Widgets poll only while visible, so it's gentle on a home connection ([numbers](#-bandwidth)).
+- 🔌 **Plugs into what you use:** Google Calendar and iCal, Spotify, Strava, Aqara sensors, public transport (VBB, Transitous), TomTom, Home Assistant and more; all optional.
 
-**Jump to:** [First 10 minutes](#-first-10-minutes) · [What you get](#what-you-get) · [How sync works](#how-sync-works) · [Cloudflare setup](#cloudflare-setup) · [Calendar](#-google-family-calendar) · [Lists](#-lists-tablet-phones-voice) · [Spotify](#-spotify-now-playing--your-playlists) · [Commute](#-commute-public-transport-car-bike-on-foot) · [Strava](#-strava-your-familys-stats) · [Aqara](#-aqara-sensors-with-google-home) · [Tablet](#-tablet-fully-kiosk-browser) · [Configure](#configure) · [Develop](#local-development)
+**Contents:** [Quick start](#-first-10-minutes) · [What you get](#what-you-get) · [Where it works](#where-it-works) · [Privacy & your data](#privacy--your-data) · [How sync works](#how-sync-works) · [Cloudflare setup](#cloudflare-setup) · [Calendar](#-google-family-calendar) · [Lists](#-lists-tablet-phones-voice) · [Spotify](#-spotify-now-playing--your-playlists) · [Commute](#-commute-public-transport-car-bike-on-foot) · [Strava](#-strava-your-familys-stats) · [Aqara](#-aqara-sensors-with-google-home) · [Tablet](#-tablet-fully-kiosk-browser) · [Configure](#configure) · [Develop](#local-development)
 
 ---
 
 ## 🚀 First 10 minutes
-The fastest path to a working, signed-in dashboard. You need a free Cloudflare account and a Gmail (or any) address to sign in with.
+Just want a look first? Open `public/index.html` in a browser: no install, demo data, kept on that device only (*local mode*). For the real thing, here's the fastest path to a working, signed-in dashboard. You need a Cloudflare account (the free plan should be enough for a household; check Cloudflare's pricing for current limits) and an email address to sign in with.
 1. Click **Deploy to Cloudflare** at the top (or *Import a repository* by hand, step 2 below). This copies the repo into your GitHub account, creates the Worker (keep the name **`oh-my-dashboard`**) and connects the repo for auto-deploy.
 2. **Storage & Databases → D1 → Create**, then bind it to the Worker as **`DB`** (Worker → Settings → Bindings). No schema needed.
 3. **Zero Trust → Access → Applications → Self-hosted** → add the Worker's hostname, with a policy that allows your (and your family's) emails.
@@ -60,6 +63,41 @@ Switch screens by tapping the tabs, swiping, or with the ← → keys. You can a
 **Edit layout (▦ button):** every screen is a tree of splits, like a tiling window manager, so each column sizes its own widgets. Drag a yellow handle and only the two widgets it separates change size; the handle pushes on through the next widget in that column once one hits its minimum. **Tap two widgets to swap them** (any two, whatever their size; the transit app isn't reloaded). **Change** on a widget swaps in any widget from any screen, including ones no screen uses yet, and *Restore* brings the original back. Layout changes belong to **this device and this orientation**: resizing, swapping or hiding a header on the laptop in landscape never touches the tablet, or the laptop in portrait. They're kept in the cloud per device (so they survive a browser reset) but never applied to another device; a browser that has never opened the dashboard starts from the default layouts. Each main column is outlined and has a **− n rows +** control on its bottom edge (0–4 widgets; + asks which widget and adds it at the bottom, 0 removes the column); the edit bar has the same control for the screen's full-width rows, and every widget has **Add right / Add below / Remove**, so any widget can go on any screen. The widget picker is grouped (Time & weather, Family, Photos/music/news, Getting around, Home & web, Fitness & markets). Handles snap to a 10 px grid, so edges in different columns line up. The small **Header** switch in each widget's top-right corner hides or shows its title bar (this device, this orientation). While editing, **tap the dashboard name** in the status bar to rename it (also ⚙ → Status bar). *Reset screen* restores the default for this screen, on this device, in this orientation. Widgets refresh themselves, so they have no Reload button; an amber **Retry** appears only while a widget's data can't be loaded (embedded pages like the Google Calendar embed keep Reload). The top of ⚙ Settings has **Widget background**: 0 · 5 · 10 · 15 · 20 % (0 = no background, 20 = the frosted glass, default), and **Photos behind the widgets** (the Photos slideshow on every screen). Both preview live.
 
 </details>
+
+## Where it works
+It's a web app served by your own Worker, so anything with a modern browser can show it. Nothing to install on the device.
+
+| Device | How to use it | Notes |
+|---|---|---|
+| **Wall-mounted Android tablet** (the main use case) | Open the URL in [Fully Kiosk Browser](#-tablet-fully-kiosk-browser) for a full-screen kiosk | The layout is tuned for a 10" tablet (portrait 800×1333, or landscape). Developed and used on this setup. |
+| **Phone (Android or iPhone)** | Open the URL in the browser, then *Add to Home Screen* | Great as a remote for lists, chores and settings. |
+| **iPad, Windows, macOS, Linux, Raspberry Pi, smart-TV browser** | Open the URL in any current browser (full-screen mode for a kiosk) | Plain HTML/JS, so it should work in current Chrome, Edge, Firefox and Safari. Mostly checked on Chrome-based browsers; report anything odd. |
+
+Some extras depend on the browser: voice input for lists uses the browser's speech recognition (Chrome on Android 13+ and desktop; other browsers fall back to the keyboard's own mic). The backend (sync, Spotify, Aqara, the feed proxy) needs the Cloudflare Worker; without it the page still runs in *local mode*.
+
+## Privacy & your data
+**Short version:** the project has no server of its own. Everything runs in your Cloudflare account, and nobody else, including the author, gets your data.
+
+**What is stored, and where**
+| Data | Stored in |
+|---|---|
+| Settings, layouts, lists, chores, meal plan, family note | **Your D1 database** |
+| Spotify, Strava and Aqara sign-in tokens | A private table in **your D1 database**; only the Worker reads it, and it is never sent to browsers |
+| Per-device data-usage summaries (for ⚙ → *Data usage*) | Your D1 database |
+| Who can open the dashboard | **Your Cloudflare Access** policy (or an `ALLOWED_IPS` list); the API refuses every request until one is configured |
+| Device-only state (local mode, the widget cache, photos cache) | That device's browser storage |
+
+**What leaves your account.** The dashboard needs live data, so the browser or your Worker calls public services, but only the ones your widgets use:
+- **Weather and air quality** ([Open-Meteo](https://open-meteo.com/)): your configured coordinates.
+- **Place search and routing** (OpenStreetMap Nominatim, Photon, OSRM): the addresses you type into ⚙ → Commute; **transit** (VBB, Transitous), **planes** (adsb.fi, adsb.lol, adsbdb), **markets** (CoinGecko, Finnhub), **holidays** (Nager.Date) and **sports** (ESPN): the queries needed for those widgets.
+- **News, calendars and photos:** whatever feeds and links *you* add. In cloud mode, feeds are fetched through your own Worker proxy.
+- **Spotify, Strava, Aqara, TomTom, Todoist, Google Calendar embeds:** only if you connect them, and then they see what those services normally see.
+- **Page assets:** the browser loads fonts from Google Fonts and the calendar libraries from jsDelivr. Opening the phone-lists QR code sends that page's URL to api.qrserver.com to draw the code.
+- **Cloudflare itself** naturally sees the traffic to your Worker and handles the Access login, as with any Cloudflare-hosted site.
+
+**What it does not do:** no analytics, no telemetry, no ads, no account with the author, and nothing is reported back to the author or this repository.
+
+**You stay in control.** ⚙ → *Backup & access* has **Download backup** and **Restore**. Deleting the Worker and its D1 database removes everything. The code is MIT-licensed and small enough to read, so you can check all of this yourself.
 
 ## How sync works
 - On load, the page calls `/api/state`. If it answers, the dashboard runs in **cloud mode**:
