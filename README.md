@@ -203,23 +203,6 @@ DATA_WIDGETS: Solar | https://ha.example.com/api/states/sensor.solar | state | k
 
 > 🔐 Put tokens (Todoist, Finnhub, TomTom, Home Assistant) in ⚙ rather than in `CONFIG`. The repo is public, while D1 is only readable by signed-in family members. Spotify and Aqara keys go in **Worker secrets**, and their OAuth tokens never leave the Worker.
 
-## DAKboard feature parity
-| DAKboard feature | Here |
-|---|---|
-| Multiple screens, custom layouts, rotation & scheduling | ✅ `LAYOUTS`, `SCREEN_ROTATE_SEC`, `SCREEN_SCHEDULE`. No drag-and-drop editor. |
-| Display schedule (dim / off) | ✅ Night mode: dim, minimal clock or black; tap to wake |
-| Clock (analog/digital), world clocks | ✅ |
-| Weather: current, daily, hourly, sun, UV, moon | ✅ Open-Meteo, no key |
-| Calendars: agenda / week / month / up next | ✅ iCal feeds (native views) or Google embed (Family calendar); public holidays |
-| Photos: slideshow, Ken Burns, fill/fit, captions | ✅ URLs, RSS/Flickr, Google Photos shared album (unofficial) |
-| News headlines & ticker | ✅ |
-| Shared lists, chores, meal planner, messages | ✅ Synced across the family via D1; optional Todoist tab |
-| Countdowns, quote of the day | ✅ |
-| Stocks & crypto · sports · commute | ✅ CoinGecko / Finnhub · ESPN · TomTom or OSRM |
-| *(bonus)* Planes overhead | ✅ Live ADS-B radar from adsb.fi / adsb.lol, with airline and route from adsbdb |
-| Custom JSON data (Home Assistant…) · web page / video block · custom CSS | ✅ |
-| Fitness (Strava) | ✅ Family Strava stats (week, 4 weeks, year, last activity) |
-
 ## 🔄 Is it auto-deploying?
 **Workers & Pages → oh-my-dashboard → Settings → Build** should list the Git repository and branch (e.g. `main`), with deploy command `npx wrangler deploy`. Every push then shows up under **Deployments** with its commit message.
 If no repository is connected, click **Connect** and pick the repo and branch, or deploy by hand from a checkout with `npx wrangler login && npx wrangler deploy`.
