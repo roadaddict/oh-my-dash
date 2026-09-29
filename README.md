@@ -15,18 +15,30 @@
 ---
 
 ## 🚀 First 10 minutes
-*Ten minutes if Cloudflare hasn't moved the buttons again.* You need a Cloudflare account (the free plan should do for a household; check their pricing for current limits) and an email address to sign in with. Just curious? Open `public/index.html` in a browser for a demo that keeps everything on that device.
+*Ten minutes, if Cloudflare hasn't moved the buttons again.* You need a Cloudflare account and an email to sign in with. Just curious? Open `public/index.html` in a browser: demo data, stays on that device.
 
-1. **Fork this repo** (button, top right). A fork keeps a line back to here, so **Sync fork** brings you future updates. A copy would not.
-2. **Cloudflare → Workers & Pages → Create → Import a repository** → pick your fork. Name the Worker **`oh-my-dashboard`** (it must match `wrangler.jsonc`) and leave the deploy command alone.
-3. **Storage & Databases → D1 → Create**, then bind it to the Worker as **`DB`** (Worker → Settings → Bindings). No schema needed, it builds its own.
-4. **Zero Trust → Access → Applications → Self-hosted** → your Worker's hostname, with a policy for your family's emails. This is the front door; without it the API says no to everyone, which is rude but safe.
-5. Copy that application's **team domain** and **AUD tag** into the Worker's variables `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` (Worker → Settings → Variables and Secrets).
-6. Open `https://oh-my-dashboard.<you>.workers.dev/`, sign in, and enjoy a very expensive-looking clock. Spotify, Strava, Aqara & co. are optional and live in the ⚙ drawer.
+**Pick one:**
 
-**Shortcuts, for the impatient:** the **Deploy to Cloudflare** button at the top does steps 1–2 in one click, but it makes a *copy*, so no easy updates. Prefer no GitHub copy at all? `git clone https://github.com/roadaddict/oh-my-dash my-dashboard && cd my-dashboard && npx wrangler login && npx wrangler deploy` (creates the Worker and a D1 database), then do steps 4–5; update with `git pull && npx wrangler deploy`. More detail in [Cloudflare setup](#cloudflare-setup).
+**A. Fork** (auto-deploys on every push; *Sync fork* brings you updates)
+1. **Fork this repo.**
+2. **Cloudflare → Workers & Pages → Create → Import a repository** → your fork. Name the Worker **`oh-my-dashboard`** (must match `wrangler.jsonc`); keep the default deploy command.
+3. **Storage & Databases → D1 → Create**, then bind it as **`DB`** (Worker → Settings → Bindings). No schema needed.
 
-> The Worker's name, and so its `*.workers.dev` address, comes from `wrangler.jsonc`, whatever you call your fork. Renaming it changes the address and the Access setup.
+**B. No GitHub copy** (deploy from your machine, needs Node.js)
+```bash
+git clone https://github.com/roadaddict/oh-my-dash my-dashboard && cd my-dashboard
+npx wrangler login
+npx wrangler deploy   # creates the Worker and a D1 database bound as DB
+```
+Update later with `git pull && npx wrangler deploy`.
+
+**Then, either way:**
+
+4. **Zero Trust → Access → Applications → Self-hosted** → your Worker's hostname, with a policy for your family's emails. Until this exists, the API refuses everyone.
+5. Put that application's **team domain** and **AUD tag** into the Worker's variables `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` (Worker → Settings → Variables and Secrets).
+6. Open `https://oh-my-dashboard.<you>.workers.dev/`, sign in, admire your very expensive-looking clock. Spotify, Strava, Aqara & co. are optional, in the ⚙ drawer.
+
+More detail in [Cloudflare setup](#cloudflare-setup).
 
 ---
 
