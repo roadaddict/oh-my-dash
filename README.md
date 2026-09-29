@@ -27,6 +27,14 @@ The fastest path to a working, signed-in dashboard. You need a free Cloudflare a
 4. Copy that application's **team domain** and **AUD tag** into the Worker's dashboard variables `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` (Worker → Settings → Variables and Secrets).
 5. Open `https://<your-worker>.workers.dev/`, sign in, and you're up — everything else (Spotify, Strava, Aqara, TomTom…) is optional and can be added later from the ⚙ drawer or the steps below.
 
+**Prefer not to have a copy of the repo in your GitHub account?** Deploy straight from a local clone (needs Node.js). Nothing is copied to GitHub, and you skip step 1:
+```bash
+git clone https://github.com/roadaddict/oh-my-dash my-dashboard && cd my-dashboard
+npx wrangler login
+npx wrangler deploy      # creates the Worker and, on first deploy, a D1 database bound as DB
+```
+Then continue with steps 3–5 above (Access and the two variables); step 2 is already done by the deploy. To update later: `git pull && npx wrangler deploy`. There's no auto-deploy this way. If you want that, fork the repo and use *Import a repository* (see [Cloudflare setup](#cloudflare-setup)).
+
 > The Worker (and so its `*.workers.dev` address) is named `oh-my-dashboard`, from `wrangler.jsonc`, whatever you call the repo. Keep that name when the Deploy button asks; renaming the Worker would change the address and the Access setup.
 
 ---
