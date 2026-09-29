@@ -12,7 +12,7 @@
 
 ## Why FLORA-HOME
 - 🔒 **Your data stays in your Cloudflare account.** Settings, lists, chores, meals and layouts live in *your* D1 database, behind *your* Cloudflare Access login. No third-party backend, no sign-up with the author, no analytics or telemetry. See [Privacy & your data](#privacy--your-data).
-- 🌍 **Cross-platform.** A web app, not an Android app: it runs in any modern browser on Android, iPhone/iPad, Windows, macOS, Linux or a Raspberry Pi kiosk. See [Where it works](#where-it-works).
+- 🌍 **Cross-platform.** A web app, not a native app: it runs in any modern browser on a tablet, smart display, TV, phone or computer. See [Where it works](#where-it-works).
 - 🔄 **Family sync.** Open the same URL on every device and lists, chores, the meal plan, notes and settings stay in step (about 15 s).
 - 🧩 **Yours to arrange.** Four swipeable screens and a tiling-style layout editor (▦): drag, swap, add or remove any widget, per device and orientation.
 - 🪶 **Light and simple.** One `public/index.html` (vanilla JS, no build step) plus a small Worker. Widgets poll only while visible, so it's gentle on a home connection ([numbers](#-bandwidth)).
@@ -69,9 +69,9 @@ It's a web app served by your own Worker, so anything with a modern browser can 
 
 | Device | How to use it | Notes |
 |---|---|---|
-| **Wall-mounted Android tablet** (the main use case) | Open the URL in [Fully Kiosk Browser](#-tablet-fully-kiosk-browser) for a full-screen kiosk | The layout is tuned for a 10" tablet (portrait 800×1333, or landscape). Developed and used on this setup. |
-| **Phone (Android or iPhone)** | Open the URL in the browser, then *Add to Home Screen* | Great as a remote for lists, chores and settings. |
-| **iPad, Windows, macOS, Linux, Raspberry Pi, smart-TV browser** | Open the URL in any current browser (full-screen mode for a kiosk) | Plain HTML/JS, so it should work in current Chrome, Edge, Firefox and Safari. Mostly checked on Chrome-based browsers; report anything odd. |
+| **Wall-mounted tablet, smart display or TV** (the main use case) | Open the URL in a browser, full-screen. On Android, [Fully Kiosk Browser](#-tablet-fully-kiosk-browser) makes it a proper kiosk | Any screen size works; the layout is tuned for a 10" tablet (portrait 800×1333, or landscape) and adapts to others. |
+| **Phone** | Open the URL in the browser, then *Add to Home Screen* | Great as a remote for lists, chores and settings. |
+| **Laptop, desktop or Raspberry Pi** | Open the URL in any current browser (full-screen mode for a kiosk) | Plain HTML/JS, so it should work in current Chrome, Edge, Firefox and Safari. Mostly checked on Chrome-based browsers; report anything odd. |
 
 Some extras depend on the browser: voice input for lists uses the browser's speech recognition (Chrome on Android 13+ and desktop; other browsers fall back to the keyboard's own mic). The backend (sync, Spotify, Aqara, the feed proxy) needs the Cloudflare Worker; without it the page still runs in *local mode*.
 
@@ -218,9 +218,9 @@ Yes. In cloud mode, settings, lists, chores, meals, the note and layouts live in
 What *can* look like a reset: a device that saved settings while it was in **local mode** (before the Worker/API existed, or while not signed in) kept them in that browser only. The dashboard now uploads such on-device settings and lists **once**, automatically, when the cloud has none. For peace of mind: ⚙ → *Backup & access* → **Download backup** / **Restore**, and D1 keeps 30 days of point-in-time history (`npx wrangler d1 time-travel restore <database> --timestamp=…`).
 
 ## 📱 Tablet: Fully Kiosk Browser
-*Optional and Android-only. The dashboard itself needs no app: on an iPad, PC, Mac or phone, open the URL in a browser (and use Add to Home Screen / full-screen mode if you like).*
+*Optional, Android-only. The dashboard itself needs no app: on any other device, just open the URL in a browser (and use Add to Home Screen / full-screen mode if you like).*
 
-For a wall-mounted **Android** tablet, use [Fully Kiosk Browser](https://www.fully-kiosk.com/) rather than a custom APK. PLUS is a one-time €7.90 per device and adds remote admin (reload, brightness, start URL, screenshots), plus the free basic tier of Fully Cloud.
+If your wall display is an **Android** tablet, use [Fully Kiosk Browser](https://www.fully-kiosk.com/) rather than a custom APK. PLUS is a one-time €7.90 per device and adds remote admin (reload, brightness, start URL, screenshots), plus the free basic tier of Fully Cloud.
 - **Start URL:** `https://oh-my-dashboard.<you>.workers.dev/` (or your custom domain) (add `?START_SCREEN=frame` or other URL params for per-device tweaks)
 - Turn on *Keep screen on*, *Autostart on boot*, *Fullscreen*, *Autoplay videos*, and third-party cookies (see above)
 - On a typical 10" tablet (e.g. Nokia T21/T20): leave Fully's zoom at 100 %. If you prefer bigger text, 110–125 % still fits; the layout adapts to the smaller CSS viewport.
