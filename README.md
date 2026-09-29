@@ -21,13 +21,13 @@ A DAKboard-style smart display for a wall-mounted Android tablet, with dark glas
 
 ## 🚀 First 10 minutes
 The fastest path to a working, signed-in dashboard. You need a free Cloudflare account and a Gmail (or any) address to sign in with.
-1. Click **Deploy to Cloudflare** at the top (or *Import a repository* by hand, step 2 below). This creates the Worker and connects the repo for auto-deploy.
+1. Click **Deploy to Cloudflare** at the top (or *Import a repository* by hand, step 2 below). This copies the repo into your GitHub account, creates the Worker (keep the name **`oh-my-dashboard`**) and connects the repo for auto-deploy.
 2. **Storage & Databases → D1 → Create**, then bind it to the Worker as **`DB`** (Worker → Settings → Bindings). No schema needed.
 3. **Zero Trust → Access → Applications → Self-hosted** → add the Worker's hostname, with a policy that allows your (and your family's) emails.
 4. Copy that application's **team domain** and **AUD tag** into the Worker's dashboard variables `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` (Worker → Settings → Variables and Secrets).
 5. Open `https://<your-worker>.workers.dev/`, sign in, and you're up — everything else (Spotify, Strava, Aqara, TomTom…) is optional and can be added later from the ⚙ drawer or the steps below.
 
-> The Worker, the repo and the URL keep the technical name `oh-my-dashboard`; renaming the Worker would change the address and the Access setup.
+> The Worker (and so its `*.workers.dev` address) is named `oh-my-dashboard`, from `wrangler.jsonc`, whatever you call the repo. Keep that name when the Deploy button asks; renaming the Worker would change the address and the Access setup.
 
 ---
 
