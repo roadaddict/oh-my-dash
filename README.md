@@ -10,6 +10,26 @@
 
 *Home and Family screens at 800×1333, the portrait tablet size it's tuned for. Demo data; the sample widgets are marked **Demo** until you connect real sources.*
 
+**Contents:** [Quick start](#-first-10-minutes) · [What you get](#what-you-get) · [Where it works](#where-it-works) · [Privacy & your data](#privacy--your-data) · [How sync works](#how-sync-works) · [Cloudflare setup](#cloudflare-setup) · [Calendar](#-google-family-calendar) · [Lists](#-lists-tablet-phones-voice) · [Spotify](#-spotify-now-playing--your-playlists) · [Commute](#-commute-public-transport-car-bike-on-foot) · [Strava](#-strava-your-familys-stats) · [Aqara](#-aqara-sensors-with-google-home) · [Tablet](#-tablet-fully-kiosk-browser) · [Configure](#configure) · [Develop](#local-development)
+
+---
+
+## 🚀 First 10 minutes
+*Ten minutes if Cloudflare hasn't moved the buttons again.* You need a Cloudflare account (the free plan should do for a household; check their pricing for current limits) and an email address to sign in with. Just curious? Open `public/index.html` in a browser for a demo that keeps everything on that device.
+
+1. **Fork this repo** (button, top right). A fork keeps a line back to here, so **Sync fork** brings you future updates. A copy would not.
+2. **Cloudflare → Workers & Pages → Create → Import a repository** → pick your fork. Name the Worker **`oh-my-dashboard`** (it must match `wrangler.jsonc`) and leave the deploy command alone.
+3. **Storage & Databases → D1 → Create**, then bind it to the Worker as **`DB`** (Worker → Settings → Bindings). No schema needed, it builds its own.
+4. **Zero Trust → Access → Applications → Self-hosted** → your Worker's hostname, with a policy for your family's emails. This is the front door; without it the API says no to everyone, which is rude but safe.
+5. Copy that application's **team domain** and **AUD tag** into the Worker's variables `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` (Worker → Settings → Variables and Secrets).
+6. Open `https://oh-my-dashboard.<you>.workers.dev/`, sign in, and enjoy a very expensive-looking clock. Spotify, Strava, Aqara & co. are optional and live in the ⚙ drawer.
+
+**Shortcuts, for the impatient:** the **Deploy to Cloudflare** button at the top does steps 1–2 in one click, but it makes a *copy*, so no easy updates. Prefer no GitHub copy at all? `git clone https://github.com/roadaddict/oh-my-dash my-dashboard && cd my-dashboard && npx wrangler login && npx wrangler deploy` (creates the Worker and a D1 database), then do steps 4–5; update with `git pull && npx wrangler deploy`. More detail in [Cloudflare setup](#cloudflare-setup).
+
+> The Worker's name, and so its `*.workers.dev` address, comes from `wrangler.jsonc`, whatever you call your fork. Renaming it changes the address and the Access setup.
+
+---
+
 ## Why FLORA-HOME
 - 🔒 **Your data stays in your Cloudflare account.** Settings, lists, chores, meals and layouts live in *your* D1 database, behind *your* Cloudflare Access login. No third-party backend, no sign-up with the author, no analytics or telemetry. See [Privacy & your data](#privacy--your-data).
 - 🌍 **Cross-platform.** A web app, not a native app: it runs in any modern browser on a tablet, smart display, TV, phone or computer. See [Where it works](#where-it-works).
@@ -17,30 +37,6 @@
 - 🧩 **Yours to arrange.** Four swipeable screens and a tiling-style layout editor (▦): drag, swap, add or remove any widget, per device and orientation.
 - 🪶 **Light and simple.** One `public/index.html` (vanilla JS, no build step) plus a small Worker. Widgets poll only while visible, so it's gentle on a home connection ([numbers](#-bandwidth)).
 - 🔌 **Plugs into what you use:** Google Calendar and iCal, Spotify, Strava, Aqara sensors, public transport (VBB, Transitous), TomTom, Home Assistant and more; all optional.
-
-**Contents:** [Quick start](#-first-10-minutes) · [What you get](#what-you-get) · [Where it works](#where-it-works) · [Privacy & your data](#privacy--your-data) · [How sync works](#how-sync-works) · [Cloudflare setup](#cloudflare-setup) · [Calendar](#-google-family-calendar) · [Lists](#-lists-tablet-phones-voice) · [Spotify](#-spotify-now-playing--your-playlists) · [Commute](#-commute-public-transport-car-bike-on-foot) · [Strava](#-strava-your-familys-stats) · [Aqara](#-aqara-sensors-with-google-home) · [Tablet](#-tablet-fully-kiosk-browser) · [Configure](#configure) · [Develop](#local-development)
-
----
-
-## 🚀 First 10 minutes
-Just want a look first? Open `public/index.html` in a browser: no install, demo data, kept on that device only (*local mode*). For the real thing, here's the fastest path to a working, signed-in dashboard. You need a Cloudflare account (the free plan should be enough for a household; check Cloudflare's pricing for current limits) and an email address to sign in with.
-1. Click **Deploy to Cloudflare** at the top (or *Import a repository* by hand, step 2 below). This copies the repo into your GitHub account, creates the Worker (keep the name **`oh-my-dashboard`**) and connects the repo for auto-deploy.
-2. **Storage & Databases → D1 → Create**, then bind it to the Worker as **`DB`** (Worker → Settings → Bindings). No schema needed.
-3. **Zero Trust → Access → Applications → Self-hosted** → add the Worker's hostname, with a policy that allows your (and your family's) emails.
-4. Copy that application's **team domain** and **AUD tag** into the Worker's dashboard variables `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` (Worker → Settings → Variables and Secrets).
-5. Open `https://<your-worker>.workers.dev/`, sign in, and you're up — everything else (Spotify, Strava, Aqara, TomTom…) is optional and can be added later from the ⚙ drawer or the steps below.
-
-**Prefer not to have a copy of the repo in your GitHub account?** Deploy straight from a local clone (needs Node.js). Nothing is copied to GitHub, and you skip step 1:
-```bash
-git clone https://github.com/roadaddict/oh-my-dash my-dashboard && cd my-dashboard
-npx wrangler login
-npx wrangler deploy      # creates the Worker and, on first deploy, a D1 database bound as DB
-```
-Then continue with steps 3–5 above (Access and the two variables); step 2 is already done by the deploy. To update later: `git pull && npx wrangler deploy`. There's no auto-deploy this way. If you want that, fork the repo and use *Import a repository* (see [Cloudflare setup](#cloudflare-setup)).
-
-> The Worker (and so its `*.workers.dev` address) is named `oh-my-dashboard`, from `wrangler.jsonc`, whatever you call the repo. Keep that name when the Deploy button asks; renaming the Worker would change the address and the Access setup.
-
----
 
 ## What you get
 
