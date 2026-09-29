@@ -2,18 +2,18 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/roadaddict/oh-my-dash) · [MIT licensed](LICENSE)
 
-A DAKboard-style smart display for a wall-mounted Android tablet, with dark glassmorphism styling and four swipeable screens. The page is a single `public/index.html` (HTML, CSS and vanilla JS, no build step). A small Cloudflare Worker serves it and adds **family sync**: everyone's phones and the tablet share the same lists, chores, meal plan, note and settings.
+A DAKboard-style smart display with dark glassmorphism styling and four swipeable screens. **It's a web app, not an Android app:** it runs in any modern browser on any device (Android, iPhone/iPad, Windows, macOS, Linux, a Raspberry Pi kiosk, a smart-TV browser…). A wall-mounted tablet is just the main use case it's tuned for. The page is a single `public/index.html` (HTML, CSS and vanilla JS, no build step). A small Cloudflare Worker serves it and adds **family sync**: open the same URL on all your devices and they share the same lists, chores, meal plan, note and settings.
 
 ![FLORA-HOME on a portrait tablet: the Home screen (clock, weather, transit, calendar, sensors, Now Playing) and the Family screen (calendar, lists, chores, meal plan). Demo data.](docs/screenshot.jpg)
 
 *Home and Family screens at 800×1333, the portrait tablet size it's tuned for. Demo data; the sample widgets are marked **Demo** until you connect real sources.*
 
 ## ⚡ TL;DR
-- **What:** a wall-tablet smart display with four swipeable screens (Home · Family · Frame · Info), and **family sync** so phones and the tablet share lists, chores, the meal plan and settings.
+- **What:** a smart display with four swipeable screens (Home · Family · Frame · Info). It's a **web app, so it's cross-platform**: any browser on any OS works. **Family sync** keeps lists, chores, the meal plan and settings in step across all your devices (tablet, phones, laptop) automatically.
 - **Stack:** one `public/index.html` (vanilla JS, no build step) plus a small **Cloudflare Worker** with a **D1** database, protected by **Cloudflare Access**.
 - **Try it in 30 seconds:** open `public/index.html` in a browser. No install; it runs in *local mode* with demo data, kept on that device only.
 - **Run it for real:** follow **[First 10 minutes](#-first-10-minutes)** (Deploy button → D1 → Access → sign in). Everything else (calendar, Spotify, Strava, Aqara, commute…) is optional and added later from the **⚙** drawer.
-- **On the tablet:** [Fully Kiosk Browser](#-tablet-fully-kiosk-browser), pointed at your Worker's URL.
+- **On a device:** just open your Worker's URL and sign in. On a wall-mounted Android tablet, [Fully Kiosk Browser](#-tablet-fully-kiosk-browser) makes it a full-screen kiosk (optional; any browser works).
 
 **Jump to:** [First 10 minutes](#-first-10-minutes) · [What you get](#what-you-get) · [How sync works](#how-sync-works) · [Cloudflare setup](#cloudflare-setup) · [Calendar](#-google-family-calendar) · [Lists](#-lists-tablet-phones-voice) · [Spotify](#-spotify-now-playing--your-playlists) · [Commute](#-commute-public-transport-car-bike-on-foot) · [Strava](#-strava-your-familys-stats) · [Aqara](#-aqara-sensors-with-google-home) · [Tablet](#-tablet-fully-kiosk-browser) · [Configure](#configure) · [Develop](#local-development)
 
@@ -180,7 +180,9 @@ Yes. In cloud mode, settings, lists, chores, meals, the note and layouts live in
 What *can* look like a reset: a device that saved settings while it was in **local mode** (before the Worker/API existed, or while not signed in) kept them in that browser only. The dashboard now uploads such on-device settings and lists **once**, automatically, when the cloud has none. For peace of mind: ⚙ → *Backup & access* → **Download backup** / **Restore**, and D1 keeps 30 days of point-in-time history (`npx wrangler d1 time-travel restore <database> --timestamp=…`).
 
 ## 📱 Tablet: Fully Kiosk Browser
-Use [Fully Kiosk Browser](https://www.fully-kiosk.com/) rather than a custom APK. PLUS is a one-time €7.90 per device and adds remote admin (reload, brightness, start URL, screenshots), plus the free basic tier of Fully Cloud.
+*Optional and Android-only. The dashboard itself needs no app: on an iPad, PC, Mac or phone, open the URL in a browser (and use Add to Home Screen / full-screen mode if you like).*
+
+For a wall-mounted **Android** tablet, use [Fully Kiosk Browser](https://www.fully-kiosk.com/) rather than a custom APK. PLUS is a one-time €7.90 per device and adds remote admin (reload, brightness, start URL, screenshots), plus the free basic tier of Fully Cloud.
 - **Start URL:** `https://oh-my-dashboard.<you>.workers.dev/` (or your custom domain) (add `?START_SCREEN=frame` or other URL params for per-device tweaks)
 - Turn on *Keep screen on*, *Autostart on boot*, *Fullscreen*, *Autoplay videos*, and third-party cookies (see above)
 - On a typical 10" tablet (e.g. Nokia T21/T20): leave Fully's zoom at 100 %. If you prefer bigger text, 110–125 % still fits; the layout adapts to the smaller CSS viewport.
