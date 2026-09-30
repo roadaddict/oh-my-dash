@@ -10,7 +10,7 @@
 
 *Home and Family screens at 800×1333, the portrait tablet size it's tuned for. Demo data; the sample widgets are marked **Demo** until you connect real sources.*
 
-**Contents:** [Quick start](#-first-10-minutes) · [What you get](#what-you-get) · [Where it works](#where-it-works) · [Privacy & your data](#privacy--your-data) · [How sync works](#how-sync-works) · [Cloudflare setup](#cloudflare-setup) · [Calendar](#-google-family-calendar) · [Lists](#-lists-tablet-phones-voice) · [Spotify](#-spotify-now-playing--your-playlists) · [Commute](#-commute-public-transport-car-bike-on-foot) · [Strava](#-strava-your-familys-stats) · [Aqara](#-aqara-sensors-with-google-home) · [Tablet](#-tablet-fully-kiosk-browser) · [Configure](#configure) · [Develop](#local-development)
+**Contents:** [Quick start](#-first-10-minutes) · [What you get](#what-you-get) · [Where it works](#where-it-works) · [Privacy & your data](#privacy--your-data) · [How sync works](#how-sync-works) · [Cloudflare setup](#cloudflare-setup) · [Calendar](#-google-family-calendar) · [Lists](#-lists-tablet-phones-voice) · [Spotify](#-spotify-now-playing--your-playlists) · [Commute](#-commute-public-transport-car-bike-on-foot) · [Strava](#-strava-your-familys-stats) · [Aqara](#-aqara-sensors-with-google-home) · [Tablet](#-tablet-fully-kiosk-browser) · [Configure](#configure) · [Secrets](#-secrets-api-keys) · [Develop](#local-development) · [Contribute](CONTRIBUTING.md)
 
 ---
 
@@ -47,7 +47,7 @@ More detail in [Cloudflare setup](#cloudflare-setup).
 - 🌍 **Cross-platform.** A web app, not a native app: it runs in any modern browser on a tablet, smart display, TV, phone or computer. See [Where it works](#where-it-works).
 - 🔄 **Family sync.** Open the same URL on every device and lists, chores, the meal plan, notes and settings stay in step (about 15 s).
 - 🧩 **Yours to arrange.** Four swipeable screens and a tiling-style layout editor (▦): drag, swap, add or remove any widget, per device and orientation.
-- 🪶 **Light and simple.** One `public/index.html` (vanilla JS, no build step) plus a small Worker. Widgets poll only while visible, so it's gentle on a home connection ([numbers](#-bandwidth)).
+- 🪶 **Light and simple.** Vanilla JS in one `public/index.html` (built from small per-widget files, no framework) plus a small Worker. Widgets poll only while visible, so it's gentle on a home connection ([numbers](#-bandwidth)).
 - 🔌 **Plugs into what you use:** Google Calendar and iCal, Spotify, Strava, Aqara sensors, public transport (VBB, Transitous), TomTom, Home Assistant and more; all optional.
 
 ## What you get
@@ -119,16 +119,24 @@ Some extras depend on the browser: voice input for lists uses the browser's spee
 
 ```
 repo/
-├── public/index.html      ← the whole dashboard (also works on its own, e.g. from file://)
-├── src/worker.js          ← Cloudflare Worker: /api/* → API, everything else → public/
-├── lib/api.js             ← API routes: /api/health, /api/state[/:key], /api/proxy
-├── lib/auth.js            ← Cloudflare Access login verification + home-IP allow-list
-├── lib/http.js            ← D1 table setup + helpers
-├── lib/secrets.js         ← private D1 table for OAuth tokens (never sent to browsers)
-├── lib/spotify.js         ← /api/spotify/*: Now Playing, controls, playlists, speakers
-├── lib/aqara.js           ← /api/aqara/*: Aqara Open API (signed calls, token refresh, normalized readings)
-├── wrangler.jsonc         ← Worker config (name, assets, D1 binding, Access vars)
-└── cors-proxy/worker.js   ← only needed if you host the page somewhere other than Cloudflare
+├── app/                        ← the dashboard's source (npm run build → public/index.html)
+│   ├── index.html              ← page skeleton
+│   ├── config.js               ← your own defaults and screens (OMD.configure)
+│   ├── core/                   ← screens, layout editor, settings, sync, widget host, shared UI
+│   └── widgets/<name>/         ← one folder per widget: widget.js (+ widget.css)
+├── public/index.html           ← GENERATED: the whole dashboard in one file (also works from file://)
+├── src/worker.js               ← Cloudflare Worker: /api/* → API, everything else → public/
+├── lib/api.js                  ← API routes: /api/health, /api/state[/:key], /api/proxy, /api/<integration>/…
+├── lib/auth.js                 ← Cloudflare Access login verification + home-IP allow-list
+├── lib/http.js                 ← D1 table setup + helpers
+├── lib/secrets.js              ← private D1 table for integration tokens (never sent to browsers)
+├── lib/integration-host.js     ← runs each integration with only its own env vars and token rows
+├── lib/integrations/           ← one file per backend integration (auto-registered):
+│                                  spotify, aqara, strava, todoist, finnhub, tomtom
+├── scripts/                    ← build (npm run build) and lint checks
+├── test/                       ← unit tests (npm test) and browser tests (npm run test:e2e)
+├── wrangler.jsonc              ← Worker config (name, assets, D1 binding, Access vars)
+└── cors-proxy/worker.js        ← only needed if you host the page somewhere other than Cloudflare
 ```
 
 </details>
@@ -194,7 +202,7 @@ Notes: Spotify's development mode needs the **app owner to have Premium** and al
 ## 🚆 Commute: public transport, car, bike, on foot
 ⚙ → **Commute** → *Add destination*: a name, an address (suggestions appear as you type, and the place it found is confirmed underneath), **how** you go, and optionally a start other than home.
 - **Public transport:** the next connection leaving now, with lines ("U5 → S3"), when to leave ("leave in 4 min") and live delays or cancellations. It uses VBB (Berlin/Brandenburg) and falls back to Transitous (open, Europe-wide) elsewhere.
-- **Car:** live traffic ("+7 min traffic") needs a free TomTom key: developer.tomtom.com → sign up → copy "My first API key" into ⚙ → Commute. That's 2,500 requests a day; the widget uses about 100. Without a key it shows typical drive time.
+- **Car:** live traffic ("+7 min traffic") needs a free TomTom key: developer.tomtom.com → sign up → "My first API key", saved as the Worker secret `TOMTOM_KEY` ([Secrets](#-secrets-api-keys)). That's 2,500 requests a day; the widget uses about 100. Without a key it shows typical drive time.
 - **Bike / on foot:** OpenStreetMap routing.
 
 It refreshes every 5 minutes while visible (⚙ → Commute → *Refresh*). Each row shows minutes door to door and the arrival time. Existing `COMMUTES` lines keep working; the new format is `Name | address | public·car·bike·foot | from (optional)`.
@@ -240,7 +248,7 @@ If your wall display is an **Android** tablet, use [Fully Kiosk Browser](https:/
 There are three ways to set values, listed from highest to lowest precedence:
 1. **URL params**, per device: `?START_SCREEN=frame&LOW_POWER=1#family`
 2. **⚙ settings drawer**, shared via D1 in cloud mode, otherwise per device
-3. **`CONFIG`** at the top of the `<script>` in `public/index.html`. The `LAYOUTS` object below it defines the screens.
+3. **`app/config.js`** (then `npm run build`): your own defaults, and screens of your own next to the built-in ones. Every setting's name and default is in its widget's folder (`app/widgets/<name>/widget.js`) or in `app/core/boot/00-defaults.js`.
 
 List settings take one entry per line:
 ```
@@ -249,7 +257,23 @@ COMMUTES:     Work | 51.5155,-0.0922
 DATA_WIDGETS: Solar | https://ha.example.com/api/states/sensor.solar | state | kW | Bearer eyJ…
 ```
 
-> 🔐 Put tokens (Todoist, Finnhub, TomTom, Home Assistant) in ⚙ rather than in `CONFIG`. The repo is public, while D1 is only readable by signed-in family members. Spotify and Aqara keys go in **Worker secrets**, and their OAuth tokens never leave the Worker.
+> 🔐 API keys are never settings: they're **Worker secrets** (next section), so no screen, and no widget, ever sees them. A Home Assistant token in a data widget line is the exception: it lives in ⚙, which only signed-in family members can read.
+
+## 🔐 Secrets (API keys)
+Every service that needs a key is a **backend integration** (`lib/integrations/`): the key stays on the Worker, the screens only get the results, and each integration can read only the variables it declares and its own token rows in D1.
+
+| Secret | For | Get it |
+|---|---|---|
+| `TODOIST_TOKEN` | a Todoist project as a tab of the Lists widget (⚙ → Lists → *Todoist project*) | Todoist → Settings → Integrations → Developer |
+| `FINNHUB_TOKEN` | stocks in the Markets widget | free at finnhub.io |
+| `TOMTOM_KEY` | live traffic for Commute by car | developer.tomtom.com → "My first API key" |
+| `SPOTIFY_CLIENT_ID` / `_SECRET` | Now Playing | [Spotify](#-spotify-now-playing--your-playlists) |
+| `AQARA_APP_ID` / `_KEY_ID` / `_APP_KEY` | sensors | [Aqara](#-aqara-sensors-with-google-home) |
+| `STRAVA_CLIENT_ID` / `_SECRET` | Strava | [Strava](#-strava-your-familys-stats) |
+
+Set one with `npx wrangler secret put TODOIST_TOKEN`, or in the Cloudflare dashboard: **Workers & Pages → oh-my-dashboard → Settings → Variables and Secrets → Add → Secret**.
+
+**Upgrading from a version that kept Todoist / Finnhub / TomTom keys in ⚙:** add them as Worker secrets as above, then open ⚙ and press **Save**; the old copies are removed from the saved settings (the drawer points them out until then).
 
 ## 🔄 Is it auto-deploying?
 **Workers & Pages → oh-my-dashboard → Settings → Build** should list the Git repository and branch (e.g. `main`), with deploy command `npx wrangler deploy`. Every push then shows up under **Deployments** with its commit message.
@@ -280,27 +304,28 @@ How it stays light:
 - The proxy edge-caches feeds (5 min by default; 5 s for live flight data).
 
 ## 🧩 Writing a widget
-Every widget follows the same contract, so new ones are a few dozen lines in `public/index.html`:
+A widget is one folder, `app/widgets/<name>/`, with a `widget.js` and optionally a `widget.css`:
 
 ```js
-// 1. Data: a shared, lazily-started poller. visibleOnly = pause while off-screen.
-const myFeed = createFeed(async () => fetchJSON('https://api.example.com/x'), 5 * 60000, { visibleOnly: true });
-//    Feeds without CORS headers: fetchJSON(withProxy(url, ttlSeconds)) → same-origin /api/proxy.
-
-// 2. UI: a factory that returns a standard glass panel.
-BLOCKS.mywidget = (options) => {
-  const p = makePanel({ type: 'mywidget', title: 'My widget', iconName: 'star', tint: 'amber' });
-  myFeed.subscribe((data, err) => { p.body.replaceChildren(h('div', null, data?.value ?? '…')); }, p.el);
-  p.onReload = () => myFeed.refresh();          // ↻ button; the ⤢ expand button is automatic
-  return p.el;
-};
-
-// 3. Place it: LAYOUTS.info.blocks.foo = { type: 'mywidget' } and name "foo" in the areas grid.
+OMD.defineWidget({
+  id: 'mywidget', name: 'My widget', icon: 'star', group: 'Home & web',
+  settings: [['MYWIDGET_URL', 'Data URL', 'url']],          // → its own section in ⚙
+  defaults: { MYWIDGET_URL: '' },
+  mount(ctx) {
+    const p = ctx.panel({ tint: 'amber' });                  // the glass panel (↻ and ⤢ are automatic)
+    const feed = ctx.feed(() => ctx.fetchJSON(ctx.settings.MYWIDGET_URL), 5 * 60000, { visibleOnly: true });
+    ctx.subscribe(feed, (data) => p.body.replaceChildren(ctx.h('div', null, data?.value ?? '…')));
+    p.onReload = () => feed.refresh();
+  },
+});
 ```
-Family-editable data uses `sharedState(key, fallback).update(fn)`: synced via D1 and conflict-safe (add the key to `STATE_KEYS` in `lib/http.js`).
+The picker, the settings drawer and the defaults are generated from that definition, so a new widget touches nothing outside its folder. Timers, listeners and feeds go through `ctx`: they stop when the widget is removed, and an error in one only replaces *that* widget with a "failed — Retry" card. **[CONTRIBUTING.md](CONTRIBUTING.md)** has the whole `ctx` API, the rules the linter checks, backend integrations and the tests; `app/widgets/example/` is a small widget to copy.
 
 ## Local development
 ```bash
-npx wrangler dev --var OPEN_API:true   # http://localhost:8787 (local D1)
+npm install
+npm run build:watch                       # app/ → public/index.html on every change
+npx wrangler dev --var OPEN_API:true      # http://localhost:8787 (local D1), in a second terminal
+npm run check                             # build, lint, format, unit and browser tests — what CI runs
 ```
-`OPEN_API=true` disables API auth. **Never set it in production.**
+`OPEN_API=true` disables API auth. **Never set it in production.** Deploying is unchanged: `public/index.html` is committed, so Cloudflare needs no build step.

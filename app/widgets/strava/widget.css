@@ -1,0 +1,280 @@
+/* Strava: one card per person; details drop out as the slot gets smaller */
+.b-strava .strava-host {
+  container: strava / size;
+}
+.b-strava .strava {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  align-content: center;
+  gap: 10px;
+}
+.b-strava .st-card {
+  container: stcard / inline-size;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.b-strava .st-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.b-strava .st-avatar {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  background: rgba(var(--strava-rgb), 0.18);
+  color: var(--strava);
+  font-weight: 700;
+}
+.b-strava .st-who {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.b-strava .st-who b {
+  font-size: 14px;
+  font-weight: 600;
+}
+.b-strava .st-who span {
+  font-size: 11.5px;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-strava .st-big b {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 4vmin, 38px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.b-strava .st-big small {
+  margin-left: 6px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.b-strava .st-bars {
+  height: clamp(40px, 20cqh, 110px);
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  align-items: end;
+}
+.b-strava .st-bar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+}
+.b-strava .st-bar i {
+  display: block;
+  width: 100%;
+  max-width: 18px;
+  border-radius: 4px 4px 2px 2px;
+  background: rgba(var(--strava-rgb), 0.55);
+}
+.b-strava .st-bar.is-today i {
+  background: var(--strava);
+  box-shadow: 0 0 12px -2px rgba(var(--strava-rgb), 0.7);
+}
+.b-strava .st-bar.is-future i {
+  background: rgba(255, 255, 255, 0.08);
+}
+.b-strava .st-bar span {
+  font-size: 10px;
+  color: var(--text-3);
+}
+.b-strava .st-bar.is-today span {
+  color: var(--strava);
+  font-weight: 600;
+}
+.b-strava .st-sports {
+  display: flex;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.b-strava .st-sports span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.b-strava .st-sports .i {
+  width: 14px;
+  height: 14px;
+  color: var(--strava);
+}
+.b-strava .st-sports:empty {
+  display: none;
+}
+.b-strava .st-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+.b-strava .st-foot small {
+  color: var(--text-3);
+  font-size: 11px;
+}
+.b-strava .st-last {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-3);
+  min-width: 0;
+}
+.b-strava .st-last .i {
+  flex: none;
+  width: 13px;
+  height: 13px;
+}
+.b-strava .st-last span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@container stcard (max-width: 220px) {
+  .b-strava .st-foot {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .b-strava .st-wk {
+    display: none;
+  }
+}
+@container strava (max-height: 280px) {
+  .b-strava .st-last {
+    display: none;
+  }
+}
+/* km + trend vs last week */
+.b-strava .st-big {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 6px;
+}
+.b-strava .st-big small {
+  margin-left: 0;
+}
+.b-strava .st-delta {
+  flex-basis: 100%;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+.b-strava .st-delta.is-up {
+  color: var(--emerald);
+}
+.b-strava .st-vs {
+  font-weight: 400;
+  color: var(--text-3);
+}
+@container strava (max-height: 230px) {
+  /* Short slot: one line per person — who · Mon–Sun bars · km per sport · week km + trend */
+  .b-strava .strava {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .b-strava .st-foot,
+  .b-strava .st-who span,
+  .b-strava .st-wk,
+  .b-strava .st-vs,
+  .b-strava .st-last {
+    display: none;
+  }
+  .b-strava .st-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    grid-template-areas: 'head bars sports big';
+    align-items: center;
+    gap: 14px;
+    padding: 8px 12px;
+  }
+  .b-strava .st-head {
+    grid-area: head;
+    min-width: 0;
+  }
+  .b-strava .st-who b {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .b-strava .st-bars {
+    grid-area: bars;
+    width: 84px;
+    height: 30px;
+    gap: 3px;
+  }
+  .b-strava .st-bar span {
+    display: none;
+  }
+  .b-strava .st-bar i {
+    max-width: none;
+    border-radius: 2px;
+  }
+  .b-strava .st-sports {
+    grid-area: sports;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 12px;
+  }
+  .b-strava .st-big {
+    grid-area: big;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-wrap: nowrap;
+    row-gap: 2px;
+  }
+  .b-strava .st-big > b {
+    font-size: 26px;
+  }
+  .b-strava .st-big > small {
+    display: none;
+  }
+  .b-strava .st-big > b::after {
+    content: ' km';
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--text-3);
+  }
+  .b-strava .st-delta {
+    flex-basis: auto;
+    font-size: 11.5px;
+  }
+}
+@container strava (max-height: 230px) and (max-width: 420px) {
+  .b-strava .st-sports {
+    display: none;
+  }
+}
+@container strava (max-height: 230px) and (max-width: 300px) {
+  .b-strava .st-bars {
+    display: none;
+  }
+}

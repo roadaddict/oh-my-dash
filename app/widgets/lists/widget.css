@@ -1,0 +1,319 @@
+.b-lists .seg {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  margin-bottom: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: none;
+}
+.b-lists .seg button {
+  flex: 1;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-3);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.b-lists .seg button.is-active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+.b-lists .seg button span {
+  margin-left: 5px;
+  font-size: 11px;
+  color: var(--tint);
+}
+.b-lists .items {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+/* All done: the top half celebrates, the crossed-out items sit below it */
+.b-lists .all-done {
+  flex: 0 0 50%;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+}
+.b-lists .all-done-mark svg {
+  display: block;
+  width: 56px;
+  height: 56px;
+  overflow: visible;
+  filter: drop-shadow(0 0 14px rgba(var(--tint-rgb), 0.45));
+}
+.b-lists .all-done-mark .ring {
+  fill: rgba(var(--tint-rgb), 0.12);
+  stroke: var(--tint);
+  stroke-width: 2.5;
+}
+.b-lists .all-done-mark .tick {
+  fill: none;
+  stroke: var(--tint);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 40;
+}
+.b-lists .all-done b {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+.b-lists .all-done small {
+  font-size: 12px;
+  color: var(--text-3);
+}
+.b-lists .all-done.pop .all-done-mark svg {
+  animation: lists-done-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.b-lists .all-done.pop .tick {
+  animation: lists-done-tick 0.45s 0.3s ease-out both;
+}
+@keyframes lists-done-pop {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes lists-done-tick {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.b-lists .items.is-all-done .item.is-done {
+  opacity: 0.75;
+}
+.b-lists .item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.035);
+  cursor: pointer;
+  border: 0;
+  width: 100%;
+  text-align: left;
+  color: var(--text);
+  font-size: 14px;
+}
+.b-lists .item.is-done .check {
+  background: var(--c, var(--tint));
+  border-color: transparent;
+}
+.b-lists .item.is-done .check .i {
+  opacity: 1;
+}
+.b-lists .item.is-done .item-text {
+  color: var(--text-3);
+  text-decoration: line-through;
+}
+.b-lists .item-text {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-lists .item-del {
+  flex: none;
+  opacity: 0.5;
+  padding: 2px;
+}
+.b-lists .add-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex: none;
+}
+.b-lists .add-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 12px;
+  border-radius: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text);
+  outline: none;
+  font-size: 13.5px;
+  user-select: text;
+}
+.b-lists .add-row input:focus {
+  border-color: rgba(var(--tint-rgb), 0.6);
+}
+.b-lists .add-row .icon-btn {
+  width: 38px;
+  height: 38px;
+  background: rgba(var(--tint-rgb), 0.15);
+  color: var(--tint);
+}
+.b-lists .add-row .mic {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-2);
+}
+.b-lists .items-sep {
+  margin: 6px 2px 0;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 600;
+}
+.b-lists .lists-host {
+  position: relative;
+}
+.b-lists .quick {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: none;
+  mask-image: linear-gradient(90deg, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, #000 90%, transparent);
+}
+.b-lists .quick::-webkit-scrollbar {
+  display: none;
+}
+.b-lists .quick[hidden],
+.b-lists .lists-host.is-short .quick {
+  display: none;
+}
+.b-lists .quick-add {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 11px 6px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--tint-rgb), 0.25);
+  background: rgba(var(--tint-rgb), 0.08);
+  color: var(--text-2);
+  font-size: 12.5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.b-lists .quick-add .i {
+  width: 13px;
+  height: 13px;
+  color: var(--tint);
+}
+.b-lists .quick-add:active {
+  background: rgba(var(--tint-rgb), 0.2);
+}
+.b-lists .undo-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 52px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 8px 8px 14px;
+  border-radius: 12px;
+  background: rgba(24, 26, 30, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 13px;
+  color: var(--text-2);
+  box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.7);
+}
+.b-lists .undo-bar[hidden] {
+  display: none;
+}
+.b-lists .undo-bar span {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-lists .undo-bar button {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 9px;
+  border: 0;
+  background: rgba(var(--tint-rgb), 0.18);
+  color: var(--tint);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.b-lists .undo-bar .i {
+  width: 14px;
+  height: 14px;
+}
+.b-lists .phone-card {
+  align-items: center;
+  text-align: center;
+  width: min(360px, 100%);
+}
+.b-lists .phone-card .edit-picker-head {
+  width: 100%;
+  text-align: left;
+}
+.b-lists .phone-card .qr {
+  width: 220px;
+  height: 220px;
+  border-radius: 12px;
+  background: #fff;
+}
+.b-lists .phone-url {
+  font-size: 12px;
+  color: var(--text-2);
+  word-break: break-all;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  user-select: all;
+}
+.app.view-phone .b-lists .seg button {
+  padding: 10px 12px;
+  font-size: 14px;
+}
+.app.view-phone .b-lists .item {
+  padding: 13px 12px;
+  font-size: 16px;
+}
+.app.view-phone .b-lists .check {
+  width: 24px;
+  height: 24px;
+}
+.app.view-phone .b-lists .add-row input {
+  font-size: 16px;
+  padding: 12px 14px;
+}
+.app.view-phone .b-lists .add-row .icon-btn {
+  width: 46px;
+  height: 46px;
+}
+.app.view-phone .b-lists .quick-add {
+  padding: 9px 14px 9px 10px;
+  font-size: 14px;
+}
+.app.view-phone .b-lists .undo-bar {
+  bottom: 62px;
+}

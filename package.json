@@ -1,0 +1,28 @@
+{
+  "name": "oh-my-dashboard",
+  "private": true,
+  "type": "module",
+  "description": "Glassmorphism smart-home kiosk dashboard for wall-mounted tablets.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:watch": "node scripts/build.mjs --watch",
+    "lint": "oxlint && node scripts/lint.mjs",
+    "test": "node --test --no-warnings test/unit/*.test.js",
+    "test:e2e": "playwright test",
+    "check": "npm run build && npm run lint && npm run format:check && npm test && npm run test:e2e",
+    "test:visual": "playwright test -c playwright.visual.config.js",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1",
+    "oxfmt": "^0.71.0",
+    "oxlint": "^1.86.0",
+    "postcss": "^8.5.6",
+    "postcss-selector-parser": "^7.1.0"
+  }
+}

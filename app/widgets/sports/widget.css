@@ -1,0 +1,72 @@
+.b-sports .league {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin: 4px 0 5px;
+}
+.b-sports .game {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.03);
+  margin-bottom: 5px;
+}
+.b-sports .team {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.b-sports .team.away {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.b-sports .team img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex: none;
+}
+.b-sports .team span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-sports .score {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: 15px;
+  font-weight: 600;
+  min-width: 64px;
+}
+.b-sports .score small {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.b-sports .score.is-live small {
+  color: var(--crimson);
+}
+.b-sports .score.is-live small::before {
+  content: '● ';
+}
+.b-sports .panel-body {
+  container-type: inline-size;
+}
+@container (max-width: 250px) {
+  .b-sports .team span {
+    display: none;
+  }
+  .b-sports .game {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+}

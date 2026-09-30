@@ -1,0 +1,151 @@
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+[hidden] {
+  display: none !important;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-feature-settings: 'cv11', 'ss01', 'tnum';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+body.is-idle,
+body.is-idle * {
+  cursor: none !important;
+}
+button {
+  font: inherit;
+  color: inherit;
+}
+input,
+select,
+textarea {
+  font: inherit;
+}
+.i {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  display: block;
+}
+
+/* ==========================================================================
+   AMBIENT BACKGROUND
+   ========================================================================== */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bg-orbs {
+  position: absolute;
+  inset: -15%;
+  background:
+    radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.16), transparent 30%), radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.09), transparent 30%),
+    radial-gradient(circle at 60% 95%, rgba(76, 29, 149, 0.07), transparent 30%);
+  animation: drift 90s ease-in-out infinite alternate;
+}
+/* Film grain, as in the transit app */
+.bg-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+body.low-power .bg-noise {
+  display: none;
+}
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+}
+.bg-photos {
+  position: absolute;
+  inset: 0;
+}
+.bg-photos .slideshow {
+  background: transparent;
+}
+.bg-photos::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5, 5, 5, 0.6), rgba(5, 5, 5, 0.85));
+}
+@keyframes drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, -2%, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(-2%, 3%, 0) scale(1.02);
+  }
+}
+
+/* Night mode: dim veil, black screen, or minimal clock */
+.night-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  background: #000;
+  opacity: var(--night-veil);
+  transition: opacity 3s ease;
+}
+.night-clock {
+  position: fixed;
+  inset: 0;
+  z-index: 91;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 1vmin;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 3s ease;
+}
+.night-clock.is-on {
+  opacity: 1;
+}
+.night-clock b {
+  font-size: min(22vw, 30vmin);
+  font-weight: 200;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.night-clock span {
+  font-size: 2.6vmin;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}

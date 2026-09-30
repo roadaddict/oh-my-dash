@@ -1,0 +1,49 @@
+/* ==========================================================================
+   DESIGN TOKENS
+   ========================================================================== */
+:root {
+  /* Matches the transit app (oh-my-bussy): near-black, faint glass, BVG-yellow accent. */
+  --bg: #050505;
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.075);
+  --blur: 12px;
+
+  --text: #e2e8f0;
+  --text-2: #a1a8b3;
+  --text-3: #6b7280;
+
+  --emerald: #34d399;
+  --emerald-rgb: 52, 211, 153;
+  --amber: #fbbf24;
+  --amber-rgb: 251, 191, 36;
+  --crimson: #fb4f6b;
+  --crimson-rgb: 251, 79, 107;
+  --accent: #f0d722;
+  --accent-rgb: 240, 215, 34;
+  --edit: var(--accent);
+  --edit-rgb: var(--accent-rgb); /* layout editor colour */
+  --violet: #b692ff;
+  --violet-rgb: 182, 146, 255;
+  --cyan: #5eead4;
+  --cyan-rgb: 94, 234, 212;
+  --sky: #7dd3fc;
+  --sky-rgb: 125, 211, 252;
+  --spotify: #1ed760;
+  --spotify-rgb: 30, 215, 96;
+  --strava: #fc5200;
+  --strava-rgb: 252, 82, 0;
+
+  --radius: 22px;
+  --radius-sm: 14px;
+  --gap: clamp(10px, 1.5vmin, 18px);
+  --pad: clamp(12px, 1.9vmin, 20px);
+
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Outfit', var(--font);
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Updated at runtime (burn-in protection / night mode) */
+  --shift-x: 0px;
+  --shift-y: 0px;
+  --night-veil: 0;
+}

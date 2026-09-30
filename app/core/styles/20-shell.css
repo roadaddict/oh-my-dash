@@ -1,0 +1,723 @@
+/* ==========================================================================
+   APP SHELL
+   ========================================================================== */
+.app {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: var(--gap);
+  padding-left: max(var(--gap), env(safe-area-inset-left));
+  padding-right: max(var(--gap), env(safe-area-inset-right));
+  transform: translate3d(var(--shift-x), var(--shift-y), 0);
+  transition: transform 4s ease;
+}
+
+/* ---------- Status bar ---------- */
+/* A system bar, not a widget: no card, it sits straight on the wallpaper. */
+.statusbar {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0 2px 0 4px;
+  border-radius: 16px;
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.45s;
+}
+.statusbar .chip {
+  background: transparent;
+  border-color: transparent;
+  padding: 0 6px;
+}
+.statusbar .icon-btn:not(:hover) {
+  background: transparent;
+}
+/* Screens without a status bar (photo frame): it slides in on tap, on a dark tint so it reads over the photo. */
+.app.statusbar-auto .statusbar {
+  position: absolute;
+  top: var(--gap);
+  left: var(--gap);
+  right: var(--gap);
+  transform: translateY(calc(-100% - var(--gap) - 4px));
+  opacity: 0;
+  padding: 6px 8px 6px 14px;
+  background: rgba(5, 5, 5, 0.7);
+  backdrop-filter: blur(var(--blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+}
+.app.statusbar-auto.show-bar .statusbar {
+  transform: none;
+  opacity: 1;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.brand-mark {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  flex: none;
+  background: linear-gradient(135deg, var(--accent), #f59e0b);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  padding: 5px;
+  box-shadow: 0 4px 18px -4px rgba(var(--accent-rgb), 0.6);
+}
+.brand-mark i {
+  background: rgba(5, 5, 5, 0.85);
+  border-radius: 2px;
+}
+.brand-mark i:first-child {
+  grid-row: span 2;
+}
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.brand-date {
+  color: var(--text-3);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.screen-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  margin-left: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.screen-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-3);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.25s,
+    color 0.25s;
+}
+.screen-tab .i {
+  width: 15px;
+  height: 15px;
+}
+.screen-tab:hover {
+  color: var(--text-2);
+}
+.screen-tab.is-active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+.screen-tab .rot {
+  width: 14px;
+  height: 14px;
+  margin-right: -4px;
+}
+.rot circle {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 3;
+}
+.rot circle.prog {
+  stroke: var(--accent);
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+.status-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  min-width: 0;
+}
+.status-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip {
+  --tone-rgb: 167, 175, 189;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: rgb(var(--tone-rgb));
+  background: rgba(var(--tone-rgb), 0.1);
+  border: 1px solid rgba(var(--tone-rgb), 0.22);
+  transition:
+    color 0.4s,
+    background 0.4s,
+    border-color 0.4s;
+}
+.chip .i {
+  width: 16px;
+  height: 16px;
+}
+.chip .chip-sub {
+  color: var(--text-3);
+  font-weight: 400;
+}
+.tone-good {
+  --tone-rgb: var(--emerald-rgb);
+}
+.tone-warn {
+  --tone-rgb: var(--amber-rgb);
+}
+.tone-bad {
+  --tone-rgb: var(--crimson-rgb);
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgb(var(--tone-rgb));
+}
+.dot.tone-good {
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--tone-rgb), 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(var(--tone-rgb), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--tone-rgb), 0);
+  }
+}
+.ping-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  min-width: 6.5ch;
+}
+#netChip {
+  gap: 9px;
+}
+.sparkline {
+  width: 64px;
+  height: 18px;
+  overflow: visible;
+}
+.sparkline polyline {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.sparkline .area {
+  fill: currentColor;
+  opacity: 0.12;
+  stroke: none;
+}
+.sparkline circle {
+  fill: var(--crimson);
+}
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 11px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-2);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.15s;
+}
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+.icon-btn:active {
+  transform: scale(0.94);
+}
+.icon-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.icon-btn .i {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- Screens ---------- */
+.screens {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+.screen {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(var(--enter, 24px));
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    visibility 0s 0.6s;
+}
+.screen.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+/* No z-index here: it would trap a fullscreen (expanded) widget below the frosted scrim.
+   The photo backdrop (z-index 0, earlier in the page) still paints underneath. */
+.screen > .grid {
+  position: relative;
+  height: 100%;
+  display: grid;
+  gap: var(--gap);
+}
+/* Split-tree layouts: JS computes each widget's box (see layoutScreen) */
+.screen > .grid.is-tree {
+  display: block;
+}
+.grid.is-tree > .panel:not(.is-expanded) {
+  position: absolute;
+  left: var(--x, 0);
+  top: var(--y, 0);
+  width: var(--w, 100%);
+  height: var(--h, 100%);
+}
+.grid > .panel.is-off {
+  display: none !important;
+}
+.screen-photo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+.screen-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.08) 45%, rgba(0, 0, 0, 0) 60%), linear-gradient(270deg, rgba(0, 0, 0, 0.35), transparent 40%);
+}
+.app.has-photo-screen .statusbar {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+.app.has-photo-screen:not(.statusbar-auto) .screen-photo::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 120px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent);
+}
+
+/* ---------- Glass panel ---------- */
+.panel {
+  --tint: var(--accent);
+  --tint-rgb: var(--accent-rgb);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--pad);
+  border-radius: var(--radius);
+  /* ⚙ → Widget background (0–20 %): --glass-k fades the frosted glass, its blur and border in */
+  background: rgba(255, 255, 255, calc(0.04 * var(--glass-k, 1)));
+  border: 1px solid rgba(255, 255, 255, calc(0.075 * var(--glass-k, 1)));
+  backdrop-filter: blur(calc(var(--blur) * var(--glass-k, 1))) saturate(calc(1 + 0.4 * var(--glass-k, 1)));
+  -webkit-backdrop-filter: blur(calc(var(--blur) * var(--glass-k, 1))) saturate(calc(1 + 0.4 * var(--glass-k, 1)));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, calc(0.05 * var(--glass-k, 1))),
+    0 24px 48px -24px rgba(0, 0, 0, calc(0.9 * var(--glass-k, 1)));
+  overflow: hidden;
+}
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 30%);
+}
+.screen.is-active .grid > .panel {
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.screen.is-active .grid > .panel:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.screen.is-active .grid > .panel:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.screen.is-active .grid > .panel:nth-child(4) {
+  animation-delay: 0.15s;
+}
+.screen.is-active .grid > .panel:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.screen.is-active .grid > .panel:nth-child(n + 6) {
+  animation-delay: 0.25s;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.panel.is-bare {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: 0;
+  overflow: visible;
+}
+.panel.is-bare::before {
+  display: none;
+}
+/* Seamless embed (transit app): no border, header or padding — just the app, edge to edge. */
+.panel.is-seamless {
+  padding: 0;
+  background: #050505;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.panel.is-seamless::before {
+  display: none;
+}
+.panel.is-seamless .frame {
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+.panel.is-dark {
+  background: rgba(5, 5, 5, 0.66);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.panel.is-dark .panel-meta {
+  color: rgba(255, 255, 255, 0.62);
+}
+.panel.is-compact {
+  padding: clamp(10px, 1.5vmin, 16px) var(--pad);
+}
+
+.t-emerald {
+  --tint: var(--emerald);
+  --tint-rgb: var(--emerald-rgb);
+}
+.t-accent {
+  --tint: var(--accent);
+  --tint-rgb: var(--accent-rgb);
+}
+.t-spotify {
+  --tint: var(--spotify);
+  --tint-rgb: var(--spotify-rgb);
+}
+.t-strava {
+  --tint: var(--strava);
+  --tint-rgb: var(--strava-rgb);
+}
+.t-amber {
+  --tint: var(--amber);
+  --tint-rgb: var(--amber-rgb);
+}
+.t-crimson {
+  --tint: var(--crimson);
+  --tint-rgb: var(--crimson-rgb);
+}
+.t-violet {
+  --tint: var(--violet);
+  --tint-rgb: var(--violet-rgb);
+}
+.t-cyan {
+  --tint: var(--cyan);
+  --tint-rgb: var(--cyan-rgb);
+}
+.t-sky {
+  --tint: var(--sky);
+  --tint-rgb: var(--sky-rgb);
+}
+
+.panel-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: clamp(10px, 1.4vmin, 14px);
+  min-height: 36px;
+}
+.panel-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  color: var(--tint);
+  background: rgba(var(--tint-rgb), 0.13);
+  box-shadow: inset 0 0 0 1px rgba(var(--tint-rgb), 0.22);
+}
+.panel-icon .i {
+  width: 17px;
+  height: 17px;
+}
+.panel-title {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.panel-title h2 {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.panel-meta {
+  font-size: 12px;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.panel-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.panel-actions .icon-btn {
+  width: 34px;
+  height: 34px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tint);
+  background: rgba(var(--tint-rgb), 0.12);
+}
+.legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+}
+.legend i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c);
+}
+.panel-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Expanded (full-screen) panel */
+.panel.is-expanded {
+  position: fixed;
+  z-index: 60;
+  inset: max(var(--gap), 12px);
+  animation: none !important;
+  background: rgba(10, 10, 10, 0.96);
+}
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(5, 6, 8, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.scrim.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* Dragging the widget background slider: the scrim steps aside so the widgets show */
+body.settings-peek .scrim.is-visible {
+  opacity: 0;
+}
+.settings-top {
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.settings-top .field {
+  margin: 0 0 12px;
+}
+.settings-top .field:last-child {
+  margin: 0;
+}
+.bg-steps {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.bg-step {
+  flex: 1;
+  position: relative;
+}
+.bg-step input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.bg-step span {
+  display: block;
+  padding: 8px 0;
+  border-radius: 9px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.bg-step input:checked + span {
+  background: rgba(var(--accent-rgb), 0.18);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.45);
+}
+.bg-step input:focus-visible + span {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  color: var(--text-3);
+  font-size: 13px;
+  padding: 12px;
+}
+.empty .i {
+  width: 28px;
+  height: 28px;
+  opacity: 0.6;
+}
+.empty small {
+  max-width: 34ch;
+  line-height: 1.45;
+}
+.muted {
+  color: var(--text-3);
+}
+.scroll-y {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  mask-image: linear-gradient(180deg, #000 88%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, #000 88%, transparent);
+  padding-bottom: 14px;
+}
+.scroll-y::-webkit-scrollbar {
+  display: none;
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-2);
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.cta:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
+}
+.cta .i {
+  width: 16px;
+  height: 16px;
+}

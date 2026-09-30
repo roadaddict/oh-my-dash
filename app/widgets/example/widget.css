@@ -1,0 +1,46 @@
+/* Every selector goes through .b-example (the panel's own class): npm run lint checks it,
+   so nothing here can restyle another widget. Shared pieces (.cta, .muted, .empty, .tile…)
+   come from app/core/styles/50-components.css. Keyframes are named example-…. */
+.b-example .hello {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+.b-example .hello h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 3vmin, 30px);
+  font-weight: 400;
+}
+.b-example .hello p {
+  margin: 0;
+  color: var(--text-2);
+}
+.b-example .row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.b-example .count {
+  color: var(--tint);
+  font-weight: 600;
+  animation: example-in 0.4s ease-out both;
+}
+.b-example .fact {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.b-example .fact:empty {
+  display: none;
+}
+@keyframes example-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

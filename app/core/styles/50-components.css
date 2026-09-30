@@ -1,0 +1,345 @@
+/* ==========================================================================
+   SHARED COMPONENTS — for any widget: tiles, rows, status colours, check marks,
+   the recording look, the photo slideshow. Widget-specific styles live in
+   app/widgets/<id>/widget.css, scoped to .b-<id>.
+   ========================================================================== */
+.late {
+  color: var(--amber);
+}
+.ontime {
+  color: var(--emerald);
+}
+.up {
+  color: var(--emerald);
+}
+.down {
+  color: var(--crimson);
+}
+
+/* Rows of a list widget (markets, commute, planes) */
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Tiles (smart home, data widgets) */
+.tiles-host {
+  container-type: size;
+}
+.tiles {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+}
+@container (min-width: 480px) {
+  .tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.tile {
+  --c: var(--text-2);
+  --c-rgb: 167, 175, 189;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 0;
+  overflow: hidden;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: left;
+  cursor: default;
+  transition:
+    background 0.3s,
+    border-color 0.3s;
+}
+button.tile {
+  cursor: pointer;
+}
+button.tile:active {
+  transform: scale(0.98);
+}
+.tile-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: clamp(32px, 4.4vmin, 40px);
+  height: clamp(32px, 4.4vmin, 40px);
+  border-radius: 11px;
+  color: var(--c);
+  background: rgba(var(--c-rgb), 0.12);
+  transition:
+    color 0.3s,
+    background 0.3s,
+    box-shadow 0.3s;
+}
+.tile-icon .i {
+  width: 55%;
+  height: 55%;
+}
+.tile-text {
+  min-width: 0;
+}
+.tile-label {
+  font-size: 11.5px;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tile-value {
+  font-size: clamp(14px, 1.9vmin, 17px);
+  font-weight: 600;
+  margin-top: 1px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tile-value small {
+  font-size: 0.7em;
+  color: var(--text-3);
+  font-weight: 500;
+  margin-left: 3px;
+}
+.panel.is-expanded .tiles {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+/* Big tiles (icon above the text) need ~125 px per tile: 3 rows of 2 below 480 px wide, 2 rows of 3 above */
+@container ((max-width: 479px) and (min-height: 400px)) or ((min-width: 480px) and (min-height: 270px)) {
+  .tiles .tile {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 14px;
+  }
+  .tiles .tile-icon {
+    width: clamp(38px, 5vmin, 48px);
+    height: clamp(38px, 5vmin, 48px);
+    border-radius: 13px;
+  }
+  .tiles .tile-label {
+    font-size: 12.5px;
+  }
+  .tiles .tile-value {
+    font-size: clamp(18px, 2.6vmin, 26px);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+}
+.tile.is-on {
+  background: linear-gradient(135deg, rgba(var(--c-rgb), 0.16), rgba(var(--c-rgb), 0.04));
+  border-color: rgba(var(--c-rgb), 0.28);
+}
+.tile.is-on .tile-icon {
+  color: #0d0f12;
+  background: var(--c);
+  box-shadow: 0 0 18px -2px rgba(var(--c-rgb), 0.6);
+}
+.tile.is-offline {
+  opacity: 0.45;
+}
+.tile-warn {
+  display: inline-flex;
+  color: var(--crimson);
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+.tile-warn .i {
+  width: 13px;
+  height: 13px;
+}
+.c-amber {
+  --c: var(--amber);
+  --c-rgb: var(--amber-rgb);
+}
+.c-emerald {
+  --c: var(--emerald);
+  --c-rgb: var(--emerald-rgb);
+}
+.c-sky {
+  --c: var(--sky);
+  --c-rgb: var(--sky-rgb);
+}
+.c-crimson {
+  --c: var(--crimson);
+  --c-rgb: var(--crimson-rgb);
+}
+.c-accent {
+  --c: var(--accent);
+  --c-rgb: var(--accent-rgb);
+}
+.c-violet {
+  --c: var(--violet);
+  --c-rgb: var(--violet-rgb);
+}
+
+/* Round check mark (lists, chores) */
+.check {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  display: grid;
+  place-items: center;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.check .i {
+  width: 12px;
+  height: 12px;
+  stroke-width: 3;
+  opacity: 0;
+  color: #0d0f12;
+}
+
+/* ---------- Recording (panel.setRecording(on, button)) ----------
+   The button grows a little and sends out soft rings; the whole widget breathes a red glow. */
+.rec-btn {
+  position: relative;
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.25s,
+    color 0.25s;
+}
+.rec-btn.is-recording {
+  transform: scale(1.14);
+  background: var(--crimson);
+  color: #fff;
+  box-shadow: 0 4px 16px -4px rgba(var(--crimson-rgb), 0.7);
+}
+.rec-btn.is-recording::before,
+.rec-btn.is-recording::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 0 2px rgba(var(--crimson-rgb), 0.55);
+  animation: rec-ring 1.8s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+.rec-btn.is-recording::after {
+  animation-delay: 0.9s;
+}
+@keyframes rec-ring {
+  from {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+.panel.is-recording {
+  z-index: 3;
+  border-color: rgba(var(--crimson-rgb), 0.55);
+  animation: rec-glow 2.4s ease-in-out infinite;
+}
+/* Panels on a screen already run the (finished) "rise" entrance: keep it in the list so it doesn't replay */
+.screen.is-active .grid > .panel.is-recording {
+  animation:
+    rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both,
+    rec-glow 2.4s ease-in-out infinite;
+}
+@keyframes rec-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(var(--crimson-rgb), 0.35),
+      0 0 22px 0 rgba(var(--crimson-rgb), 0.22),
+      inset 0 0 18px rgba(var(--crimson-rgb), 0.06);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(var(--crimson-rgb), 0.6),
+      0 0 40px 4px rgba(var(--crimson-rgb), 0.38),
+      inset 0 0 28px rgba(var(--crimson-rgb), 0.12);
+  }
+}
+body.low-power .screen.is-active .grid > .panel.is-recording {
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  box-shadow:
+    0 0 0 1px rgba(var(--crimson-rgb), 0.6),
+    0 0 28px 2px rgba(var(--crimson-rgb), 0.3);
+}
+body.low-power .rec-btn.is-recording::before,
+body.low-power .rec-btn.is-recording::after {
+  animation: none;
+  opacity: 0;
+}
+
+/* ---------- Photo slideshow (Photos widget, photo screens, photo background) ---------- */
+.slideshow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+  border-radius: inherit;
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.8s ease;
+}
+.slide.is-visible {
+  opacity: 1;
+}
+.slide-fill {
+  position: absolute;
+  inset: -40px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(28px) brightness(0.55) saturate(1.2);
+}
+.slide-img {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  will-change: transform;
+}
+.slide.fit-contain .slide-img {
+  background-size: contain;
+}
+.slide.kb .slide-img {
+  animation: kenburns var(--kb-dur, 30s) ease-out both;
+  transform-origin: var(--kb-origin, 50% 50%);
+}
+@keyframes kenburns {
+  from {
+    transform: scale(1.02);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+.slide-caption {
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
+  right: 14px;
+  z-index: 2;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.82);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.screen-photo .slide-caption {
+  left: max(24px, var(--gap));
+  right: auto;
+  bottom: auto;
+  top: 18px;
+  opacity: 0.7;
+}

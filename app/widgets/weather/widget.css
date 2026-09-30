@@ -1,0 +1,8 @@
+.b-weather .panel-body {
+  container: wx / size;
+}
+@media (max-width: 599px), (orientation: landscape) and (max-height: 480px) {
+  .grid > .b-weather {
+    min-height: 420px;
+  }
+}

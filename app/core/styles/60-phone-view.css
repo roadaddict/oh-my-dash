@@ -1,0 +1,41 @@
+/* Phone lists view (?view=lists): just the lists, full screen, thumb-sized */
+.app.view-phone {
+  height: 100dvh !important;
+  min-height: 0 !important;
+  padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom)) !important;
+}
+.app.view-phone .statusbar {
+  display: none !important;
+}
+.app.view-phone .screens {
+  flex: 1 !important;
+  min-height: 0;
+}
+.app.view-phone .screen {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+.app.view-phone .screen > .grid {
+  display: flex !important;
+  flex-direction: column;
+  height: 100% !important;
+}
+.app.view-phone .grid > .panel {
+  flex: 1;
+  min-height: 0 !important;
+  animation: none !important;
+}
+.app.view-phone [data-action='expand'] {
+  display: none;
+}
+/* Reload only while the widget's data is failing (embedded pages keep it: see makePanel) */
+.panel:not(.feed-error) [data-action='reload'].is-retry {
+  display: none;
+}
+.panel.feed-error [data-action='reload'].is-retry {
+  color: var(--amber);
+}

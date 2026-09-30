@@ -25,13 +25,21 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
     if (request.method !== 'GET') return new Response('Method not allowed', { status: 405, headers: cors });
 
-    const list = (v) => (v || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+    const list = (v) =>
+      (v || '')
+        .split(',')
+        .map((s) => s.trim().toLowerCase())
+        .filter(Boolean);
     const origins = list(env.ALLOWED_ORIGINS);
     const origin = (request.headers.get('Origin') || '').toLowerCase();
     if (origins.length && !origins.includes(origin)) return new Response('Origin not allowed', { status: 403, headers: cors });
 
     let target;
-    try { target = new URL(new URL(request.url).searchParams.get('url')); } catch { return new Response('Missing or invalid ?url=', { status: 400, headers: cors }); }
+    try {
+      target = new URL(new URL(request.url).searchParams.get('url'));
+    } catch {
+      return new Response('Missing or invalid ?url=', { status: 400, headers: cors });
+    }
     if (!/^https?:$/.test(target.protocol)) return new Response('Only http(s) URLs', { status: 400, headers: cors });
     const hosts = list(env.ALLOWED_HOSTS);
     if (hosts.length && !hosts.some((h) => target.hostname === h || target.hostname.endsWith(`.${h}`))) {

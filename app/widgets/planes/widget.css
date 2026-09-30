@@ -1,0 +1,139 @@
+.b-planes .planes {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.b-planes .radar {
+  flex: 0 1 46%;
+  min-height: 110px;
+  display: flex;
+  justify-content: center;
+}
+.b-planes .radar svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.b-planes .radar .ring {
+  fill: none;
+  stroke: rgba(125, 211, 252, 0.22);
+  stroke-width: 0.8;
+}
+.b-planes .radar .ax {
+  stroke: rgba(125, 211, 252, 0.12);
+  stroke-width: 0.6;
+}
+.b-planes .radar .home {
+  fill: var(--sky);
+}
+.b-planes .radar .n,
+.b-planes .radar .rl {
+  fill: var(--text-3);
+  font-size: 8px;
+  font-family: var(--font);
+  text-anchor: middle;
+}
+.b-planes .radar .rl {
+  text-anchor: start;
+  font-size: 7px;
+}
+.b-planes .radar .pl {
+  fill: var(--text-2);
+  font-size: 7.5px;
+  font-weight: 600;
+  font-family: var(--font);
+}
+.b-planes .radar .ac {
+  stroke: rgba(0, 0, 0, 0.4);
+  stroke-width: 0.6;
+}
+.b-planes .radar .near {
+  fill: none;
+  stroke: var(--amber);
+  stroke-width: 1;
+  animation: planes-pulse-ring 2s ease-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.b-planes .radar .sweep {
+  animation: planes-sweep 6s linear infinite;
+  transform-origin: 0 0;
+}
+.b-planes .radar .sweep path {
+  fill: rgba(125, 211, 252, 0.08);
+}
+@keyframes planes-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes planes-pulse-ring {
+  0% {
+    opacity: 1;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+body.low-power .b-planes .radar .sweep,
+body.low-power .b-planes .radar .near {
+  animation: none;
+}
+.b-planes .plane {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.b-planes .plane.is-near {
+  background: rgba(var(--amber-rgb), 0.1);
+  box-shadow: inset 0 0 0 1px rgba(var(--amber-rgb), 0.3);
+}
+.b-planes .plane-ic {
+  color: var(--c);
+}
+.b-planes .plane-ic .i {
+  width: 18px;
+  height: 18px;
+}
+.b-planes .plane-title {
+  font-size: 13.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-planes .plane-title span {
+  color: var(--text-2);
+  font-size: 12px;
+}
+.b-planes .plane-sub {
+  font-size: 11.5px;
+  color: var(--text-3);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-planes .plane-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.b-planes .plane-num b {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c);
+}
+.b-planes .plane-num small {
+  display: block;
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 2px;
+}

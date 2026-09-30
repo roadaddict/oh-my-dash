@@ -1,0 +1,4 @@
+.b-photo .panel-body {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}

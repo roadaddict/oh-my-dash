@@ -1,0 +1,127 @@
+/* ==========================================================================
+   RESPONSIVE ENGINE (per-screen layouts are computed in core/boot/80-screens.js).
+   Widgets add their own phone rules in widget.css, inside the same media query:
+   @media (max-width: 599px), (orientation: landscape) and (max-height: 480px)
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .screen-tab .tab-label {
+    display: none;
+  }
+  .screen-tab {
+    padding: 0 10px;
+  }
+}
+@media (max-width: 1440px) {
+  .brand-date {
+    display: none;
+  }
+}
+/* Portrait tablet (800 px): the name stays, the latency sparkline makes room for it */
+@media (max-width: 900px) {
+  .ping-extra,
+  .sparkline {
+    display: none;
+  }
+  .brand-name {
+    font-size: 14.5px;
+  }
+}
+@media (max-width: 720px) {
+  .brand-name,
+  .chip .chip-label-long {
+    display: none;
+  }
+}
+
+/* Phones / tiny windows: single scrolling column */
+@media (max-width: 599px), (orientation: landscape) and (max-height: 480px) {
+  body {
+    overflow: auto;
+  }
+  .app {
+    height: auto;
+    min-height: 100dvh;
+  }
+  .screens {
+    flex: none;
+  }
+  .screen {
+    position: relative;
+    inset: auto;
+    display: none;
+    transform: none;
+  }
+  .screen.is-active {
+    display: block;
+  }
+  .screen > .grid {
+    display: flex !important;
+    flex-direction: column;
+    height: auto;
+  }
+  .grid > .panel {
+    min-height: 300px;
+  }
+  .screen-photo {
+    position: fixed;
+  }
+  .chip .chip-label-long,
+  .screen-tab .tab-label {
+    display: none;
+  }
+  .screen-tabs {
+    margin-left: 0;
+  }
+  .brand,
+  #btnFullscreen {
+    display: none;
+  }
+  .statusbar {
+    gap: 6px;
+    padding: 0;
+  }
+  .status-chips {
+    gap: 6px;
+  }
+  .statusbar .chip {
+    padding: 0 6px;
+  }
+  .ping-value {
+    min-width: 0;
+  }
+  .screen-tab {
+    padding: 0 9px;
+  }
+}
+
+@media (max-width: 380px) {
+  #netChip .ping-value {
+    display: none;
+  }
+  #netChip {
+    padding: 0 6px;
+  }
+}
+
+/* Low-power mode for older tablets & reduced-motion users */
+body.low-power .panel:not(.is-bare),
+body.low-power .app.statusbar-auto .statusbar {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(16, 16, 16, 0.95);
+}
+body.low-power .bg-orbs,
+body.low-power .sk,
+body.low-power .dot.tone-good,
+body.low-power .slide.kb .slide-img {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,340 @@
+/* Spotify's player only renders cleanly at 80 / 152 / 352 px: JS snaps to the largest that fits. */
+.b-spotify .panel-body {
+  justify-content: center;
+}
+.b-spotify .frame {
+  flex: none;
+  height: 152px;
+  background: transparent;
+  box-shadow: none;
+}
+.b-spotify.is-expanded .frame {
+  flex: 1;
+  height: auto;
+}
+.b-spotify .spotify-glow {
+  position: absolute;
+  inset: auto -20% -40% -20%;
+  height: 70%;
+  background: radial-gradient(closest-side, rgba(30, 215, 96, 0.14), transparent);
+  pointer-events: none;
+}
+/* Now Playing: art + track + progress + controls; stacks when the cell is portrait */
+.b-spotify .np-host {
+  container-type: size;
+  min-height: 132px;
+} /* size containers have no intrinsic height: keeps "auto" layout rows usable */
+.b-spotify .np {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 4cqw, 18px);
+}
+.b-spotify .np-art {
+  flex: none;
+  height: min(100cqh, 42cqw);
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  color: var(--text-3);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.8);
+}
+.b-spotify .np-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.b-spotify .np-art > .i {
+  width: 34%;
+  height: 34%;
+  opacity: 0.5;
+}
+.b-spotify .np-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 3cqh, 12px);
+}
+.b-spotify .np-title {
+  font-size: clamp(15px, min(9cqh, 6cqw), 24px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-spotify .np-artist {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-spotify .np-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+.b-spotify .np-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--spotify);
+  border-radius: inherit;
+}
+.b-spotify .np-times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+.b-spotify .np-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+/* Volume: shares the progress bar's place */
+.b-spotify .np-vol {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  height: 26px;
+}
+.b-spotify .np-mid.show-vol .np-progress {
+  display: none;
+}
+.b-spotify .np-mid.show-vol .np-vol {
+  display: flex;
+}
+.b-spotify .np-vol input {
+  flex: 1;
+  min-width: 0;
+  height: 26px;
+  margin: 0;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.b-spotify .np-vol input::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--spotify) var(--v, 50%), rgba(255, 255, 255, 0.12) var(--v, 50%));
+}
+.b-spotify .np-vol input::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--spotify) var(--v, 50%), rgba(255, 255, 255, 0.12) var(--v, 50%));
+}
+.b-spotify .np-vol input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+.b-spotify .np-vol input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+}
+.b-spotify .np-vol-val {
+  flex: none;
+  min-width: 4ch;
+  text-align: right;
+  font-size: 11.5px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+.b-spotify .np-vol-btn {
+  margin-left: auto;
+}
+.b-spotify .np-vol-btn.is-on {
+  color: var(--spotify);
+}
+.b-spotify .np-vol-btn[hidden] {
+  display: none;
+}
+.b-spotify .np-btn {
+  width: 40px;
+  height: 40px;
+}
+.b-spotify .np-btn .i {
+  fill: currentColor;
+}
+.b-spotify .np-btn.is-main {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--spotify);
+  border-color: transparent;
+  color: #050505;
+}
+.b-spotify:not(.is-playing) .np-bar i {
+  background: var(--text-3);
+}
+@container (orientation: portrait) {
+  .b-spotify .np {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+  }
+  .b-spotify .np-art {
+    height: auto;
+    width: min(100%, 52cqh);
+    align-self: center;
+  }
+  .b-spotify .np-controls {
+    justify-content: center;
+  }
+}
+@container (max-height: 140px) {
+  .b-spotify .np-times,
+  .b-spotify .np-artist {
+    display: none;
+  }
+  .b-spotify .np-btn {
+    width: 34px;
+    height: 34px;
+  }
+  .b-spotify .np-btn.is-main {
+    width: 40px;
+    height: 40px;
+  }
+}
+.b-spotify .np-sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  background: #0a0a0a;
+  border-radius: 12px;
+}
+.b-spotify .np-sheet[hidden] {
+  display: none;
+}
+.b-spotify .np-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 2px 8px;
+}
+.b-spotify .np-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.b-spotify .np-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+.b-spotify .np-row:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+.b-spotify .np-row.is-current {
+  border-color: rgba(var(--spotify-rgb), 0.45);
+  background: rgba(var(--spotify-rgb), 0.08);
+}
+.b-spotify .np-thumb {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-3);
+}
+.b-spotify .np-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.b-spotify .np-thumb .i {
+  width: 20px;
+  height: 20px;
+}
+.b-spotify .np-row-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.b-spotify .np-row-text b,
+.b-spotify .np-row-text small {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-spotify .np-row-text b {
+  font-size: 14px;
+  font-weight: 500;
+}
+.b-spotify .np-row-text small {
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+.b-spotify .np-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  z-index: 4;
+  transform: translate(-50%, 8px);
+  max-width: 92%;
+  padding: 7px 12px;
+  border-radius: 10px;
+  background: rgba(30, 30, 30, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 12.5px;
+  color: var(--text);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.25s,
+    transform 0.25s;
+}
+.b-spotify .np-toast.is-on {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+@media (orientation: portrait) and (min-width: 600px) {
+  .b-spotify .frame {
+    height: 152px;
+  }
+}
+@media (max-width: 599px), (orientation: landscape) and (max-height: 480px) {
+  .grid > .b-spotify {
+    min-height: 0;
+  }
+  .grid > .b-spotify .frame {
+    height: 352px;
+  }
+  .grid > .b-spotify .np-host {
+    flex: none;
+    height: 150px;
+  }
+}

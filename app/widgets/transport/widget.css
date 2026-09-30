@@ -1,0 +1,119 @@
+.b-transport .board {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.b-transport .board-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(var(--emerald-rgb), 0.12), rgba(255, 255, 255, 0.03));
+  box-shadow: inset 0 0 0 1px rgba(var(--emerald-rgb), 0.18);
+}
+.b-transport .board-station {
+  font-size: clamp(16px, 2.2vmin, 20px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.b-transport .board-sub {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+.b-transport .board-clock {
+  font-family: var(--font-mono);
+  font-size: clamp(18px, 2.6vmin, 24px);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  color: var(--emerald);
+}
+.b-transport .departures {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.b-transport .dep {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(8px, 1.1vmin, 11px) 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.b-transport .line-badge {
+  min-width: 44px;
+  height: 30px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0d0f12;
+  background: var(--c);
+}
+.b-transport .line-badge .i {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2.2;
+}
+.b-transport .dep-dest {
+  font-size: clamp(14px, 1.8vmin, 16px);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-transport .dep-info {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-transport .dep-eta {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.b-transport .dep-eta b {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.6vmin, 24px);
+  font-weight: 500;
+}
+.b-transport .dep-eta small {
+  display: block;
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 3px;
+}
+.b-transport .dep-eta.is-now b {
+  color: var(--emerald);
+  animation: transport-blink 1.2s ease-in-out infinite;
+}
+@keyframes transport-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+@media (max-width: 599px), (orientation: landscape) and (max-height: 480px) {
+  .grid > .b-transport {
+    min-height: 480px;
+  }
+}

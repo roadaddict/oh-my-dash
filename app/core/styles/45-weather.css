@@ -1,0 +1,413 @@
+/* Shared weather component (.wx) — Home clock and Info weather. Adapts to its own box:
+   narrow → stacked; tall → forecast as rows with range bars; wide → now | chart side by side. */
+.wx {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-areas: 'now' 'stats' 'graph' 'fc';
+  row-gap: clamp(8px, 2.4cqh, 18px);
+}
+.wx-now {
+  grid-area: now;
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2.2cqi, 16px);
+  min-width: 0;
+}
+.wx-icon {
+  --tone: var(--amber);
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: clamp(40px, 5.5vmin, 54px);
+  height: clamp(40px, 5.5vmin, 54px);
+  border-radius: 16px;
+  color: var(--tone);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+.wx-icon .i {
+  width: 58%;
+  height: 58%;
+  stroke-width: 1.5;
+}
+.wx-temp {
+  flex: none;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 6vmin, 60px);
+  font-weight: 200;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+}
+.wx-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.wx-desc {
+  font-size: clamp(13px, 1.7vmin, 16px);
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wx-sub {
+  font-size: 12.5px;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+}
+.wx-error {
+  color: var(--text-3);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* One quiet line of facts; whatever doesn't fit is dropped by JS. */
+.wxd-stats {
+  grid-area: stats;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 16px;
+  row-gap: 6px;
+  height: 18px;
+  overflow: hidden;
+}
+.stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 18px;
+  font-size: 12.5px;
+  color: var(--text-2);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.stat .i {
+  width: 14px;
+  height: 14px;
+  color: var(--text-3);
+}
+.stat svg.moon {
+  width: 14px;
+  height: 14px;
+}
+
+.wx-graph {
+  grid-area: graph;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  min-height: 0;
+  min-width: 0;
+}
+.chart-cap {
+  flex: none;
+  font-size: 11px;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chart-cap b {
+  color: var(--accent);
+  font-weight: 500;
+}
+.wxd-chart {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 64px;
+  max-height: 150px;
+  min-width: 0;
+}
+.wxd-chart svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.wxd-chart .line {
+  fill: none;
+  stroke: var(--amber);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.wxd-chart .fill {
+  fill: url(#wxGrad);
+}
+.wxd-chart .bar {
+  fill: rgba(var(--sky-rgb), 0.45);
+}
+.wxd-chart text {
+  fill: var(--text-3);
+  font-size: 10px;
+  font-family: var(--font);
+}
+.wxd-chart text.t {
+  fill: var(--text-2);
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+/* Forecast days: compact columns by default */
+.forecast {
+  grid-area: fc;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+}
+.fc-day {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 'name name' 'ic ic' 'hi lo' 'rain rain';
+  justify-items: center;
+  align-content: center;
+  row-gap: 3px;
+  column-gap: 4px;
+  padding: 5px 2px;
+  border-radius: 10px;
+  background: transparent;
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+.fc-name {
+  grid-area: name;
+}
+.fc-ic {
+  grid-area: ic;
+  display: flex;
+}
+.fc-day .i {
+  width: 20px;
+  height: 20px;
+}
+.fc-hi {
+  grid-area: hi;
+  justify-self: end;
+  color: var(--text);
+  font-weight: 600;
+}
+.fc-lo {
+  grid-area: lo;
+  justify-self: start;
+  color: var(--text-3);
+}
+.fc-rain {
+  grid-area: rain;
+  font-size: 10.5px;
+  color: var(--sky);
+  min-height: 1em;
+}
+.fc-range {
+  display: none;
+}
+.fc-day.is-today .fc-name {
+  color: var(--accent);
+  font-weight: 600;
+}
+/* font-family only: the `font` shorthand would also reset the size to the widget's (16 px) */
+button.fc-day {
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
+}
+button.fc-day:active {
+  transform: scale(0.98);
+}
+.fc-day.is-selected {
+  background: rgba(var(--accent-rgb), 0.12);
+  box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.45);
+  color: var(--text);
+}
+
+/* Tall and not too wide: Apple-style rows — day · icon · rain · low ━━━ high */
+@container wx (min-height: 430px) and (max-width: 599px) {
+  .forecast {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .fc-day {
+    grid-template-columns: 4.6em 24px 2.8em 2.4em minmax(40px, 1fr) 2.4em;
+    grid-template-areas: 'name ic rain lo range hi';
+    justify-items: start;
+    align-items: center;
+    column-gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+  .fc-day:not(:last-child):not(.is-selected) {
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  }
+  .fc-day .i {
+    width: 20px;
+    height: 20px;
+  }
+  .fc-rain {
+    font-size: 12px;
+  }
+  .fc-lo,
+  .fc-hi {
+    justify-self: end;
+  }
+  .fc-range {
+    display: block;
+    grid-area: range;
+    justify-self: stretch;
+    position: relative;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.07);
+  }
+  .fc-range i {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--sky), var(--amber));
+  }
+}
+/* Wide (Home clock in portrait, Info): conditions + facts | compact days, chart full width underneath */
+@container wx (min-width: 540px) {
+  .wx {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas: 'now fc' 'stats fc' 'graph graph';
+    align-content: center; /* spare height goes around the block, not into the chart */
+    column-gap: clamp(16px, 3cqi, 32px);
+    row-gap: 12px;
+  }
+  .wx-now {
+    align-self: center;
+  }
+  .wxd-stats {
+    align-self: start;
+  }
+  .wx-graph .wxd-chart {
+    flex: none;
+    height: 120px;
+    min-height: 0;
+    max-height: none;
+  }
+  .forecast {
+    align-self: stretch;
+  }
+  /* Days fill the height of conditions + facts: name level with the temperature, °C line level with the facts */
+  .fc-day {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 'name name' 'ic ic' 'hi lo';
+    align-content: space-between;
+    padding: 2px 2px 0;
+    row-gap: 3px;
+  }
+  .fc-day .i {
+    width: 22px;
+    height: 22px;
+  }
+  .fc-hi {
+    justify-self: end;
+  }
+  .fc-lo {
+    justify-self: start;
+  }
+  .fc-rain {
+    display: none;
+  }
+}
+/* …and short (Info panel): no facts line or chart caption */
+@container wx (min-width: 540px) and (max-height: 220px) {
+  .wx {
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas: 'now fc' 'graph graph';
+    row-gap: 8px;
+    align-content: stretch;
+  }
+  .wx-graph .wxd-chart {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 28px;
+  }
+  .fc-day {
+    padding: 3px 2px;
+    font-size: 12px;
+    align-content: center;
+  }
+  .fc-day .i {
+    width: 20px;
+    height: 20px;
+  }
+  .wx .chart-cap {
+    display: none;
+  }
+}
+@container wx (min-width: 540px) and (max-width: 720px) and (max-height: 220px) {
+  .wx {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .wx .wx-main {
+    display: none;
+  }
+}
+/* Narrow and short: mini days between now and the chart */
+@container wx (max-width: 539px) and (max-height: 250px) {
+  .wx {
+    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-areas: 'now' 'fc' 'graph';
+    row-gap: 8px;
+  }
+  .fc-day {
+    padding: 2px;
+    row-gap: 2px;
+    font-size: 12px;
+    grid-template-areas: 'name name' 'hi lo';
+  }
+  .fc-ic,
+  .fc-rain,
+  .wx .chart-cap {
+    display: none;
+  }
+  /* This layout has no "stats" area: a visible facts line would add implicit grid columns and crush the days */
+  .wx .wxd-stats {
+    display: none;
+  }
+}
+@container wx (max-width: 539px) and (max-height: 175px) {
+  .wx .forecast {
+    display: none;
+  }
+}
+@container wx (max-width: 539px) and (max-height: 120px) {
+  .wx .forecast {
+    display: none;
+  }
+}
+/* Wide and very short: days stay (they sit beside the conditions); the chart goes first */
+@container wx (min-width: 540px) and (max-height: 78px) {
+  .wx .wx-graph {
+    display: none;
+  }
+}
+@container wx (max-height: 220px) {
+  .wx .wxd-stats {
+    display: none;
+  }
+}

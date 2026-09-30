@@ -1,0 +1,89 @@
+.b-commute .commute {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.b-commute .commute .tile-icon {
+  --c: var(--tint);
+  --c-rgb: var(--tint-rgb);
+}
+.b-commute .commute-name {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-commute .commute-sub {
+  font-size: 11.5px;
+  color: var(--text-3);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.b-commute .cm-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 4px 0 8px;
+}
+.b-commute .cm-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.b-commute .cm-row .field-inline > * {
+  min-width: 0;
+}
+.b-commute .cm-row .field-inline input[aria-label='Name'] {
+  flex: 1 1 auto;
+  min-width: 110px;
+}
+.b-commute .cm-row .field-inline select {
+  flex: 0 0 172px;
+  width: 172px;
+}
+.b-commute .cm-row input[aria-label='Start (optional)'] {
+  flex: 0.6;
+}
+.b-commute .cm-hint {
+  font-size: 11.5px;
+  color: var(--text-3);
+  min-height: 1em;
+}
+.b-commute .commute-min {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.b-commute .commute-min b {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 3vmin, 28px);
+  font-weight: 400;
+}
+.b-commute .commute-min small {
+  display: block;
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 3px;
+}
+.b-commute .panel-body {
+  container-type: inline-size;
+}
+@container (max-width: 250px) {
+  .b-commute .commute {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .b-commute .commute .tile-icon {
+    display: none;
+  }
+}

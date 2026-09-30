@@ -1,0 +1,80 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  // oxlint: `npm run lint` (with scripts/lint.mjs: the core boot files as one function, widget CSS scopes).
+  "jsPlugins": ["./scripts/oxlint-plugin.mjs"],
+  "ignorePatterns": [
+    "public/**",
+    "test/.build/**",
+    "test/fixtures/widgets/broken-syntax/**",
+    "app/core/boot/**",
+    "lib/integrations/index.js",
+    "test-results/**"
+  ],
+  "rules": {
+    "no-undef": "error",
+    "no-unused-vars": ["error", { "args": "none", "caughtErrors": "none", "ignoreRestSiblings": true }]
+  },
+  "overrides": [
+    {
+      "files": ["app/**/*.js", "test/fixtures/**/*.js"],
+      "env": { "browser": true, "es2024": true },
+      "globals": { "OMD": "readonly" }
+    },
+    {
+      // What a widget gets from ctx instead: cleaned up with the widget, errors stay inside it.
+      "files": ["app/widgets/**/*.js"],
+      "rules": {
+        "no-restricted-globals": [
+          "error",
+          { "name": "setTimeout", "message": "Use ctx.setTimeout — cleared when the widget is removed, errors stay inside the widget." },
+          { "name": "setInterval", "message": "Use ctx.setInterval — cleared when the widget is removed, errors stay inside the widget." },
+          { "name": "clearTimeout", "message": "Use ctx.clearTimeout." },
+          { "name": "clearInterval", "message": "Use ctx.clearInterval." },
+          { "name": "requestAnimationFrame", "message": "Use ctx.raf." },
+          { "name": "cancelAnimationFrame", "message": "ctx.raf callbacks are cancelled with the widget." },
+          { "name": "ResizeObserver", "message": "Use ctx.observeResize(el, fn)." },
+          { "name": "MutationObserver", "message": "Widgets watch their own data, not the page." },
+          { "name": "localStorage", "message": "Use ctx.local(name, fallback) (per device) or ctx.state(name, fallback) (synced)." },
+          { "name": "sessionStorage", "message": "Use ctx.local(name, fallback)." },
+          { "name": "fetch", "message": "Use ctx.fetchJSON / ctx.fetchText (proxy fallback, data meter), or ctx.api for your backend integration." }
+        ],
+        "no-restricted-properties": [
+          "error",
+          { "object": "OMD", "property": "_internal", "message": "Dashboard internals are not part of the widget API." },
+          { "object": "OMD", "property": "_load" },
+          { "object": "OMD", "property": "_manifest" },
+          { "object": "window", "property": "fetch" },
+          { "object": "window", "property": "setTimeout" },
+          { "object": "window", "property": "setInterval" }
+        ],
+        "omd/no-raw-listeners": "error",
+        "omd/no-page-access": "error"
+      }
+    },
+    {
+      "files": ["lib/**/*.js", "src/**/*.js", "cors-proxy/**/*.js"],
+      "env": { "serviceworker": true, "es2024": true }
+    },
+    {
+      // An integration only gets what the integration host hands it (ctx): no core modules.
+      "files": ["lib/integrations/**/*.js"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["../*", "!../integration-kit.js"],
+                "message": "An integration imports only ../integration-kit.js (and its own files): secrets, env and storage come through ctx."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["scripts/**/*.mjs", "test/**/*.js", "playwright*.config.js"],
+      "env": { "node": true, "browser": true, "es2024": true }
+    }
+  ]
+}
