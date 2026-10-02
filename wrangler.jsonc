@@ -19,5 +19,13 @@
   //   ACCESS_AUD         = Access → your application → Overview → "Application Audience (AUD) Tag"
   // Keep variables set in the dashboard (the two above, plus e.g. ALLOWED_IPS) across deploys.
   "keep_vars": true,
-  "observability": { "enabled": true }
+  "observability": { "enabled": true },
+  // Settings for Previews: the builds Workers Builds makes for branches other than main
+  // (wrangler preview refuses to run without this block). Empty on purpose: a Preview
+  // gets none of the production bindings or variables, so it serves the dashboard
+  // page (try ?local=1) but its API stays locked (no ACCESS_* / ALLOWED_IPS → every
+  // /api call is refused) and it never touches the production database. (Whether a
+  // Preview URL also asks for an Access login depends on your Access setup — keep it
+  // that way rather than relying on it: Previews shouldn't see real data.)
+  "previews": {}
 }
