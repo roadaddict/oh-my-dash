@@ -14,7 +14,7 @@ const GLOBAL_SCOPE = {
     ro.observe(el);
     return () => ro.disconnect();
   },
-  setInterval: (fn, ms) => setInterval(fn, ms),
+  setInterval: (fn, ms) => every(ms, fn), // on the shared clock (lives as long as the page)
   setTimeout: (fn, ms) => setTimeout(fn, ms),
   clearTimeout: (id) => clearTimeout(id),
 };
@@ -111,20 +111,24 @@ function wmo(code, isDay = 1) {
 }
 const FAHRENHEIT = cfg.TEMP_UNIT === 'fahrenheit';
 const WIND_UNIT = FAHRENHEIT ? 'mph' : 'km/h';
-const weatherFeed = createFeed(async () => {
-  const q = new URLSearchParams({
-    latitude: cfg.LATITUDE,
-    longitude: cfg.LONGITUDE,
-    timezone: 'auto',
-    forecast_days: 7,
-    current: 'temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,is_day',
-    hourly: 'temperature_2m,precipitation_probability,weather_code',
-    daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max',
-    temperature_unit: FAHRENHEIT ? 'fahrenheit' : 'celsius',
-    wind_speed_unit: FAHRENHEIT ? 'mph' : 'kmh',
-  });
-  return fetchJSON(`https://api.open-meteo.com/v1/forecast?${q}`);
-}, cfg.WEATHER_REFRESH_MIN * 60000);
+const weatherFeed = createFeed(
+  async () => {
+    const q = new URLSearchParams({
+      latitude: cfg.LATITUDE,
+      longitude: cfg.LONGITUDE,
+      timezone: 'auto',
+      forecast_days: 7,
+      current: 'temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,is_day',
+      hourly: 'temperature_2m,precipitation_probability,weather_code',
+      daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max',
+      temperature_unit: FAHRENHEIT ? 'fahrenheit' : 'celsius',
+      wind_speed_unit: FAHRENHEIT ? 'mph' : 'kmh',
+    });
+    return fetchJSON(`https://api.open-meteo.com/v1/forecast?${q}`);
+  },
+  cfg.WEATHER_REFRESH_MIN * 60000,
+  { persist: `weather.${hashKey([cfg.LATITUDE, cfg.LONGITUDE, cfg.TEMP_UNIT].join())}` },
+);
 
 /** Moon phase (0 = new, .5 = full) from a known new moon + synodic month. */
 function moonPhase(date = new Date()) {
@@ -281,8 +285,12 @@ function mountWeather(host, scope = GLOBAL_SCOPE) {
     resetTimer = 0;
   // Facts that don't fit are dropped (never shown half-cut).
   const fitStats = () => {
-    const chips = [...stats.children];
-    while (chips.length > 1 && stats.scrollHeight > stats.clientHeight + 1) chips.pop().remove();
+    // One measurement, then removals (not measure → remove → measure… per chip).
+    const limit = stats.clientHeight + 1,
+      chips = [...stats.children];
+    const top = (c) => (c.offsetParent === stats ? c.offsetTop : c.offsetTop - stats.offsetTop);
+    const cut = chips.findIndex((c, i) => i > 0 && top(c) + c.offsetHeight > limit);
+    if (cut > 0) chips.slice(cut).forEach((c) => c.remove());
   };
   const draw = () => {
     if (!last) return;
@@ -385,34 +393,38 @@ async function loadGooglePhotos(url) {
   for (const m of html.matchAll(/\["(https:\/\/lh3\.googleusercontent\.com\/pw\/[a-zA-Z0-9\-_]+)"/g)) found.add(m[1]);
   return [...found].map((u) => ({ src: `${u}=w${PHOTO_W}-h${PHOTO_H}`, caption: '' }));
 }
-const photoFeed = createFeed(async () => {
-  let items = [];
-  for (const line of cfg.PHOTO_URLS) {
-    const [src, caption] = pipe(line);
-    if (src) items.push({ src, caption });
-  }
-  const feeds = await Promise.allSettled(cfg.PHOTO_FEEDS.map((u) => fetchText(u).then(parsePhotoFeed)));
-  feeds.forEach((r) => {
-    if (r.status === 'fulfilled') items.push(...r.value);
-    else console.warn('Photo feed failed:', r.reason);
-  });
-  if (cfg.GOOGLE_PHOTOS_ALBUM) {
-    try {
-      items.push(...(await loadGooglePhotos(cfg.GOOGLE_PHOTOS_ALBUM)));
-    } catch (e) {
-      console.warn('Google Photos failed:', e);
+const photoFeed = createFeed(
+  async () => {
+    let items = [];
+    for (const line of cfg.PHOTO_URLS) {
+      const [src, caption] = pipe(line);
+      if (src) items.push({ src, caption });
     }
-  }
-  let demo = false;
-  if (!items.length) {
-    demo = true;
-    const page = 1 + Math.floor(Math.random() * 20);
-    const list = await fetchJSON(`https://picsum.photos/v2/list?page=${page}&limit=40`);
-    const [w, hh] = PORTRAIT ? [PHOTO_H, PHOTO_W] : [PHOTO_W, PHOTO_H];
-    items = list.map((ph) => ({ src: `https://picsum.photos/id/${ph.id}/${w}/${hh}`, caption: `Photo: ${ph.author} · Unsplash` }));
-  }
-  return { items: cfg.PHOTO_SHUFFLE ? shuffle(items) : items, demo };
-}, 6 * 3600000);
+    const feeds = await Promise.allSettled(cfg.PHOTO_FEEDS.map((u) => fetchText(u).then(parsePhotoFeed)));
+    feeds.forEach((r) => {
+      if (r.status === 'fulfilled') items.push(...r.value);
+      else console.warn('Photo feed failed:', r.reason);
+    });
+    if (cfg.GOOGLE_PHOTOS_ALBUM) {
+      try {
+        items.push(...(await loadGooglePhotos(cfg.GOOGLE_PHOTOS_ALBUM)));
+      } catch (e) {
+        console.warn('Google Photos failed:', e);
+      }
+    }
+    let demo = false;
+    if (!items.length) {
+      demo = true;
+      const page = 1 + Math.floor(Math.random() * 20);
+      const list = await fetchJSON(`https://picsum.photos/v2/list?page=${page}&limit=40`);
+      const [w, hh] = PORTRAIT ? [PHOTO_H, PHOTO_W] : [PHOTO_W, PHOTO_H];
+      items = list.map((ph) => ({ src: `https://picsum.photos/id/${ph.id}/${w}/${hh}`, caption: `Photo: ${ph.author} · Unsplash` }));
+    }
+    return { items: cfg.PHOTO_SHUFFLE ? shuffle(items) : items, demo };
+  },
+  6 * 3600000,
+  { persist: `photos.${hashKey(JSON.stringify([cfg.PHOTO_URLS, cfg.PHOTO_FEEDS, cfg.GOOGLE_PHOTOS_ALBUM, PORTRAIT]))}` },
+);
 
 /**
  * Photo bytes: fetched once as a blob, kept in Cache Storage (survives the daily reload)
@@ -451,7 +463,8 @@ async function photoUrl(src) {
 }
 
 const KB_ORIGINS = ['20% 30%', '80% 25%', '50% 80%', '30% 70%', '70% 60%', '50% 40%'];
-function slideshow(host, { captions = true } = {}, scope = GLOBAL_SCOPE) {
+/** glass: also keep a blurred twin clipped to the panels over it (see 66-glass.js); gridOf() finds them. */
+function slideshow(host, { captions = true, glass = null } = {}, scope = GLOBAL_SCOPE) {
   const wrap = h('div', { class: 'slideshow' });
   const mk = () => {
     const img = h('div', { class: 'slide-img' }),
@@ -464,6 +477,7 @@ function slideshow(host, { captions = true } = {}, scope = GLOBAL_SCOPE) {
   const cap = h('div', { class: 'slide-caption' });
   if (captions) wrap.append(cap);
   host.append(wrap);
+  const twin = glass ? glassLayer(host, glass) : null;
 
   let items = [],
     idx = 0,
@@ -482,11 +496,13 @@ function slideshow(host, { captions = true } = {}, scope = GLOBAL_SCOPE) {
       back.fill.style.backgroundImage = url;
       back.el.classList.remove('kb');
       void back.el.offsetWidth; // restart the Ken Burns animation
-      if (cfg.PHOTO_KEN_BURNS) {
-        back.el.style.setProperty('--kb-dur', `${cfg.PHOTO_INTERVAL_SEC + 4}s`);
-        back.el.style.setProperty('--kb-origin', KB_ORIGINS[idx % KB_ORIGINS.length]);
+      const kb = cfg.PHOTO_KEN_BURNS ? { dur: `${cfg.PHOTO_INTERVAL_SEC + 4}s`, origin: KB_ORIGINS[idx % KB_ORIGINS.length] } : null;
+      if (kb) {
+        back.el.style.setProperty('--kb-dur', kb.dur);
+        back.el.style.setProperty('--kb-origin', kb.origin);
         back.el.classList.add('kb');
       }
+      twin?.show(im, kb); // same frame, same zoom: the blurred twin stays aligned
       back.el.classList.add('is-visible');
       layers[front].el.classList.remove('is-visible');
       front = 1 - front;

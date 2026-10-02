@@ -145,8 +145,7 @@
   background: rgba(10, 12, 15, 0.45) !important;
   border-radius: 14px !important;
   padding: 0 14px !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  /* no live blur: over a photo the pre-blurred glass layer is behind it (core boot/66-glass.js) */
 }
 @media (max-width: 599px), (orientation: landscape) and (max-height: 480px) {
   .grid > .b-ticker {

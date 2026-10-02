@@ -323,6 +323,26 @@ body.low-power .rec-btn.is-recording::after {
     transform: scale(1.14);
   }
 }
+/* The blurred twin of a photo, clipped to the panels over it (boot/66-glass.js). */
+.glass-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden; /* the zoom must not make the page scroll */
+  opacity: var(--glass-k, 1);
+  clip-path: inset(50%);
+}
+.glass-layer .slide-img {
+  background-size: 100% 100%; /* the copy is already cropped to this box */
+}
+.glass-layer .slide.is-raw .slide-img {
+  /* a host that doesn't allow reading its photos: blur it live after all */
+  background-size: cover;
+  filter: blur(var(--blur)) saturate(1.4);
+}
+body.low-power .glass-layer {
+  display: none;
+}
 .slide-caption {
   position: absolute;
   left: 14px;

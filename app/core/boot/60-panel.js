@@ -230,7 +230,7 @@ function mountFrame(host, { url, title, zoom = 1, refreshMin = 0, allow = '', in
     wrap.prepend(buffer);
   }
   hardReload();
-  const refreshTimer = refreshMin > 0 ? setInterval(softReload, refreshMin * 60000) : 0;
+  const stopRefresh = refreshMin > 0 ? every(refreshMin * 60000, softReload) : () => {};
   const resume = () => {
     if (stale) softReload();
   };
@@ -238,7 +238,7 @@ function mountFrame(host, { url, title, zoom = 1, refreshMin = 0, allow = '', in
   const api = {
     reload: hardReload,
     destroy() {
-      clearInterval(refreshTimer);
+      stopRefresh();
       clearTimeout(slowTimer);
       resumers.delete(resume);
       frames.splice(frames.indexOf(api), 1);

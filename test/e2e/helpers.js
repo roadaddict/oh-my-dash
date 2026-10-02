@@ -59,11 +59,16 @@ export async function expectNoFailedWidgets(page) {
   expect(failed, 'widgets showing an error card').toEqual([]);
 }
 
-/** Box of each visible panel, by slot. */
+/**
+ * Box of each visible panel, by slot, where it ends up: one-off animations (the panels'
+ * entry "rise", a transform) run on the real clock, not the test's, so they're finished
+ * first — otherwise a slow machine measures a panel still a pixel short of its place.
+ */
 export const panelBoxes = (page) =>
   visiblePanels(page).evaluateAll((els) =>
     Object.fromEntries(
       els.map((e) => {
+        for (const a of e.getAnimations({ subtree: true })) if (a.effect?.getComputedTiming().iterations !== Infinity) a.finish();
         const r = e.getBoundingClientRect();
         return [e.dataset.block, { x: r.x, y: r.y, w: r.width, h: r.height, r: r.right, b: r.bottom }];
       }),

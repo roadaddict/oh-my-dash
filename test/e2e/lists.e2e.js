@@ -88,3 +88,33 @@ test('cloud mode: an item added on a phone shows up on the tablet', async ({ bro
   // Only lists sync this way: the phone never had a tablet's other widgets.
   await expect(phone.locator('.panel')).toHaveCount(1);
 });
+
+test('cloud mode: an item added while the cloud is unreachable survives a reload and merges with edits made elsewhere', async ({ browser }) => {
+  const api = fakeApi();
+  const tablet = await browser.newPage(),
+    phone = await browser.newPage();
+  await openDashboard(tablet, { screen: 'family', cloud: true, api });
+  await openDashboard(phone, { query: 'view=lists', viewport: 'phone', cloud: true, api });
+  // The tablet loses the cloud; its edit waits on the device.
+  await tablet.route('**/api/state**', (r) => r.abort());
+  await add(tablet, 'Tea');
+  // Meanwhile a phone adds something else.
+  await phone.locator('.b-lists').getByRole('textbox', { name: 'New item' }).fill('Honey');
+  await phone.locator('.b-lists').getByRole('textbox', { name: 'New item' }).press('Enter');
+  await phone.clock.runFor(1000);
+  expect(api.state.lists.value.Groceries.map((i) => i.text)).toContain('Honey');
+  expect(api.state.lists.value.Groceries.map((i) => i.text)).not.toContain('Tea');
+  // The tablet restarts, still without the cloud: the item is still there.
+  await tablet.reload();
+  await settle(tablet, 'paused', 2000);
+  await expect(tablet.locator('.screen.is-active .b-lists .item', { hasText: 'Tea' })).toHaveCount(1);
+  // The cloud is back: the tablet's item is sent, and nobody's edit is lost.
+  await tablet.unroute('**/api/state**');
+  await tablet.clock.runFor(15500);
+  await settle(tablet, 'paused', 3000);
+  const texts = api.state.lists.value.Groceries.map((i) => i.text);
+  expect(texts).toContain('Tea');
+  expect(texts).toContain('Honey');
+  await expect(tablet.locator('.screen.is-active .b-lists .item', { hasText: 'Honey' })).toHaveCount(1);
+  expect(await tablet.evaluate(() => localStorage.getItem('omd.sync-pending.v1'))).toBeNull();
+});

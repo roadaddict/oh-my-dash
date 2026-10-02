@@ -28,4 +28,9 @@ else {
   initKiosk();
   initNetwork();
   initScreens();
+  dropSnapshot();
+  initSnapshots();
 }
+performance.mark('omd:ready');
+initOffline();
+initPerfOverlay();

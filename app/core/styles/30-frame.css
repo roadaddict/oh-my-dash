@@ -49,13 +49,31 @@
 }
 .frame.is-loaded .skeleton {
   opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.5s ease,
+    visibility 0s 0.5s;
   pointer-events: none;
 }
+/* Loading shimmer: a light band slides across. It moves with transform (on the GPU): an
+   animated background would restyle and repaint on the main thread every frame. */
 .sk {
+  position: relative;
+  overflow: hidden;
   border-radius: 8px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.1) 45%, rgba(255, 255, 255, 0.04) 90%);
-  background-size: 250% 100%;
+  background: rgba(255, 255, 255, 0.04);
+}
+.sk::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
+  transform: translateX(-100%);
   animation: shimmer 1.5s linear infinite;
+}
+/* Hidden behind a loaded page: don't animate at all. */
+.frame.is-loaded .sk::after {
+  animation: none;
 }
 .sk-title {
   height: 18px;
@@ -81,11 +99,8 @@
   flex: none;
 }
 @keyframes shimmer {
-  from {
-    background-position: 100% 0;
-  }
   to {
-    background-position: -150% 0;
+    transform: translateX(100%);
   }
 }
 
@@ -120,4 +135,19 @@
   background: rgba(255, 255, 255, 0.08);
   cursor: pointer;
   font-size: 12px;
+}
+
+/* Data older than it should be (offline, or the service is down): "12 min ago" in the corner. */
+.panel[data-stale]::after {
+  content: attr(data-stale);
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  z-index: 3;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(var(--amber-rgb), 0.14);
+  color: var(--amber);
+  font: 500 10px/1.6 var(--font-mono);
+  pointer-events: none;
 }

@@ -46,7 +46,7 @@ OMD.defineWidget({
     const quotes = ctx.settings.QUOTES.length ? ctx.settings.QUOTES.map(pipe) : BUILTIN_QUOTES;
     function render() {
       const [text, author] = quotes[hash(ymd(new Date())) % quotes.length];
-      box.replaceChildren(h('blockquote', null, text), author ? h('cite', null, `— ${author}`) : null);
+      box.replaceChildren(h('blockquote', null, text), author ? h('cite', null, `— ${author}`) : '');
     }
     ctx.onTick((n) => {
       if (n.getHours() === 0 && n.getMinutes() === 0 && n.getSeconds() === 3) render();

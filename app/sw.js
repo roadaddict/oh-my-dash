@@ -1,0 +1,94 @@
+/**
+ * Service worker: the dashboard starts even without internet.
+ *
+ *   the page (index.html)  network first, so a deploy shows up on the next load; the saved copy
+ *                          when the network fails or takes longer than NAV_TIMEOUT_MS
+ *   fonts/*                saved on install, then served from the device (they never change)
+ *   everything else        not touched: /api, feeds, photos and embeds go to the network as usual
+ *                          (widgets keep their own last good data — see createFeed)
+ *
+ * The page is only saved when it really is the dashboard (not, say, a sign-in page shown
+ * by Cloudflare Access), and a sign-in redirect is always passed through to the browser.
+ * Built by scripts/build.mjs, which fills in VERSION and PRECACHE. Open the dashboard
+ * with ?nosw=1 to remove it from a device.
+ */
+const VERSION = 'dev';
+const PRECACHE = [];
+const CACHE = `omd-${VERSION}`;
+const NAV_TIMEOUT_MS = 4000;
+const SHELL_KEY = new URL('./', self.location).href;
+
+/** A response that is the dashboard itself (and not a login page or an error). */
+async function isShell(res) {
+  if (!res || !res.ok || res.redirected || res.type !== 'basic') return false;
+  if (!(res.headers.get('Content-Type') || '').includes('text/html')) return false;
+  return (await res.clone().text()).includes('name="omd-build"');
+}
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    (async () => {
+      const cache = await caches.open(CACHE);
+      await cache.addAll(PRECACHE);
+      const page = await fetch(SHELL_KEY, { cache: 'no-store' }).catch(() => null);
+      if (await isShell(page)) await cache.put(SHELL_KEY, page);
+      await self.skipWaiting();
+    })(),
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    (async () => {
+      // Carry the saved page over from the previous version, then drop the old caches.
+      const cache = await caches.open(CACHE);
+      for (const name of await caches.keys()) {
+        if (!name.startsWith('omd-') || name === CACHE || name.startsWith('omd-photos')) continue;
+        if (!(await cache.match(SHELL_KEY))) {
+          const old = await (await caches.open(name)).match(SHELL_KEY);
+          if (old) await cache.put(SHELL_KEY, old);
+        }
+        await caches.delete(name);
+      }
+      await self.clients.claim();
+    })(),
+  );
+});
+
+async function page(request) {
+  const cache = await caches.open(CACHE);
+  const network = fetch(request).then(async (res) => {
+    if (await isShell(res)) await cache.put(SHELL_KEY, res.clone());
+    return res;
+  });
+  const timeout = new Promise((resolve) => setTimeout(resolve, NAV_TIMEOUT_MS, null));
+  try {
+    const res = await Promise.race([network, timeout]);
+    if (res) return res;
+  } catch {
+    /* offline — fall through to the saved copy */
+  }
+  const saved = await cache.match(SHELL_KEY);
+  if (saved) return saved;
+  return network; // nothing saved yet: wait for the network after all
+}
+
+async function asset(request) {
+  const cache = await caches.open(CACHE);
+  const hit = await cache.match(request);
+  if (hit) return hit;
+  const res = await fetch(request);
+  if (res.ok) await cache.put(request, res.clone());
+  return res;
+}
+
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET') return;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+  const scope = new URL(self.registration.scope);
+  const path = url.pathname.slice(scope.pathname.length);
+  if (request.mode === 'navigate' && (path === '' || path === 'index.html')) event.respondWith(page(request));
+  else if (path.startsWith('fonts/')) event.respondWith(asset(request));
+});

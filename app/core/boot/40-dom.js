@@ -1,10 +1,17 @@
 /* ==========================================================================
    DOM HELPERS & FORMATTERS
    ========================================================================== */
+const iconCache = new Map(); // parsed once per icon, then cloned (parsing SVG markup is the slow part)
 function icon(name, cls = '') {
-  const t = document.createElement('template');
-  t.innerHTML = `<svg class="i ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${REG.icons[name] || ''}</svg>`;
-  return t.content.firstElementChild;
+  const key = `${name}|${cls}`;
+  let svg = iconCache.get(key);
+  if (!svg) {
+    const t = document.createElement('template');
+    t.innerHTML = `<svg class="i ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${REG.icons[name] || ''}</svg>`;
+    svg = t.content.firstElementChild;
+    iconCache.set(key, svg);
+  }
+  return svg.cloneNode(true);
 }
 function hydrateIcons(root = document) {
   root.querySelectorAll('[data-icon]').forEach((n) => {

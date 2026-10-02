@@ -135,7 +135,7 @@ OMD.defineWidget({
       : null;
     const form = h('form', { class: 'add-row' }, input, mic, h('button', { class: 'icon-btn', type: 'submit', 'aria-label': 'Add item' }, icon('plus')));
     p.body.classList.add('lists-host');
-    p.body.append(tabs.length > 1 ? seg : null, list, undoBar, quick, form);
+    p.body.append(tabs.length > 1 ? seg : '', list, undoBar, quick, form);
 
     const current = () => (active === 'Todoist' ? td.items : data[active] || (data[active] = []));
     async function syncTodoist() {

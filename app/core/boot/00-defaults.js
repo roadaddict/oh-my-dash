@@ -61,7 +61,7 @@ const CORE_DEFAULTS = {
   KEEP_SCREEN_AWAKE: true, // Screen Wake Lock API.
   HIDE_CURSOR_SEC: 5,
   DAILY_RELOAD_AT: '03:30', // Full page refresh once a day ("" to disable).
-  LOW_POWER: false, // Disable blur & animations on slower tablets.
+  LOW_POWER: 'auto', // No animations or glow: 'auto' (slow tablets, detected), 'on', 'off'.
   WIDGET_BG: 20, // widget background: 0 · 5 · 10 · 15 · 20 (%) — 0 = none, 20 = frosted glass
   THEME_ACCENT: '#f0d722', // BVG yellow, matching the transit app
   CUSTOM_CSS: '', // Injected as-is, e.g. ".clock-hm{font-weight:100}"
@@ -325,7 +325,18 @@ const CORE_SECTIONS = [
       ],
       ['KEEP_SCREEN_AWAKE', 'Keep screen awake', 'checkbox'],
       ['BURN_IN_SHIFT', 'Burn-in protection (pixel shift)', 'checkbox'],
-      ['LOW_POWER', 'Low-power mode (no blur / animations)', 'checkbox'],
+      [
+        'LOW_POWER',
+        'Low-power mode (no animations)',
+        'select',
+        {
+          options: [
+            ['auto', 'Automatic — on for slow tablets'],
+            ['on', 'On'],
+            ['off', 'Off'],
+          ],
+        },
+      ],
       ['CUSTOM_CSS', 'Custom CSS', 'textarea'],
     ],
   ],

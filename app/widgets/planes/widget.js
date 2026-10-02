@@ -93,7 +93,7 @@ OMD.defineWidget({
           .sort((a, b) => a.km - b.km);
       },
       Math.max(5, s.PLANES_REFRESH_SEC) * 1000,
-      { visibleOnly: true },
+      { visibleOnly: true, persist: false }, // positions are only true for a few seconds
     );
 
     const p = ctx.panel({ title: 'Overhead', tint: 'sky' });

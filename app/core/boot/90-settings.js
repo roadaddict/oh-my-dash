@@ -133,7 +133,7 @@ function reportUsage() {
   });
 }
 setTimeout(reportUsage, 90000);
-setInterval(reportUsage, 15 * 60000);
+every(15 * 60000, reportUsage);
 
 function usageSection() {
   const s = netmeter.summary();
@@ -442,7 +442,7 @@ function applyPhotoBg(on) {
   const bg = $('#bgPhotos');
   if (on && !bg.dataset.started) {
     bg.dataset.started = '1';
-    slideshow(bg, { captions: false });
+    slideshow(bg, { captions: false, glass: () => $('.screen.is-active > .grid') });
   }
   bg.hidden = !on;
 }
@@ -528,7 +528,7 @@ function buildSettings() {
             `${retired.join(', ')} ${retired.length > 1 ? 'are' : 'is'} still in the saved settings, where every signed-in screen can read ${retired.length > 1 ? 'them' : 'it'}. API keys are Worker secrets now (README → Secrets): add ${retired.length > 1 ? 'them' : 'it'} there, then Save here to remove ${retired.length > 1 ? 'them' : 'it'} from the settings.`,
           ),
         )
-      : null,
+      : '',
     backgroundField(),
     group('System', 'Screens, status bar, location and the tablet itself', sections.filter((s) => !s.def).map(section)),
     group('Data & accounts', 'Sign-ins, data usage, backups', [

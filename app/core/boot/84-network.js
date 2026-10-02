@@ -128,7 +128,7 @@ function initNetwork() {
   function updateNetTitle() {
     pingChip.title = [statusText, latencyText].filter(Boolean).join('\n');
   }
-  setInterval(renderStatus, 15000); // sync state changes (signed out, sync unreachable) show up on the dot
+  every(15000, renderStatus); // sync state changes (signed out, sync unreachable) show up on the dot
   window.addEventListener('online', () => {
     renderStatus();
     frames.forEach((f) => f.onOnline());
@@ -144,6 +144,6 @@ function initNetwork() {
   // Warm-up request (DNS + TLS handshake) is discarded so the first reading is honest.
   measure().finally(() => {
     ping();
-    setInterval(ping, Math.max(2, cfg.PING_INTERVAL_SEC) * 1000);
+    every(Math.max(2, cfg.PING_INTERVAL_SEC) * 1000, ping);
   });
 }

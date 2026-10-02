@@ -234,13 +234,18 @@ function makeCtx(inst) {
   const panelEl = () => inst.panel?.el || null;
   const visibleKeys = new Set([...Object.keys(def.defaults), ...settingKeys(def.settings), ...def.reads, ...SHARED_KEYS]);
   const settings = Object.freeze(Object.fromEntries([...visibleKeys].filter((k) => k in cfg).map((k) => [k, cfg[k]])));
+  const settingsSig = JSON.stringify(settings); // saved feed data belongs to these settings
+  let feedCount = 0;
   const timeouts = new Set(),
     intervals = new Set(),
-    frames = new Set();
+    frames = new Set(),
+    clockJobs = new Map();
+  let clockIds = 0;
   own(() => {
     timeouts.forEach(clearTimeout);
     intervals.forEach(clearInterval);
     frames.forEach(cancelAnimationFrame);
+    clockJobs.forEach((cancel) => cancel());
   });
   const allowed = (path) => {
     const name = String(path).replace(/^\//, '').split(/[/?]/)[0];
@@ -290,12 +295,23 @@ function makeCtx(inst) {
       timeouts.delete(id);
       clearTimeout(id);
     },
+    /** Whole seconds run on the shared clock (one wake-up for everything due); shorter ones on a timer. */
     setInterval(fn, ms) {
+      if (ms >= 1000 && ms % 1000 === 0) {
+        const id = `c${++clockIds}`;
+        clockJobs.set(id, every(ms, g(fn)));
+        return id;
+      }
       const id = setInterval(g(fn), ms);
       intervals.add(id);
       return id;
     },
     clearInterval(id) {
+      if (clockJobs.has(id)) {
+        clockJobs.get(id)();
+        clockJobs.delete(id);
+        return;
+      }
       intervals.delete(id);
       clearInterval(id);
     },
@@ -323,13 +339,17 @@ function makeCtx(inst) {
     guard: g,
     fail: (err) => inst.fail(err),
 
-    /* Data */
+    /* Data — feeds keep their last good data on the device unless opts.persist === false. */
     /** A polling feed for this widget: createFeed semantics; subscribe with ctx.subscribe. */
-    feed: (loader, intervalMs, opts) => createFeed(loader, intervalMs, opts),
+    feed(loader, intervalMs, opts = {}) {
+      const persist = opts.persist !== false && `${def.id}.${hashKey(`${JSON.stringify(spec)}|${settingsSig}|${feedCount++}`)}`;
+      return createFeed(loader, intervalMs, { ...opts, persist });
+    },
     /** One feed shared by every widget asking for `key` (e.g. News and the ticker). */
-    sharedFeed(key, makeLoader, intervalMs, opts) {
+    sharedFeed(key, makeLoader, intervalMs, opts = {}) {
       const k = `${def.folder || def.id}:${key}`;
-      if (!sharedFeeds.has(k)) sharedFeeds.set(k, createFeed(makeLoader(), intervalMs, opts));
+      const persist = opts.persist !== false && `${def.folder || def.id}.${hashKey(`${key}|${settingsSig}`)}`;
+      if (!sharedFeeds.has(k)) sharedFeeds.set(k, createFeed(makeLoader(), intervalMs, { ...opts, persist }));
       return sharedFeeds.get(k);
     },
     /** fn(data, error) now (if there is data) and on every update; the panel shows Retry while it fails. */

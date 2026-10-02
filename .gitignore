@@ -3,6 +3,7 @@ node_modules/
 .dev.vars
 # test output
 test/.build/
+test/.bench/
 test-results/
 playwright-report/
 test/visual/__screens__/

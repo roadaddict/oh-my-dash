@@ -111,8 +111,8 @@ body.low-power .app.statusbar-auto .statusbar {
   background: rgba(16, 16, 16, 0.95);
 }
 body.low-power .bg-orbs,
-body.low-power .sk,
-body.low-power .dot.tone-good,
+body.low-power .sk::after,
+body.low-power .dot.tone-good::after,
 body.low-power .slide.kb .slide-img {
   animation: none;
 }

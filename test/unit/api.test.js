@@ -46,3 +46,31 @@ test('an integration answers "not configured" without its secret', async () => {
   }
   assert.deepEqual((await call(env({ TODOIST_TOKEN: 'x' }), '/api/todoist/status')).body, { configured: true });
 });
+
+test('proxy batch: several feeds in one round trip, each checked like GET /api/proxy', async (t) => {
+  const seen = [];
+  t.mock.method(globalThis, 'fetch', async (url) => {
+    seen.push(String(url));
+    if (String(url).includes('down.example')) throw new Error('connection refused');
+    return new Response(`body of ${url}`, { headers: { 'Content-Type': 'text/calendar' } });
+  });
+  const e = env({ ALLOWED_HOSTS: 'feeds.example,down.example' });
+  const post = (requests) => ({ method: 'POST', body: JSON.stringify({ requests }), headers: { 'Content-Type': 'application/json' } });
+  const { status, body } = await call(
+    e,
+    '/api/proxy/batch',
+    post([{ url: 'https://feeds.example/a.ics' }, { url: 'https://other.example/x' }, { url: 'https://down.example/y' }, { url: 'nope' }]),
+  );
+  assert.equal(status, 200);
+  assert.deepEqual(
+    body.responses.map((r) => r.status),
+    [200, 403, 502, 400],
+  );
+  assert.equal(body.responses[0].body, 'body of https://feeds.example/a.ics');
+  assert.equal(body.responses[0].type, 'text/calendar');
+  assert.deepEqual(seen, ['https://feeds.example/a.ics', 'https://down.example/y']); // the refused ones were never fetched
+  assert.equal((await call(e, '/api/proxy/batch', post([]))).status, 400);
+  assert.equal((await call(e, '/api/proxy/batch', post(Array.from({ length: 21 }, () => ({ url: 'https://feeds.example/' }))))).status, 400);
+  assert.equal((await call(e, '/api/proxy/batch')).status, 405);
+  assert.equal((await call({ DB: fakeD1() }, '/api/proxy/batch', post([{ url: 'https://feeds.example/a' }]))).status, 401);
+});

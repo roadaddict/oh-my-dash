@@ -284,6 +284,7 @@ function layoutScreen(def, grid) {
     p.style.setProperty('--h', `${r.h.toFixed(1)}px`);
   }
   grid._layout = { tree, rects, gap, orient };
+  bus.dispatchEvent(new Event('layout')); // e.g. the glass over photos follows the panels
   if (editing && !grid._draft && grid === activeGrid()) refreshEditUI();
 }
 /** A slot the current layout doesn't show (removed, or left out in this orientation): nothing runs there. */
@@ -316,7 +317,7 @@ function buildScreen(def) {
   const el = h('section', { class: 'screen', 'data-screen': def.id, 'aria-label': `${def.name} screen` });
   if (def.photo) {
     const ph = h('div', { class: 'screen-photo' });
-    slideshow(ph);
+    slideshow(ph, { glass: () => el.querySelector(':scope > .grid') });
     el.append(ph);
   }
   const grid = h('div', { class: 'grid' });
@@ -325,7 +326,14 @@ function buildScreen(def) {
   screensHost.append(el);
   hydrateIcons(el);
   layoutScreen(def, grid);
-  new ResizeObserver(() => layoutScreen(def, grid)).observe(grid);
+  // Re-layout when the grid changes size (it reports its first size right away: skip that one).
+  let seen = `${grid.clientWidth}x${grid.clientHeight}`;
+  new ResizeObserver(() => {
+    const size = `${grid.clientWidth}x${grid.clientHeight}`;
+    if (size === seen) return;
+    seen = size;
+    layoutScreen(def, grid);
+  }).observe(grid);
   grid._def = def;
   // Content-sized ("auto") slots settle once fonts and first data have arrived.
   [1500, 6000].forEach((ms) => setTimeout(() => layoutScreen(def, grid), ms));
@@ -339,23 +347,28 @@ function showScreen(i, { direction = 1 } = {}) {
   setExpanded(null, false);
   const def = screenDefs[i];
   let el = builtScreens.get(def.id);
+  const fresh = !el;
   if (!el) {
-    el = buildScreen(def);
+    el = buildScreen(def); // laid out already
     builtScreens.set(def.id, el);
     void el.offsetWidth;
   }
   builtScreens.forEach((s, id) => {
     if (id === def.id) {
+      clearTimeout(s._dormant);
+      s.classList.remove('is-dormant');
       s.style.setProperty('--enter', `${direction * 24}px`);
       s.classList.add('is-active');
     } else if (s.classList.contains('is-active')) {
       s.style.setProperty('--enter', `${-direction * 24}px`);
       s.classList.remove('is-active');
+      // Once it has faded out (0.6 s), stop rendering it.
+      s._dormant = setTimeout(() => s.classList.toggle('is-dormant', !s.classList.contains('is-active')), 700);
     }
   });
   currentIdx = i;
   shownAt = Date.now();
-  layoutScreen(def, el.querySelector(':scope > .grid'));
+  if (!fresh) layoutScreen(def, el.querySelector(':scope > .grid'));
   app.classList.toggle('statusbar-auto', def.statusbar === false);
   app.classList.toggle('has-photo-screen', !!def.photo);
   app.classList.remove('show-bar');
@@ -381,6 +394,7 @@ const noteInteraction = () => {
 };
 
 function initScreens() {
+  tabsHost.replaceChildren(); // the snapshot's picture of them, if any
   tabsHost.hidden = screenDefs.length < 2;
   screenDefs.forEach((d, j) =>
     tabsHost.append(
@@ -497,7 +511,7 @@ function initScreens() {
   }
   if (schedule.length) {
     applySchedule();
-    setInterval(applySchedule, 30000);
+    every(30000, applySchedule);
   }
 
   // Auto-rotation (paused for 2 minutes after any touch, while a panel is expanded, or settings are open)

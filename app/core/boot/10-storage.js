@@ -78,7 +78,7 @@ const netmeter = (() => {
     for (const k of minutes.keys()) if (k < m - 60) minutes.delete(k);
     dirty = true;
   }
-  setInterval(() => {
+  every(30000, () => {
     if (!dirty) return;
     dirty = false;
     const keep = Object.keys(st.days).sort().slice(-14);
@@ -89,7 +89,7 @@ const netmeter = (() => {
     } catch {
       /* ignore */
     }
-  }, 30000);
+  });
 
   // Exact bytes for everything the browser will report (same-origin, fonts, CDNs with Timing-Allow-Origin).
   const sameOrigin = (url) => {
@@ -107,7 +107,7 @@ const netmeter = (() => {
         else if (!sameOrigin(e.name) && e.encodedBodySize === 0 && e.initiatorType === 'img') unmeasured++;
       }
     }).observe({ type: 'resource', buffered: true });
-    setInterval(() => performance.clearResourceTimings(), 10 * 60000);
+    every(10 * 60000, () => performance.clearResourceTimings());
     // The page itself (index.html) — 0 when revalidated from cache.
     new PerformanceObserver((list) => {
       for (const e of list.getEntries()) if (e.transferSize > 0) record(e.name, e.transferSize);

@@ -37,7 +37,7 @@ async function pollState() {
   }
 }
 if (sync.mode !== 'local') {
-  setInterval(pollState, 15000);
+  every(15000, pollState);
   // Back in the foreground (phone app switched to, tablet woken): catch up right away.
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) pollState();

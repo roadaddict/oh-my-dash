@@ -115,7 +115,7 @@ readable by every screen. Keys belong in a backend integration (below).
 
 | | |
 |---|---|
-| `ctx.setTimeout / setInterval / clearTimeout / clearInterval / raf` | As the browser's. |
+| `ctx.setTimeout / setInterval / clearTimeout / clearInterval / raf` | As the browser's. An interval of whole seconds runs on the dashboard's one heartbeat, aligned to the wall clock (a 60 s interval fires at :00), so the tablet wakes once for everything that's due. |
 | `ctx.onTick(fn)` | `fn(now)` on the shared once-a-second tick (and right away). |
 | `ctx.listen(target, type, fn, options)` | `addEventListener` that goes away with the widget. |
 | `ctx.observeResize(el, fn)` | A `ResizeObserver`. |
@@ -126,7 +126,7 @@ readable by every screen. Keys belong in a backend integration (below).
 | | |
 |---|---|
 | `ctx.settings` | Read-only: the widget's own settings, its `reads`, and `LOCATION_NAME LATITUDE LONGITUDE TEMP_UNIT LOCALE HOUR_12 WEEK_START HOLIDAY_COUNTRY`. |
-| `ctx.feed(loader, intervalMs, { visibleOnly })` | A polling data source. Polls only while subscribed (and, with `visibleOnly`, only while on screen), retries after a minute on errors. |
+| `ctx.feed(loader, intervalMs, { visibleOnly, persist })` | A polling data source. Polls only while subscribed (and, with `visibleOnly`, only while on screen), on the shared clock; nothing is tried while offline, and failures retry after 15 s, 30 s, 1 min … Its last good data is kept on the device and shown at once after a reload (with its age once it's overdue); pass `persist: false` for data that means nothing later (what's playing now, plane positions). Only plain JSON and Dates are kept. Requests give up after 20 s. |
 | `ctx.sharedFeed(key, () => loader, intervalMs, options)` | One feed for every instance (and every widget of the same folder) asking for `key`. |
 | `ctx.subscribe(feed, (data, error) => …)` | Now if there's data, then on every update. Unsubscribed with the widget. |
 | `ctx.fetchJSON(url, init)`, `ctx.fetchText(url, { proxyFirst })`, `ctx.withProxy(url, ttl)`, `ctx.hasProxy` | Fetch with the dashboard's CORS proxy as fallback; counted by ⚙ → Data usage. |

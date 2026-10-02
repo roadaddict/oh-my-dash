@@ -70,7 +70,7 @@ OMD.defineWidget({
         return { ...(await ctx.api('spotify/now')), fetchedAt: Date.now() };
       },
       10000,
-      { visibleOnly: true },
+      { visibleOnly: true, persist: false }, // what played an hour ago isn't worth showing
     );
     const refreshSpotify = (delay = 900) =>
       ctx.setTimeout(() => {

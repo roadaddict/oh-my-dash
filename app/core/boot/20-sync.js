@@ -29,6 +29,75 @@ try {
 }
 const saveSyncCache = () => store.set(SYNC_CACHE, JSON.stringify(sync.items));
 
+/* ---------- Edits not yet in the cloud survive a reload ----------
+   An edit made offline (or while the API was down) waits in sync.pending as functions,
+   which can't be stored. So the device keeps, per key, the value it last synced from
+   (base) and its own value (mine); after a reload the edit is replayed as "my change
+   from base, applied to whatever the cloud has now" — see merge3. */
+const PENDING_KEY = 'omd.sync-pending.v1';
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const isObj = (v) => v != null && typeof v === 'object' && !Array.isArray(v);
+const byId = (arr) => Array.isArray(arr) && arr.every((x) => isObj(x) && x.id != null);
+/**
+ * Three-way merge: `mine` changed `base`; `theirs` is someone else's newer version.
+ * Objects merge key by key, arrays of { id } item by item (adds, removals and edits on
+ * both sides survive); where both changed the same value, mine wins.
+ */
+function merge3(base, mine, theirs) {
+  if (same(mine, base)) return theirs;
+  if (same(theirs, base) || theirs === undefined) return mine;
+  if (isObj(base) && isObj(mine) && isObj(theirs)) {
+    const out = {};
+    for (const k of new Set([...Object.keys(theirs), ...Object.keys(mine), ...Object.keys(base)])) {
+      const inM = k in mine,
+        inT = k in theirs,
+        inB = k in base;
+      if (!inM && inB && same(theirs[k], base[k])) continue; // I removed it, they didn't touch it
+      if (!inT && inB && same(mine[k], base[k])) continue; // they removed it, I didn't touch it
+      out[k] = !inM ? theirs[k] : !inT ? mine[k] : merge3(base[k], mine[k], theirs[k]);
+    }
+    return out;
+  }
+  if (byId(mine) && byId(theirs) && (base == null || byId(base))) {
+    const idx = (a) => new Map((a || []).map((x) => [x.id, x]));
+    const b = idx(base),
+      m = idx(mine),
+      t = idx(theirs);
+    const out = [];
+    for (const x of theirs) {
+      if (!m.has(x.id) && b.has(x.id) && same(x, b.get(x.id))) continue; // I removed it
+      out.push(m.has(x.id) ? merge3(b.get(x.id), m.get(x.id), x) : x);
+    }
+    // Mine that they don't have: new ones go in at my position; ones they removed stay removed unless I changed them.
+    mine.forEach((x, i) => {
+      if (t.has(x.id)) return;
+      if (b.has(x.id) && same(x, b.get(x.id))) return;
+      const after = i > 0 ? out.findIndex((y) => y.id === mine[i - 1].id) : -1;
+      out.splice(after + 1, 0, x);
+    });
+    return out;
+  }
+  return mine;
+}
+function savePending() {
+  if (!sync.pending.size) return store.remove(PENDING_KEY);
+  const out = {};
+  sync.pending.forEach((p, key) => {
+    // `from`: what my edits started from (the defaults, when the cloud had nothing yet).
+    out[key] = { base: p.base, from: p.base.value ?? sync.fallbacks[key]?.() ?? null, value: applyAll(key, p.base.value, p.fns) };
+  });
+  store.set(PENDING_KEY, JSON.stringify(out));
+}
+try {
+  for (const [key, rec] of Object.entries(JSON.parse(store.get(PENDING_KEY) || '{}') || {})) {
+    if (!rec?.base) continue;
+    sync.pending.set(key, { base: rec.base, fns: [(theirs) => merge3(rec.from, rec.value, theirs)] });
+    sync.items[key] = { rev: rec.base.rev, value: rec.value };
+  }
+} catch {
+  /* nothing usable saved */
+}
+
 async function api(path, opts = {}) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), opts.timeout || 8000);
@@ -102,6 +171,7 @@ async function pushState(key) {
   sync.items[key] = p.fns.length ? { rev: p.base.rev, value: applyAll(key, p.base.value, p.fns) } : p.base;
   if (!p.fns.length) sync.pending.delete(key);
   saveSyncCache();
+  savePending();
   emit(key);
   if (p.fns.length) pushState(key);
 }
@@ -132,6 +202,8 @@ function sharedState(key, fallback) {
       }
       p.fns.push(fn);
       sync.items[key] = { rev: p.base.rev, value: applyAll(key, p.base.value, p.fns) };
+      saveSyncCache();
+      savePending();
       emit(key);
       pushState(key);
     },

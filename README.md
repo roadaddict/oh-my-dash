@@ -112,6 +112,7 @@ Some extras depend on the browser: voice input for lists uses the browser's spee
   - **Settings (⚙):** stored in D1. Saving on any device reloads every screen within ~15 s.
   - **Lists, chores, meals and the note:** synced to D1, polled every 15 s. Each write carries a revision number. If two people edit at once, the second write is re-applied on top of the first, so nothing is overwritten.
   - **Feeds (iCal, RSS, Google Photos, live flight data):** go through the same-origin `/api/proxy`, so no CORS setup is needed.
+  - **Everything due at the same moment comes in one request:** feeds share one clock, and with the Worker the tablet sends them together to `/api/proxy/batch` (weather, calendars, news …). The Worker fetches them in parallel and caches them at the edge for every screen in the house. A host that `ALLOWED_HOSTS` leaves out is fetched directly by the tablet.
 - If there's no backend (`file://`, other static hosts) or you aren't signed in, it runs in **local mode**: everything is stored on that device. The ⚙ drawer header says which mode you're in.
 
 <details>
@@ -126,7 +127,7 @@ repo/
 │   └── widgets/<name>/         ← one folder per widget: widget.js (+ widget.css)
 ├── public/index.html           ← GENERATED: the whole dashboard in one file (also works from file://)
 ├── src/worker.js               ← Cloudflare Worker: /api/* → API, everything else → public/
-├── lib/api.js                  ← API routes: /api/health, /api/state[/:key], /api/proxy, /api/<integration>/…
+├── lib/api.js                  ← API routes: /api/health, /api/state[/:key], /api/proxy[/batch], /api/<integration>/…
 ├── lib/auth.js                 ← Cloudflare Access login verification + home-IP allow-list
 ├── lib/http.js                 ← D1 table setup + helpers
 ├── lib/secrets.js              ← private D1 table for integration tokens (never sent to browsers)

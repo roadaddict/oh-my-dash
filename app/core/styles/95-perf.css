@@ -1,0 +1,23 @@
+/* ?perf=1 overlay (see boot/88-perf.js) */
+.perf-hud {
+  position: fixed;
+  left: 8px;
+  bottom: 8px;
+  z-index: 9999;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.82);
+  color: #d1fae5;
+  font: 11px/1.45 var(--font-mono);
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 0 12px;
+}
+.perf-hud b {
+  color: var(--text-3);
+  font-weight: 500;
+}
+.perf-hud .bad {
+  color: var(--crimson);
+}

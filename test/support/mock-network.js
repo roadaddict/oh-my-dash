@@ -228,6 +228,7 @@ function external(url) {
 
 /** An in-memory Worker API. `state` is shared between pages of one test (like D1). */
 export function fakeApi(opts = {}) {
+  const batches = [];
   const state = opts.state || {};
   const services = {
     spotify: { configured: true, connected: true },
@@ -361,6 +362,14 @@ export function fakeApi(opts = {}) {
       rev++;
       return json({ rev: cur.rev + 1 });
     }
+    if (path === 'proxy/batch' && method === 'POST') {
+      batches.push(JSON.parse(request.postData() || '{}').requests || []);
+      const responses = batches.at(-1).map(({ url }) => {
+        const res = external(url);
+        return res ? { status: res.status || 200, type: res.contentType, body: String(res.body) } : { status: 502, type: 'text/plain', body: 'unreachable' };
+      });
+      return json({ responses });
+    }
     if (path === 'proxy') {
       const inner = u.searchParams.get('url');
       const res = external(inner);
@@ -382,6 +391,8 @@ export function fakeApi(opts = {}) {
     state,
     services,
     handle,
+    /** The URLs of each POST /api/proxy/batch, in order. */
+    batches,
     get writes() {
       return rev;
     },

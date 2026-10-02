@@ -273,7 +273,13 @@
   border-radius: 50%;
   background: currentColor;
   vertical-align: 1px;
-  animation: pulse 2s ease-in-out infinite;
+  animation: calendar-live 2s ease-in-out infinite;
+}
+/* "Happening now": the dot breathes (opacity only, so it runs on the GPU). */
+@keyframes calendar-live {
+  50% {
+    opacity: 0.35;
+  }
 }
 .b-calendar .upnext-also {
   font-size: 12.5px;

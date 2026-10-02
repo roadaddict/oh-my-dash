@@ -2,7 +2,7 @@
    KIOSK FEATURES — wake lock, fullscreen, idle cursor, burn-in, night mode…
    ========================================================================== */
 function initKiosk() {
-  if (cfg.LOW_POWER) document.body.classList.add('low-power');
+  initPowerMode();
   applyWidgetBg(cfg.WIDGET_BG);
   const rgb = hexToRgb(cfg.THEME_ACCENT);
   if (rgb) {
@@ -69,11 +69,12 @@ function initKiosk() {
       [-2, 1],
     ];
     let i = 0;
-    setInterval(() => {
+    every(180000, () => {
       i = (i + 1) % offsets.length;
       document.documentElement.style.setProperty('--shift-x', `${offsets[i][0]}px`);
       document.documentElement.style.setProperty('--shift-y', `${offsets[i][1]}px`);
-    }, 180000);
+      bus.dispatchEvent(new Event('shift'));
+    });
   }
 
   // Night mode: dim / minimal clock / off (tap to wake for 60 s)
@@ -118,15 +119,15 @@ function initKiosk() {
     { passive: true, capture: true },
   );
   applyNight();
-  setInterval(applyNight, 15000);
+  every(15000, applyNight);
 
   // Daily full reload (clears memory leaks from long-running embeds)
   const reloadAt = parseHM(cfg.DAILY_RELOAD_AT);
   const bootedAt = Date.now();
   if (reloadAt != null) {
-    setInterval(() => {
-      if (minutesOfDay() === reloadAt && Date.now() - bootedAt > 3600000 && navigator.onLine) location.reload();
-    }, 30000);
+    every(30000, () => {
+      if (minutesOfDay() === reloadAt && Date.now() - bootedAt > 3600000 && canReload()) location.reload();
+    });
   }
 
   window.addEventListener('keydown', (e) => {
@@ -140,4 +141,56 @@ function initKiosk() {
       openSettings();
     }
   });
+}
+
+/* ---------- Low-power mode: on, off, or automatic ----------
+   Automatic: on right away for clearly weak hardware (2 cores or less, 1 GB or less);
+   otherwise the first minute's frames are watched once the screen has settled, and a
+   tablet that can't keep ~30 fps switches over. The verdict is remembered for a week. */
+const POWER_KEY = 'omd.lowpower.auto';
+function initPowerMode() {
+  const v = String(cfg.LOW_POWER).trim().toLowerCase();
+  const setting = ['true', '1', 'on', 'yes'].includes(v) ? true : ['false', '0', 'off', 'no'].includes(v) ? false : null;
+  const on = (why) => {
+    document.body.classList.add('low-power');
+    document.body.dataset.power = why;
+  };
+  if (setting === true) return on('setting');
+  if (setting === false) return;
+  const weak = (navigator.hardwareConcurrency || 4) <= 2 || (navigator.deviceMemory != null && navigator.deviceMemory <= 1);
+  if (weak) return on('auto');
+  let saved = null;
+  try {
+    saved = JSON.parse(store.get(POWER_KEY) || 'null');
+  } catch {
+    /* ignore */
+  }
+  if (saved && Date.now() - saved.at < 7 * 864e5) {
+    if (saved.low) on('auto');
+    return;
+  }
+  // Watch 5 s of frames, 20 s after startup (the first screen has settled by then).
+  setTimeout(() => {
+    if (document.hidden) return;
+    const gaps = [];
+    let first = 0,
+      last = 0;
+    const frame = (t) => {
+      if (last) gaps.push(t - last);
+      else first = t;
+      last = t;
+      if (t - first < 5000) requestAnimationFrame(frame);
+      else decide();
+    };
+    const decide = () => {
+      if (gaps.length < 20 || document.hidden) return;
+      const sorted = [...gaps].sort((a, b) => a - b);
+      const median = sorted[Math.floor(sorted.length / 2)],
+        janky = gaps.filter((g) => g > 50).length / gaps.length;
+      const low = median > 34 || janky > 0.25;
+      store.set(POWER_KEY, JSON.stringify({ at: Date.now(), low, median: Math.round(median), janky: +janky.toFixed(2) }));
+      if (low) on('auto');
+    };
+    requestAnimationFrame(frame);
+  }, 20000);
 }

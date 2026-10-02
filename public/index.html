@@ -5,6 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050505">
+<meta name="omd-build" content="349946121045">
 <meta name="color-scheme" content="dark">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,9 +13,10 @@
 <meta name="description" content="Glassmorphism smart-home kiosk dashboard for wall-mounted tablets.">
 <title>FLORA-HOME</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238b9cff'/%3E%3Cstop offset='1' stop-color='%235eead4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='9' fill='url(%23g)'/%3E%3Crect x='7' y='7' width='8' height='18' rx='3' fill='%230d0f12' opacity='.85'/%3E%3Crect x='17' y='7' width='8' height='8' rx='3' fill='%230d0f12' opacity='.85'/%3E%3Crect x='17' y='17' width='8' height='8' rx='3' fill='%230d0f12' opacity='.85'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<!-- Self-hosted fonts (app/fonts): no request leaves the house to draw text. -->
+<link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
 
 <style>
 /* app/core/styles/00-tokens.css */
@@ -66,6 +68,149 @@
   --shift-x: 0px;
   --shift-y: 0px;
   --night-veil: 0;
+}
+
+/* app/core/styles/05-fonts.css */
+/* ==========================================================================
+   FONTS — self-hosted (app/fonts, copied to public/fonts by the build), so the
+   dashboard looks the same offline and never waits for Google Fonts. Variable
+   fonts: one file per script covers every weight. A browser only downloads the
+   files whose unicode-range the page actually uses (Latin, for most homes).
+   Licenses: app/fonts/LICENSE-*.txt (SIL Open Font License 1.1).
+   ========================================================================== */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(fonts/inter-cyrillic-ext.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(fonts/inter-cyrillic.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(fonts/inter-greek-ext.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(fonts/inter-greek.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(fonts/inter-vietnamese.woff2) format('woff2');
+  unicode-range:
+    U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(fonts/inter-latin-ext.woff2) format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(fonts/inter-latin.woff2) format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(fonts/outfit-latin-ext.woff2) format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(fonts/outfit-latin.woff2) format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url(fonts/jetbrains-mono-cyrillic-ext.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url(fonts/jetbrains-mono-cyrillic.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url(fonts/jetbrains-mono-greek.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url(fonts/jetbrains-mono-vietnamese.woff2) format('woff2');
+  unicode-range:
+    U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url(fonts/jetbrains-mono-latin-ext.woff2) format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url(fonts/jetbrains-mono-latin.woff2) format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
 }
 
 /* app/core/styles/10-base.css */
@@ -430,18 +575,31 @@ body.low-power .bg-noise {
   border-radius: 50%;
   background: rgb(var(--tone-rgb));
 }
+/* The "all good" pulse: a ring that grows and fades — scale and opacity only, so it runs
+   on the GPU. (Animating box-shadow restyled and repainted the page 60 times a second.) */
 .dot.tone-good {
+  position: relative;
+}
+.dot.tone-good::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(var(--tone-rgb), 0.55);
   animation: pulse 2.4s infinite;
 }
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(var(--tone-rgb), 0.55);
+    transform: scale(1);
+    opacity: 1;
   }
   70% {
-    box-shadow: 0 0 0 8px rgba(var(--tone-rgb), 0);
+    transform: scale(3);
+    opacity: 0;
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(var(--tone-rgb), 0);
+    transform: scale(3);
+    opacity: 0;
   }
 }
 .ping-value {
@@ -531,6 +689,15 @@ body.low-power .bg-noise {
     opacity 0.6s ease,
     transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
+/* Instant start (boot/89-snapshot.js): the live screen takes the saved picture's place without a fade. */
+.from-snapshot .screen,
+.from-snapshot .screen .grid > .panel {
+  transition: none !important;
+  animation: none !important;
+}
+.screen.is-snapshot {
+  pointer-events: none;
+}
 /* No z-index here: it would trap a fullscreen (expanded) widget below the frosted scrim.
    The photo backdrop (z-index 0, earlier in the page) still paints underneath. */
 .screen > .grid {
@@ -549,6 +716,15 @@ body.low-power .bg-noise {
   top: var(--y, 0);
   width: var(--w, 100%);
   height: var(--h, 100%);
+}
+/* Each widget is an island: a change inside one never re-lays-out or repaints another. */
+.grid.is-tree > .panel:not(.is-expanded):not(.is-bare) {
+  contain: layout paint style;
+}
+/* A screen that isn't showing (once its exit transition is over) isn't rendered at all:
+   clocks ticking on it cost nothing. It keeps its state for an instant switch back. */
+.screen.is-dormant {
+  content-visibility: hidden;
 }
 .grid > .panel.is-off {
   display: none !important;
@@ -590,11 +766,10 @@ body.low-power .bg-noise {
   min-height: 0;
   padding: var(--pad);
   border-radius: var(--radius);
-  /* ⚙ → Widget background (0–20 %): --glass-k fades the frosted glass, its blur and border in */
+  /* ⚙ → Widget background (0–20 %): --glass-k fades the glass and its border in. No live blur:
+     over photos the blur comes from a pre-blurred copy behind the panels (.glass-layer, boot/66-glass.js). */
   background: rgba(255, 255, 255, calc(0.04 * var(--glass-k, 1)));
   border: 1px solid rgba(255, 255, 255, calc(0.075 * var(--glass-k, 1)));
-  backdrop-filter: blur(calc(var(--blur) * var(--glass-k, 1))) saturate(calc(1 + 0.4 * var(--glass-k, 1)));
-  -webkit-backdrop-filter: blur(calc(var(--blur) * var(--glass-k, 1))) saturate(calc(1 + 0.4 * var(--glass-k, 1)));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, calc(0.05 * var(--glass-k, 1))),
     0 24px 48px -24px rgba(0, 0, 0, calc(0.9 * var(--glass-k, 1)));
@@ -641,8 +816,6 @@ body.low-power .bg-noise {
   background: none;
   border: 0;
   box-shadow: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
   padding: 0;
   overflow: visible;
 }
@@ -655,8 +828,6 @@ body.low-power .bg-noise {
   background: #050505;
   border: 0;
   box-shadow: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
 }
 .panel.is-seamless::before {
   display: none;
@@ -998,13 +1169,31 @@ body.settings-peek .scrim.is-visible {
 }
 .frame.is-loaded .skeleton {
   opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.5s ease,
+    visibility 0s 0.5s;
   pointer-events: none;
 }
+/* Loading shimmer: a light band slides across. It moves with transform (on the GPU): an
+   animated background would restyle and repaint on the main thread every frame. */
 .sk {
+  position: relative;
+  overflow: hidden;
   border-radius: 8px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.1) 45%, rgba(255, 255, 255, 0.04) 90%);
-  background-size: 250% 100%;
+  background: rgba(255, 255, 255, 0.04);
+}
+.sk::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
+  transform: translateX(-100%);
   animation: shimmer 1.5s linear infinite;
+}
+/* Hidden behind a loaded page: don't animate at all. */
+.frame.is-loaded .sk::after {
+  animation: none;
 }
 .sk-title {
   height: 18px;
@@ -1030,11 +1219,8 @@ body.settings-peek .scrim.is-visible {
   flex: none;
 }
 @keyframes shimmer {
-  from {
-    background-position: 100% 0;
-  }
   to {
-    background-position: -150% 0;
+    transform: translateX(100%);
   }
 }
 
@@ -1069,6 +1255,21 @@ body.settings-peek .scrim.is-visible {
   background: rgba(255, 255, 255, 0.08);
   cursor: pointer;
   font-size: 12px;
+}
+
+/* Data older than it should be (offline, or the service is down): "12 min ago" in the corner. */
+.panel[data-stale]::after {
+  content: attr(data-stale);
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  z-index: 3;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(var(--amber-rgb), 0.14);
+  color: var(--amber);
+  font: 500 10px/1.6 var(--font-mono);
+  pointer-events: none;
 }
 
 /* app/core/styles/40-analog-clock.css */
@@ -1848,6 +2049,26 @@ body.low-power .rec-btn.is-recording::after {
   to {
     transform: scale(1.14);
   }
+}
+/* The blurred twin of a photo, clipped to the panels over it (boot/66-glass.js). */
+.glass-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden; /* the zoom must not make the page scroll */
+  opacity: var(--glass-k, 1);
+  clip-path: inset(50%);
+}
+.glass-layer .slide-img {
+  background-size: 100% 100%; /* the copy is already cropped to this box */
+}
+.glass-layer .slide.is-raw .slide-img {
+  /* a host that doesn't allow reading its photos: blur it live after all */
+  background-size: cover;
+  filter: blur(var(--blur)) saturate(1.4);
+}
+body.low-power .glass-layer {
+  display: none;
 }
 .slide-caption {
   position: absolute;
@@ -2777,8 +2998,8 @@ body.low-power .app.statusbar-auto .statusbar {
   background: rgba(16, 16, 16, 0.95);
 }
 body.low-power .bg-orbs,
-body.low-power .sk,
-body.low-power .dot.tone-good,
+body.low-power .sk::after,
+body.low-power .dot.tone-good::after,
 body.low-power .slide.kb .slide-img {
   animation: none;
 }
@@ -2790,6 +3011,31 @@ body.low-power .slide.kb .slide-img {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* app/core/styles/95-perf.css */
+/* ?perf=1 overlay (see boot/88-perf.js) */
+.perf-hud {
+  position: fixed;
+  left: 8px;
+  bottom: 8px;
+  z-index: 9999;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.82);
+  color: #d1fae5;
+  font: 11px/1.45 var(--font-mono);
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 0 12px;
+}
+.perf-hud b {
+  color: var(--text-3);
+  font-weight: 500;
+}
+.perf-hud .bad {
+  color: var(--crimson);
 }
 </style>
 <style data-widget="calendar">
@@ -3069,7 +3315,13 @@ body.low-power .slide.kb .slide-img {
   border-radius: 50%;
   background: currentColor;
   vertical-align: 1px;
-  animation: pulse 2s ease-in-out infinite;
+  animation: calendar-live 2s ease-in-out infinite;
+}
+/* "Happening now": the dot breathes (opacity only, so it runs on the GPU). */
+@keyframes calendar-live {
+  50% {
+    opacity: 0.35;
+  }
 }
 .b-calendar .upnext-also {
   font-size: 12.5px;
@@ -4363,8 +4615,7 @@ body.low-power .slide.kb .slide-img {
   background: rgba(10, 12, 15, 0.45) !important;
   border-radius: 14px !important;
   padding: 0 14px !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  /* no live blur: over a photo the pre-blurred glass layer is behind it (core boot/66-glass.js) */
 }
 @media (max-width: 599px), (orientation: landscape) and (max-height: 480px) {
   .grid > .b-ticker {
@@ -5486,6 +5737,39 @@ body.low-power .b-planes .radar .near {
 
   <!-- Screens are generated from LAYOUTS (see script). -->
   <main class="screens" id="screens"></main>
+  <script>
+/*
+ * Instant start: put back the picture of the screen saved on the last visit (see
+ * boot/89-snapshot.js), before any of the dashboard's code has run. It is inert — no
+ * handlers, no timers — and is swapped for the live screen in the same frame the live
+ * one is ready. Runs inline, right after the screens container, so the browser can paint
+ * it while it's still reading the rest of the page. Kept only for the same build, screen
+ * and window size; anything unexpected and the dashboard simply starts without it.
+ */
+(function () {
+  try {
+    var q = location.search;
+    if (/[?&](view|nosnap)=/.test(q)) return;
+    var raw = localStorage.getItem('omd.snapshot.v1');
+    if (!raw) return;
+    var s = JSON.parse(raw);
+    var build = document.querySelector('meta[name="omd-build"]');
+    var hash = location.hash.slice(1).toLowerCase();
+    if (!s || !build || s.build !== build.content || s.w !== innerWidth || s.h !== innerHeight) return;
+    if ((hash && hash !== s.screen) || !(Date.now() - s.at < 12 * 3600e3)) return;
+    var screens = document.getElementById('screens');
+    var tabs = document.getElementById('screenTabs');
+    screens.insertAdjacentHTML('afterbegin', s.html);
+    if (tabs && s.tabs) {
+      tabs.innerHTML = s.tabs;
+      tabs.hidden = false;
+    }
+    document.documentElement.classList.add('from-snapshot');
+  } catch (e) {
+    /* no storage, bad data: start the normal way */
+  }
+})();
+</script>
 
   <!-- Inside .app so expanded panels (z 60) stack above it despite the burn-in transform. -->
   <div class="scrim" id="scrim"></div>
@@ -7502,7 +7786,7 @@ OMD.defineWidget({
       : null;
     const form = h('form', { class: 'add-row' }, input, mic, h('button', { class: 'icon-btn', type: 'submit', 'aria-label': 'Add item' }, icon('plus')));
     p.body.classList.add('lists-host');
-    p.body.append(tabs.length > 1 ? seg : null, list, undoBar, quick, form);
+    p.body.append(tabs.length > 1 ? seg : '', list, undoBar, quick, form);
 
     const current = () => (active === 'Todoist' ? td.items : data[active] || (data[active] = []));
     async function syncTodoist() {
@@ -8493,7 +8777,7 @@ OMD.defineWidget({
           .sort((a, b) => a.km - b.km);
       },
       Math.max(5, s.PLANES_REFRESH_SEC) * 1000,
-      { visibleOnly: true },
+      { visibleOnly: true, persist: false }, // positions are only true for a few seconds
     );
 
     const p = ctx.panel({ title: 'Overhead', tint: 'sky' });
@@ -8643,7 +8927,7 @@ OMD.defineWidget({
     const quotes = ctx.settings.QUOTES.length ? ctx.settings.QUOTES.map(pipe) : BUILTIN_QUOTES;
     function render() {
       const [text, author] = quotes[hash(ymd(new Date())) % quotes.length];
-      box.replaceChildren(h('blockquote', null, text), author ? h('cite', null, `— ${author}`) : null);
+      box.replaceChildren(h('blockquote', null, text), author ? h('cite', null, `— ${author}`) : '');
     }
     ctx.onTick((n) => {
       if (n.getHours() === 0 && n.getMinutes() === 0 && n.getSeconds() === 3) render();
@@ -9126,7 +9410,7 @@ OMD.defineWidget({
         return { ...(await ctx.api('spotify/now')), fetchedAt: Date.now() };
       },
       10000,
-      { visibleOnly: true },
+      { visibleOnly: true, persist: false }, // what played an hour ago isn't worth showing
     );
     const refreshSpotify = (delay = 900) =>
       ctx.setTimeout(() => {
@@ -9903,11 +10187,22 @@ OMD.defineWidget({
 });
 </script>
 <script>
-OMD._manifest({"widgets":{"calendar":{"ids":["calendar"],"from":5833,"to":6459},"chores":{"ids":["chores"],"from":6464,"to":6594},"clock":{"ids":["clock"],"from":6599,"to":6718},"commute":{"ids":["commute"],"from":6723,"to":7082},"countdown":{"ids":["countdown"],"from":7087,"to":7155},"data":{"ids":["data"],"from":7160,"to":7251},"example":{"ids":["example"],"from":7256,"to":7363},"lists":{"ids":["lists"],"from":7368,"to":7842},"markets":{"ids":["markets"],"from":7847,"to":7979},"meals":{"ids":["meals"],"from":7984,"to":8079},"message":{"ids":["message"],"from":8084,"to":8145},"news":{"ids":["news","ticker"],"from":8150,"to":8353},"photo":{"ids":["photo"],"from":8358,"to":8396},"planes":{"ids":["planes"],"from":8401,"to":8593},"quote":{"ids":["quote"],"from":8598,"to":8654},"smarthome":{"ids":["smarthome"],"from":8659,"to":8941},"sports":{"ids":["sports"],"from":8946,"to":9052},"spotify":{"ids":["spotify"],"from":9057,"to":9463},"strava":{"ids":["strava"],"from":9468,"to":9644},"transport":{"ids":["transport"],"from":9649,"to":9774},"weather":{"ids":["weather"],"from":9779,"to":9796},"webpage":{"ids":["webpage"],"from":9801,"to":9834},"worldclock":{"ids":["worldclock"],"from":9839,"to":9902}}});
+OMD._manifest({"widgets":{"calendar":{"ids":["calendar"],"from":6117,"to":6743},"chores":{"ids":["chores"],"from":6748,"to":6878},"clock":{"ids":["clock"],"from":6883,"to":7002},"commute":{"ids":["commute"],"from":7007,"to":7366},"countdown":{"ids":["countdown"],"from":7371,"to":7439},"data":{"ids":["data"],"from":7444,"to":7535},"example":{"ids":["example"],"from":7540,"to":7647},"lists":{"ids":["lists"],"from":7652,"to":8126},"markets":{"ids":["markets"],"from":8131,"to":8263},"meals":{"ids":["meals"],"from":8268,"to":8363},"message":{"ids":["message"],"from":8368,"to":8429},"news":{"ids":["news","ticker"],"from":8434,"to":8637},"photo":{"ids":["photo"],"from":8642,"to":8680},"planes":{"ids":["planes"],"from":8685,"to":8877},"quote":{"ids":["quote"],"from":8882,"to":8938},"smarthome":{"ids":["smarthome"],"from":8943,"to":9225},"sports":{"ids":["sports"],"from":9230,"to":9336},"spotify":{"ids":["spotify"],"from":9341,"to":9747},"strava":{"ids":["strava"],"from":9752,"to":9928},"transport":{"ids":["transport"],"from":9933,"to":10058},"weather":{"ids":["weather"],"from":10063,"to":10080},"webpage":{"ids":["webpage"],"from":10085,"to":10118},"worldclock":{"ids":["worldclock"],"from":10123,"to":10186}}});
 </script>
 <script>
 (async () => {
 'use strict';
+/* ---------- app/core/boot/00-begin.js ---------- */
+/* ==========================================================================
+   BEGIN — when a saved snapshot is on screen (app/core/snapshot.js), let the
+   browser paint it before the dashboard starts its own work.
+   ========================================================================== */
+if (document.documentElement.classList.contains('from-snapshot'))
+  await new Promise((resolve) => {
+    requestAnimationFrame(() => setTimeout(resolve, 0));
+    setTimeout(resolve, 100); // hidden tabs get no frames
+  });
+
 /* ---------- app/core/boot/00-defaults.js ---------- */
 /* ==========================================================================
    CORE DEFAULTS — the dashboard's own settings. Each widget brings its own
@@ -9972,7 +10267,7 @@ const CORE_DEFAULTS = {
   KEEP_SCREEN_AWAKE: true, // Screen Wake Lock API.
   HIDE_CURSOR_SEC: 5,
   DAILY_RELOAD_AT: '03:30', // Full page refresh once a day ("" to disable).
-  LOW_POWER: false, // Disable blur & animations on slower tablets.
+  LOW_POWER: 'auto', // No animations or glow: 'auto' (slow tablets, detected), 'on', 'off'.
   WIDGET_BG: 20, // widget background: 0 · 5 · 10 · 15 · 20 (%) — 0 = none, 20 = frosted glass
   THEME_ACCENT: '#f0d722', // BVG yellow, matching the transit app
   CUSTOM_CSS: '', // Injected as-is, e.g. ".clock-hm{font-weight:100}"
@@ -10236,7 +10531,18 @@ const CORE_SECTIONS = [
       ],
       ['KEEP_SCREEN_AWAKE', 'Keep screen awake', 'checkbox'],
       ['BURN_IN_SHIFT', 'Burn-in protection (pixel shift)', 'checkbox'],
-      ['LOW_POWER', 'Low-power mode (no blur / animations)', 'checkbox'],
+      [
+        'LOW_POWER',
+        'Low-power mode (no animations)',
+        'select',
+        {
+          options: [
+            ['auto', 'Automatic — on for slow tablets'],
+            ['on', 'On'],
+            ['off', 'Off'],
+          ],
+        },
+      ],
       ['CUSTOM_CSS', 'Custom CSS', 'textarea'],
     ],
   ],
@@ -10305,6 +10611,56 @@ for (const [folder, info] of Object.entries(REG.manifest.widgets || {})) {
 const widgetDef = (type) => REG.widgets.get(type) || null;
 /** ?dev=1: hidden widgets (like the example) show up in the picker and the settings. */
 const DEV = /[?&]dev=1/.test(location.search);
+
+/* ---------- app/core/boot/08-clock.js ---------- */
+/* ==========================================================================
+   CLOCK — one heartbeat for the whole dashboard.
+   Everything that happens "every N seconds" runs on it: clocks (onTick) and all
+   polling and housekeeping (every). Jobs are aligned to the wall clock (a 5-minute
+   job runs at :00, :05, :10 …), so the device wakes up once a second at most —
+   never once per widget — and everything due in that second updates the page
+   together, in one task: one style and layout pass, one repaint.
+   ========================================================================== */
+const tickers = new Set();
+/** fn(now) every second (and right away). Returns an unsubscribe. */
+const onTick = (fn) => {
+  tickers.add(fn);
+  fn(new Date());
+  return () => tickers.delete(fn);
+};
+const jobs = new Set();
+/**
+ * fn() every `ms` (rounded to whole seconds), on the heartbeat, at wall-clock multiples
+ * of `ms`. Returns a cancel function. For anything shorter than a second use a timer.
+ */
+function every(ms, fn) {
+  const step = Math.max(1000, Math.round(ms / 1000) * 1000);
+  const job = { ms: step, fn, slot: Math.floor(Date.now() / step) };
+  jobs.add(job);
+  return () => jobs.delete(job);
+}
+(function beat() {
+  const now = new Date(),
+    t = now.getTime();
+  for (const job of jobs) {
+    const slot = Math.floor(t / job.ms);
+    if (slot === job.slot) continue;
+    job.slot = slot;
+    try {
+      job.fn();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  tickers.forEach((fn) => {
+    try {
+      fn(now);
+    } catch (e) {
+      console.error(e);
+    }
+  });
+  setTimeout(beat, 1000 - (Date.now() % 1000) + 10);
+})();
 
 /* ---------- app/core/boot/10-storage.js ---------- */
 /* ==========================================================================
@@ -10387,7 +10743,7 @@ const netmeter = (() => {
     for (const k of minutes.keys()) if (k < m - 60) minutes.delete(k);
     dirty = true;
   }
-  setInterval(() => {
+  every(30000, () => {
     if (!dirty) return;
     dirty = false;
     const keep = Object.keys(st.days).sort().slice(-14);
@@ -10398,7 +10754,7 @@ const netmeter = (() => {
     } catch {
       /* ignore */
     }
-  }, 30000);
+  });
 
   // Exact bytes for everything the browser will report (same-origin, fonts, CDNs with Timing-Allow-Origin).
   const sameOrigin = (url) => {
@@ -10416,7 +10772,7 @@ const netmeter = (() => {
         else if (!sameOrigin(e.name) && e.encodedBodySize === 0 && e.initiatorType === 'img') unmeasured++;
       }
     }).observe({ type: 'resource', buffered: true });
-    setInterval(() => performance.clearResourceTimings(), 10 * 60000);
+    every(10 * 60000, () => performance.clearResourceTimings());
     // The page itself (index.html) — 0 when revalidated from cache.
     new PerformanceObserver((list) => {
       for (const e of list.getEntries()) if (e.transferSize > 0) record(e.name, e.transferSize);
@@ -10544,6 +10900,75 @@ try {
 }
 const saveSyncCache = () => store.set(SYNC_CACHE, JSON.stringify(sync.items));
 
+/* ---------- Edits not yet in the cloud survive a reload ----------
+   An edit made offline (or while the API was down) waits in sync.pending as functions,
+   which can't be stored. So the device keeps, per key, the value it last synced from
+   (base) and its own value (mine); after a reload the edit is replayed as "my change
+   from base, applied to whatever the cloud has now" — see merge3. */
+const PENDING_KEY = 'omd.sync-pending.v1';
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const isObj = (v) => v != null && typeof v === 'object' && !Array.isArray(v);
+const byId = (arr) => Array.isArray(arr) && arr.every((x) => isObj(x) && x.id != null);
+/**
+ * Three-way merge: `mine` changed `base`; `theirs` is someone else's newer version.
+ * Objects merge key by key, arrays of { id } item by item (adds, removals and edits on
+ * both sides survive); where both changed the same value, mine wins.
+ */
+function merge3(base, mine, theirs) {
+  if (same(mine, base)) return theirs;
+  if (same(theirs, base) || theirs === undefined) return mine;
+  if (isObj(base) && isObj(mine) && isObj(theirs)) {
+    const out = {};
+    for (const k of new Set([...Object.keys(theirs), ...Object.keys(mine), ...Object.keys(base)])) {
+      const inM = k in mine,
+        inT = k in theirs,
+        inB = k in base;
+      if (!inM && inB && same(theirs[k], base[k])) continue; // I removed it, they didn't touch it
+      if (!inT && inB && same(mine[k], base[k])) continue; // they removed it, I didn't touch it
+      out[k] = !inM ? theirs[k] : !inT ? mine[k] : merge3(base[k], mine[k], theirs[k]);
+    }
+    return out;
+  }
+  if (byId(mine) && byId(theirs) && (base == null || byId(base))) {
+    const idx = (a) => new Map((a || []).map((x) => [x.id, x]));
+    const b = idx(base),
+      m = idx(mine),
+      t = idx(theirs);
+    const out = [];
+    for (const x of theirs) {
+      if (!m.has(x.id) && b.has(x.id) && same(x, b.get(x.id))) continue; // I removed it
+      out.push(m.has(x.id) ? merge3(b.get(x.id), m.get(x.id), x) : x);
+    }
+    // Mine that they don't have: new ones go in at my position; ones they removed stay removed unless I changed them.
+    mine.forEach((x, i) => {
+      if (t.has(x.id)) return;
+      if (b.has(x.id) && same(x, b.get(x.id))) return;
+      const after = i > 0 ? out.findIndex((y) => y.id === mine[i - 1].id) : -1;
+      out.splice(after + 1, 0, x);
+    });
+    return out;
+  }
+  return mine;
+}
+function savePending() {
+  if (!sync.pending.size) return store.remove(PENDING_KEY);
+  const out = {};
+  sync.pending.forEach((p, key) => {
+    // `from`: what my edits started from (the defaults, when the cloud had nothing yet).
+    out[key] = { base: p.base, from: p.base.value ?? sync.fallbacks[key]?.() ?? null, value: applyAll(key, p.base.value, p.fns) };
+  });
+  store.set(PENDING_KEY, JSON.stringify(out));
+}
+try {
+  for (const [key, rec] of Object.entries(JSON.parse(store.get(PENDING_KEY) || '{}') || {})) {
+    if (!rec?.base) continue;
+    sync.pending.set(key, { base: rec.base, fns: [(theirs) => merge3(rec.from, rec.value, theirs)] });
+    sync.items[key] = { rev: rec.base.rev, value: rec.value };
+  }
+} catch {
+  /* nothing usable saved */
+}
+
 async function api(path, opts = {}) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), opts.timeout || 8000);
@@ -10617,6 +11042,7 @@ async function pushState(key) {
   sync.items[key] = p.fns.length ? { rev: p.base.rev, value: applyAll(key, p.base.value, p.fns) } : p.base;
   if (!p.fns.length) sync.pending.delete(key);
   saveSyncCache();
+  savePending();
   emit(key);
   if (p.fns.length) pushState(key);
 }
@@ -10647,6 +11073,8 @@ function sharedState(key, fallback) {
       }
       p.fns.push(fn);
       sync.items[key] = { rev: p.base.rev, value: applyAll(key, p.base.value, p.fns) };
+      saveSyncCache();
+      savePending();
       emit(key);
       pushState(key);
     },
@@ -10738,7 +11166,7 @@ async function pollState() {
   }
 }
 if (sync.mode !== 'local') {
-  setInterval(pollState, 15000);
+  every(15000, pollState);
   // Back in the foreground (phone app switched to, tablet woken): catch up right away.
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) pollState();
@@ -10750,10 +11178,17 @@ const LOCALE = cfg.LOCALE || undefined;
 /* ==========================================================================
    DOM HELPERS & FORMATTERS
    ========================================================================== */
+const iconCache = new Map(); // parsed once per icon, then cloned (parsing SVG markup is the slow part)
 function icon(name, cls = '') {
-  const t = document.createElement('template');
-  t.innerHTML = `<svg class="i ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${REG.icons[name] || ''}</svg>`;
-  return t.content.firstElementChild;
+  const key = `${name}|${cls}`;
+  let svg = iconCache.get(key);
+  if (!svg) {
+    const t = document.createElement('template');
+    t.innerHTML = `<svg class="i ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${REG.icons[name] || ''}</svg>`;
+    svg = t.content.firstElementChild;
+    iconCache.set(key, svg);
+  }
+  return svg.cloneNode(true);
 }
 function hydrateIcons(root = document) {
   root.querySelectorAll('[data-icon]').forEach((n) => {
@@ -10848,9 +11283,77 @@ function money(v, currency) {
 /* Network helpers — direct first, then CORS_PROXY if the host blocks CORS. */
 /** `ttl` (seconds) asks the proxy to cache less — e.g. live plane positions. */
 const withProxy = (url, ttl) => PROXY + encodeURIComponent(url) + (ttl != null ? `&ttl=${ttl}` : '');
+/* Feeds that come due together (they share the heartbeat) are fetched by the Worker in
+   ONE request: POST /api/proxy/batch. One round trip and one radio wake-up instead of one
+   per feed; the Worker's edge cache is shared by every screen in the house. In cloud
+   mode this covers every outside GET a feed makes (weather, calendars, RSS …); a host the
+   Worker refuses (ALLOWED_HOSTS) is fetched directly, and a Worker without the endpoint
+   (an older deploy) means one request each, as before. */
+const PROXY_SELF = new URL(`${API}/proxy?url=`, location.href).href;
+const batch = { queue: [], timer: 0, off: false };
+/** The batchable part of a request: { url, ttl } for the Worker — or null. */
+function batchTarget(url, opts) {
+  if (typeof url !== 'string' || opts.method || opts.signal || opts.headers || !sync.cloud || cfg.CORS_PROXY) return null;
+  if (url.startsWith(PROXY_SELF)) {
+    const u = new URL(url);
+    return { url: u.searchParams.get('url'), ...(u.searchParams.has('ttl') ? { ttl: Number(u.searchParams.get('ttl')) } : {}), proxied: true };
+  }
+  // Outside data fetched directly (CORS-friendly APIs): also via the Worker, cached for a minute.
+  return /^https?:\/\//.test(url) && new URL(url).origin !== location.origin ? { url, ttl: 60, proxied: false } : null;
+}
+function viaBatch(url, opts, target) {
+  return new Promise((resolve, reject) => {
+    batch.queue.push({ url, opts, target, resolve, reject });
+    if (!batch.timer) batch.timer = setTimeout(flushBatch, 20); // whatever else is due this moment joins in
+  });
+}
+async function flushBatch() {
+  const jobs = batch.queue.splice(0, 20);
+  batch.timer = batch.queue.length ? setTimeout(flushBatch, 0) : 0;
+  const alone = (j) => fetchWithin(j.url, j.opts, 20000, true).then(j.resolve, j.reject);
+  if (jobs.length === 1 || batch.off) return jobs.forEach(alone);
+  try {
+    const requests = jobs.map(({ target: { url, ttl } }) => ({ url, ...(ttl != null ? { ttl } : {}) }));
+    const r = await fetchWithin(
+      `${API}/proxy/batch`,
+      { method: 'POST', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ requests }) },
+      25000,
+      true,
+    );
+    if (r.status === 404 || r.status === 405) {
+      batch.off = true; // an older Worker: one by one from now on
+      return jobs.forEach(alone);
+    }
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const { responses } = await r.json();
+    jobs.forEach((j, i) => {
+      const x = responses[i];
+      // Too big to batch, or a host the Worker won't fetch (ALLOWED_HOSTS): the usual way.
+      if (!x || x.status === 413 || (!j.target.proxied && (x.status === 400 || x.status === 403))) alone(j);
+      else j.resolve(new Response(x.body, { status: x.status, headers: { 'Content-Type': x.type } }));
+    });
+  } catch (e) {
+    jobs.forEach((j) => j.reject(e));
+  }
+}
+/** fetch() that gives up after `ms`: a half-open connection (flaky Wi-Fi, captive portal) must not stall a feed forever. */
+async function fetchWithin(url, opts = {}, ms = 20000, direct = false) {
+  const target = direct ? null : batchTarget(url, opts);
+  if (target) return viaBatch(url, opts, target);
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), ms);
+  opts.signal?.addEventListener('abort', () => ctrl.abort());
+  try {
+    return await fetch(url, { ...opts, signal: ctrl.signal });
+  } catch (e) {
+    throw ctrl.signal.aborted && !opts.signal?.aborted ? new Error(`No answer in ${ms / 1000} s`) : e;
+  } finally {
+    clearTimeout(timer);
+  }
+}
 async function fetchText(url, { proxyFirst = false } = {}) {
   const attempt = async (u) => {
-    const r = await fetch(u, { cache: 'no-store' });
+    const r = await fetchWithin(u, { cache: 'no-store' });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return r.text();
   };
@@ -10863,10 +11366,107 @@ async function fetchText(url, { proxyFirst = false } = {}) {
   }
 }
 async function fetchJSON(url, opts = {}) {
-  const r = await fetch(url, { cache: 'no-store', ...opts });
+  const r = await fetchWithin(url, { cache: 'no-store', ...opts });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
   return r.json();
 }
+
+/* ---------- Saved feed data ----------
+   Every feed keeps its last good answer on the device (localStorage, "omd.feed.<key>"),
+   so after a reload — or a power cut during an internet outage — widgets show it at
+   once instead of a loading shimmer, and a reload doesn't re-download data that is
+   still fresh. Only plain JSON (plus Dates) is kept; a feed whose data is anything else
+   (Maps, class instances) simply isn't saved. Live-only data opts out: { persist: false }. */
+const FEED_PREFIX = 'omd.feed.',
+  FEED_MAX_BYTES = 256 * 1024,
+  FEED_MAX_AGE = 7 * 864e5;
+/** Short stable hash of a string (FNV-1a), for storage keys. */
+const hashKey = (s) => {
+  let x = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) x = Math.imul(x ^ s.charCodeAt(i), 16777619);
+  return (x >>> 0).toString(36);
+};
+const feedCodec = {
+  /** JSON text, or null when the data isn't plain enough to survive a round trip. */
+  encode(data) {
+    let plain = true;
+    const text = JSON.stringify(data, function (k, v) {
+      const orig = this[k];
+      if (orig instanceof Date) return { $date: orig.getTime() };
+      if (orig && typeof orig === 'object' && !Array.isArray(orig)) {
+        const proto = Object.getPrototypeOf(orig);
+        if (proto !== Object.prototype && proto !== null) plain = false;
+      }
+      return v;
+    });
+    return plain && text != null && text.length <= FEED_MAX_BYTES ? text : null;
+  },
+  decode: (text) =>
+    JSON.parse(text, (k, v) => (v && typeof v === 'object' && typeof v.$date === 'number' && Object.keys(v).length === 1 ? new Date(v.$date) : v)),
+};
+function loadSavedFeed(key) {
+  try {
+    const rec = JSON.parse(store.get(FEED_PREFIX + key) || 'null');
+    if (!rec || rec.v !== 1 || !(Date.now() - rec.at < FEED_MAX_AGE)) return null;
+    return { at: rec.at, data: feedCodec.decode(rec.data) };
+  } catch {
+    return null;
+  }
+}
+function saveFeed(key, data, at) {
+  const text = feedCodec.encode(data);
+  if (text != null && !store.set(FEED_PREFIX + key, JSON.stringify({ v: 1, at, data: text }))) pruneSavedFeeds(key);
+}
+/** Out of space: drop the oldest saved feeds (not `keep`), then give up quietly. */
+function pruneSavedFeeds(keep) {
+  const all = [];
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k?.startsWith(FEED_PREFIX) && k !== FEED_PREFIX + keep) all.push([k, JSON.parse(localStorage.getItem(k))?.at || 0]);
+    }
+  } catch {
+    return;
+  }
+  all
+    .sort((a, b) => a[1] - b[1])
+    .slice(0, Math.ceil(all.length / 2) || 0)
+    .forEach(([k]) => store.remove(k));
+}
+
+/** Panels showing data older than it should be ("12 min ago" in the corner) — offline, or a service is down. */
+const staleBadges = new Set();
+function updateStaleBadge(el) {
+  if (el.isConnected) el._badgeSeen = true;
+  else if (el._badgeSeen) return void staleBadges.delete(el); // removed from the page
+  let oldest = Infinity;
+  for (const { at, interval } of el._feedAges?.values() || [])
+    if (interval > 0 && Date.now() - at > Math.max(2 * interval, 10 * 60000)) oldest = Math.min(oldest, at);
+  if (oldest === Infinity) delete el.dataset.stale;
+  else el.dataset.stale = timeAgo(new Date(oldest));
+}
+every(60000, () => staleBadges.forEach(updateStaleBadge));
+
+/* New data from any number of feeds is handed to widgets together, in the next frame:
+   feeds answering within the same moment cost one layout and one repaint, not one each. */
+const pendingNotify = new Set();
+let notifyArmed = false;
+function flushNotify() {
+  if (!notifyArmed) return;
+  notifyArmed = false;
+  const fns = [...pendingNotify];
+  pendingNotify.clear();
+  fns.forEach((fn) => fn());
+}
+function queueNotify(fn) {
+  pendingNotify.add(fn);
+  if (notifyArmed) return;
+  notifyArmed = true;
+  requestAnimationFrame(flushNotify);
+  setTimeout(flushNotify, 100); // hidden pages get no frames
+}
+/** After n failures in a row: 15 s, 30 s, 1 min … up to max(interval, 1 min), ±20 % so devices and feeds spread out. */
+const retryDelay = (fails, intervalMs) => Math.min(Math.max(intervalMs, 60000), 15000 * 2 ** Math.min(fails - 1, 8)) * (0.8 + Math.random() * 0.4);
 
 /**
  * Shared, lazily-started polling data source with subscribers.
@@ -10874,19 +11474,31 @@ async function fetchJSON(url, opts = {}) {
  * bandwidth); a skipped poll is made up as soon as the panel is shown again.
  * Polling stops when the last subscriber leaves (a widget removed in the editor) and
  * starts again with the next one; data younger than one interval is reused then.
+ * persist: storage key for the last good data (see above), or false.
+ * Polls run on the shared clock (every); failures retry with backoff; nothing is tried
+ * while the device is offline — the 'online' event brings every feed up to date.
  */
-function createFeed(loader, intervalMs, { visibleOnly = false } = {}) {
+function createFeed(loader, intervalMs, { visibleOnly = false, persist = false } = {}) {
   const subs = new Map(); // fn → panel element (or null)
   let data,
     error,
     started = false,
     inflight = null,
     retry = 0,
+    fails = 0,
     stale = false,
     fetchedAt = 0,
-    timer = 0;
+    stopTimer = null;
   const me = {};
-  // A panel whose feed (any of them) just failed shows its Retry button (see makePanel).
+  if (persist) {
+    const saved = loadSavedFeed(persist);
+    if (saved) {
+      data = saved.data;
+      fetchedAt = saved.at;
+    }
+  }
+  // A panel whose feed (any of them) just failed shows its Retry button (see makePanel);
+  // one whose data is overdue (offline, or the service is down) says how old it is.
   const mark = (host, on = !!error) => {
     const el = host?.closest?.('.panel') || host; // some widgets subscribe with an inner element
     if (!el) return;
@@ -10894,6 +11506,11 @@ function createFeed(loader, intervalMs, { visibleOnly = false } = {}) {
     if (on) failing.add(me);
     else failing.delete(me);
     el.classList.toggle('feed-error', failing.size > 0);
+    const ages = (el._feedAges ||= new Map());
+    if (data !== undefined && fetchedAt) ages.set(me, { at: fetchedAt, interval: intervalMs });
+    else ages.delete(me);
+    staleBadges.add(el);
+    updateStaleBadge(el);
   };
   const notify = () =>
     subs.forEach((el, fn) => {
@@ -10914,35 +11531,40 @@ function createFeed(loader, intervalMs, { visibleOnly = false } = {}) {
         data = await loader();
         error = null;
         fetchedAt = Date.now();
+        fails = 0;
+        clearTimeout(retry);
+        if (persist) saveFeed(persist, data, fetchedAt);
       } catch (e) {
         error = e;
         clearTimeout(retry);
-        retry = setTimeout(tick, 60000);
+        retry = setTimeout(tick, retryDelay(++fails, intervalMs));
       } finally {
         inflight = null;
       }
-      notify();
+      queueNotify(notify);
     })();
     return inflight;
   }
   function tick() {
     if (!started) return;
-    if (active()) refresh();
-    else stale = true;
+    if (active() && navigator.onLine) refresh();
+    else stale = true; // made up when shown again / back online
   }
   const resume = () => {
-    if (stale && active()) refresh();
+    if (stale && active() && navigator.onLine) refresh();
   };
   function start() {
     started = true;
-    if (!fetchedAt || !(intervalMs > 0) || Date.now() - fetchedAt >= intervalMs) refresh();
-    if (intervalMs > 0) timer = setInterval(tick, intervalMs);
+    // The first fetch waits for the frame: by then every widget being mounted is laid out,
+    // so checking which ones are on screen costs one layout for all, not one per widget.
+    if (!fetchedAt || !(intervalMs > 0) || Date.now() - fetchedAt >= intervalMs) queueNotify(tick);
+    if (intervalMs > 0) stopTimer = every(intervalMs, tick);
     window.addEventListener('online', tick);
     resumers.add(resume);
   }
   function stop() {
     started = false;
-    clearInterval(timer);
+    stopTimer?.();
     clearTimeout(retry);
     window.removeEventListener('online', tick);
     resumers.delete(resume);
@@ -10970,25 +11592,6 @@ function createFeed(loader, intervalMs, { visibleOnly = false } = {}) {
     },
   };
 }
-
-/** One shared 1-second heartbeat for every clock on every screen. */
-const tickers = new Set();
-const onTick = (fn) => {
-  tickers.add(fn);
-  fn(new Date());
-  return () => tickers.delete(fn);
-};
-(function tick() {
-  const now = new Date();
-  tickers.forEach((fn) => {
-    try {
-      fn(now);
-    } catch (e) {
-      console.error(e);
-    }
-  });
-  setTimeout(tick, 1000 - (Date.now() % 1000) + 10);
-})();
 
 /** Backend service status (cached per page load; fresh = ask again, e.g. after connecting on a phone). */
 const serviceStatus = (() => {
@@ -11242,7 +11845,7 @@ function mountFrame(host, { url, title, zoom = 1, refreshMin = 0, allow = '', in
     wrap.prepend(buffer);
   }
   hardReload();
-  const refreshTimer = refreshMin > 0 ? setInterval(softReload, refreshMin * 60000) : 0;
+  const stopRefresh = refreshMin > 0 ? every(refreshMin * 60000, softReload) : () => {};
   const resume = () => {
     if (stale) softReload();
   };
@@ -11250,7 +11853,7 @@ function mountFrame(host, { url, title, zoom = 1, refreshMin = 0, allow = '', in
   const api = {
     reload: hardReload,
     destroy() {
-      clearInterval(refreshTimer);
+      stopRefresh();
       clearTimeout(slowTimer);
       resumers.delete(resume);
       frames.splice(frames.indexOf(api), 1);
@@ -11286,7 +11889,7 @@ const GLOBAL_SCOPE = {
     ro.observe(el);
     return () => ro.disconnect();
   },
-  setInterval: (fn, ms) => setInterval(fn, ms),
+  setInterval: (fn, ms) => every(ms, fn), // on the shared clock (lives as long as the page)
   setTimeout: (fn, ms) => setTimeout(fn, ms),
   clearTimeout: (id) => clearTimeout(id),
 };
@@ -11383,20 +11986,24 @@ function wmo(code, isDay = 1) {
 }
 const FAHRENHEIT = cfg.TEMP_UNIT === 'fahrenheit';
 const WIND_UNIT = FAHRENHEIT ? 'mph' : 'km/h';
-const weatherFeed = createFeed(async () => {
-  const q = new URLSearchParams({
-    latitude: cfg.LATITUDE,
-    longitude: cfg.LONGITUDE,
-    timezone: 'auto',
-    forecast_days: 7,
-    current: 'temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,is_day',
-    hourly: 'temperature_2m,precipitation_probability,weather_code',
-    daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max',
-    temperature_unit: FAHRENHEIT ? 'fahrenheit' : 'celsius',
-    wind_speed_unit: FAHRENHEIT ? 'mph' : 'kmh',
-  });
-  return fetchJSON(`https://api.open-meteo.com/v1/forecast?${q}`);
-}, cfg.WEATHER_REFRESH_MIN * 60000);
+const weatherFeed = createFeed(
+  async () => {
+    const q = new URLSearchParams({
+      latitude: cfg.LATITUDE,
+      longitude: cfg.LONGITUDE,
+      timezone: 'auto',
+      forecast_days: 7,
+      current: 'temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,is_day',
+      hourly: 'temperature_2m,precipitation_probability,weather_code',
+      daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max',
+      temperature_unit: FAHRENHEIT ? 'fahrenheit' : 'celsius',
+      wind_speed_unit: FAHRENHEIT ? 'mph' : 'kmh',
+    });
+    return fetchJSON(`https://api.open-meteo.com/v1/forecast?${q}`);
+  },
+  cfg.WEATHER_REFRESH_MIN * 60000,
+  { persist: `weather.${hashKey([cfg.LATITUDE, cfg.LONGITUDE, cfg.TEMP_UNIT].join())}` },
+);
 
 /** Moon phase (0 = new, .5 = full) from a known new moon + synodic month. */
 function moonPhase(date = new Date()) {
@@ -11553,8 +12160,12 @@ function mountWeather(host, scope = GLOBAL_SCOPE) {
     resetTimer = 0;
   // Facts that don't fit are dropped (never shown half-cut).
   const fitStats = () => {
-    const chips = [...stats.children];
-    while (chips.length > 1 && stats.scrollHeight > stats.clientHeight + 1) chips.pop().remove();
+    // One measurement, then removals (not measure → remove → measure… per chip).
+    const limit = stats.clientHeight + 1,
+      chips = [...stats.children];
+    const top = (c) => (c.offsetParent === stats ? c.offsetTop : c.offsetTop - stats.offsetTop);
+    const cut = chips.findIndex((c, i) => i > 0 && top(c) + c.offsetHeight > limit);
+    if (cut > 0) chips.slice(cut).forEach((c) => c.remove());
   };
   const draw = () => {
     if (!last) return;
@@ -11657,34 +12268,38 @@ async function loadGooglePhotos(url) {
   for (const m of html.matchAll(/\["(https:\/\/lh3\.googleusercontent\.com\/pw\/[a-zA-Z0-9\-_]+)"/g)) found.add(m[1]);
   return [...found].map((u) => ({ src: `${u}=w${PHOTO_W}-h${PHOTO_H}`, caption: '' }));
 }
-const photoFeed = createFeed(async () => {
-  let items = [];
-  for (const line of cfg.PHOTO_URLS) {
-    const [src, caption] = pipe(line);
-    if (src) items.push({ src, caption });
-  }
-  const feeds = await Promise.allSettled(cfg.PHOTO_FEEDS.map((u) => fetchText(u).then(parsePhotoFeed)));
-  feeds.forEach((r) => {
-    if (r.status === 'fulfilled') items.push(...r.value);
-    else console.warn('Photo feed failed:', r.reason);
-  });
-  if (cfg.GOOGLE_PHOTOS_ALBUM) {
-    try {
-      items.push(...(await loadGooglePhotos(cfg.GOOGLE_PHOTOS_ALBUM)));
-    } catch (e) {
-      console.warn('Google Photos failed:', e);
+const photoFeed = createFeed(
+  async () => {
+    let items = [];
+    for (const line of cfg.PHOTO_URLS) {
+      const [src, caption] = pipe(line);
+      if (src) items.push({ src, caption });
     }
-  }
-  let demo = false;
-  if (!items.length) {
-    demo = true;
-    const page = 1 + Math.floor(Math.random() * 20);
-    const list = await fetchJSON(`https://picsum.photos/v2/list?page=${page}&limit=40`);
-    const [w, hh] = PORTRAIT ? [PHOTO_H, PHOTO_W] : [PHOTO_W, PHOTO_H];
-    items = list.map((ph) => ({ src: `https://picsum.photos/id/${ph.id}/${w}/${hh}`, caption: `Photo: ${ph.author} · Unsplash` }));
-  }
-  return { items: cfg.PHOTO_SHUFFLE ? shuffle(items) : items, demo };
-}, 6 * 3600000);
+    const feeds = await Promise.allSettled(cfg.PHOTO_FEEDS.map((u) => fetchText(u).then(parsePhotoFeed)));
+    feeds.forEach((r) => {
+      if (r.status === 'fulfilled') items.push(...r.value);
+      else console.warn('Photo feed failed:', r.reason);
+    });
+    if (cfg.GOOGLE_PHOTOS_ALBUM) {
+      try {
+        items.push(...(await loadGooglePhotos(cfg.GOOGLE_PHOTOS_ALBUM)));
+      } catch (e) {
+        console.warn('Google Photos failed:', e);
+      }
+    }
+    let demo = false;
+    if (!items.length) {
+      demo = true;
+      const page = 1 + Math.floor(Math.random() * 20);
+      const list = await fetchJSON(`https://picsum.photos/v2/list?page=${page}&limit=40`);
+      const [w, hh] = PORTRAIT ? [PHOTO_H, PHOTO_W] : [PHOTO_W, PHOTO_H];
+      items = list.map((ph) => ({ src: `https://picsum.photos/id/${ph.id}/${w}/${hh}`, caption: `Photo: ${ph.author} · Unsplash` }));
+    }
+    return { items: cfg.PHOTO_SHUFFLE ? shuffle(items) : items, demo };
+  },
+  6 * 3600000,
+  { persist: `photos.${hashKey(JSON.stringify([cfg.PHOTO_URLS, cfg.PHOTO_FEEDS, cfg.GOOGLE_PHOTOS_ALBUM, PORTRAIT]))}` },
+);
 
 /**
  * Photo bytes: fetched once as a blob, kept in Cache Storage (survives the daily reload)
@@ -11723,7 +12338,8 @@ async function photoUrl(src) {
 }
 
 const KB_ORIGINS = ['20% 30%', '80% 25%', '50% 80%', '30% 70%', '70% 60%', '50% 40%'];
-function slideshow(host, { captions = true } = {}, scope = GLOBAL_SCOPE) {
+/** glass: also keep a blurred twin clipped to the panels over it (see 66-glass.js); gridOf() finds them. */
+function slideshow(host, { captions = true, glass = null } = {}, scope = GLOBAL_SCOPE) {
   const wrap = h('div', { class: 'slideshow' });
   const mk = () => {
     const img = h('div', { class: 'slide-img' }),
@@ -11736,6 +12352,7 @@ function slideshow(host, { captions = true } = {}, scope = GLOBAL_SCOPE) {
   const cap = h('div', { class: 'slide-caption' });
   if (captions) wrap.append(cap);
   host.append(wrap);
+  const twin = glass ? glassLayer(host, glass) : null;
 
   let items = [],
     idx = 0,
@@ -11754,11 +12371,13 @@ function slideshow(host, { captions = true } = {}, scope = GLOBAL_SCOPE) {
       back.fill.style.backgroundImage = url;
       back.el.classList.remove('kb');
       void back.el.offsetWidth; // restart the Ken Burns animation
-      if (cfg.PHOTO_KEN_BURNS) {
-        back.el.style.setProperty('--kb-dur', `${cfg.PHOTO_INTERVAL_SEC + 4}s`);
-        back.el.style.setProperty('--kb-origin', KB_ORIGINS[idx % KB_ORIGINS.length]);
+      const kb = cfg.PHOTO_KEN_BURNS ? { dur: `${cfg.PHOTO_INTERVAL_SEC + 4}s`, origin: KB_ORIGINS[idx % KB_ORIGINS.length] } : null;
+      if (kb) {
+        back.el.style.setProperty('--kb-dur', kb.dur);
+        back.el.style.setProperty('--kb-origin', kb.origin);
         back.el.classList.add('kb');
       }
+      twin?.show(im, kb); // same frame, same zoom: the blurred twin stays aligned
       back.el.classList.add('is-visible');
       layers[front].el.classList.remove('is-visible');
       front = 1 - front;
@@ -11782,6 +12401,149 @@ function slideshow(host, { captions = true } = {}, scope = GLOBAL_SCOPE) {
   scope.setInterval(next, Math.max(5, cfg.PHOTO_INTERVAL_SEC) * 1000);
   return wrap;
 }
+
+/* ---------- app/core/boot/66-glass.js ---------- */
+/* ==========================================================================
+   GLASS — the frosted look over photos, without a live blur.
+   A live `backdrop-filter` re-blurs everything behind a panel every frame while
+   the photo behind it moves (Ken Burns zoom, cross-fades) — the most expensive
+   thing an old tablet's graphics chip can be asked to do. Instead, each photo is
+   blurred ONCE, into a small copy (a few KB), shown in one layer right above the
+   photo with the same zoom animation, and clipped to the panels' shapes. Moving
+   a layer is nearly free; blurring is not.
+   Over the plain dark background there's nothing to blur (the glass differs by at
+   most 8/255 from the live blur there), so panels simply have no blur at all.
+   ========================================================================== */
+const GLASS_SCALE = 16; // the copy is 1/16 of the screen: scaling it up does most of the blurring
+const glassCopies = new Map(); // src + size → data URL (or null: the photo's host forbids reading it)
+
+/** A small, blurred, slightly saturated copy of a loaded image, cropped like the slide shows it. */
+function blurredCopy(img, w, h, fit) {
+  const key = `${img.src}|${Math.round(w)}x${Math.round(h)}|${fit}`;
+  if (glassCopies.has(key)) return glassCopies.get(key);
+  let url = null;
+  try {
+    const c = document.createElement('canvas');
+    c.width = Math.max(8, Math.round(w / GLASS_SCALE));
+    c.height = Math.max(8, Math.round(h / GLASS_SCALE));
+    const x = c.getContext('2d');
+    const iw = img.naturalWidth,
+      ih = img.naturalHeight;
+    const draw = (mode) => {
+      const s = mode === 'cover' ? Math.max(c.width / iw, c.height / ih) : Math.min(c.width / iw, c.height / ih);
+      x.drawImage(img, (c.width - iw * s) / 2, (c.height - ih * s) / 2, iw * s, ih * s);
+    };
+    x.filter = 'blur(1px) saturate(1.4)'; // ignored where unsupported: the upscale still blurs
+    if (fit === 'contain') {
+      x.filter = 'blur(2px) brightness(0.55) saturate(1.2)';
+      draw('cover');
+      x.filter = 'blur(1px) saturate(1.4)';
+      draw('contain');
+    } else draw('cover');
+    url = c.toDataURL('image/jpeg', 0.85);
+  } catch {
+    url = null; // tainted canvas: the layer falls back to a CSS blur for this photo
+  }
+  glassCopies.set(key, url);
+  if (glassCopies.size > 24) glassCopies.delete(glassCopies.keys().next().value);
+  return url;
+}
+
+/** Rounded-rectangle path (clip-path: path()) for one panel box. */
+const roundRect = (x, y, w, h, r) => {
+  r = Math.max(0, Math.min(r, w / 2, h / 2));
+  const f = (n) => +n.toFixed(1);
+  return `M${f(x + r)},${f(y)}h${f(w - 2 * r)}a${r},${r} 0 0 1 ${r},${r}v${f(h - 2 * r)}a${r},${r} 0 0 1 -${r},${r}h-${f(w - 2 * r)}a${r},${r} 0 0 1 -${r},-${r}v-${f(h - 2 * r)}a${r},${r} 0 0 1 ${r},-${r}z`;
+};
+const glassLayers = new Set();
+/**
+ * The blurred twin of a slideshow: same two cross-fading layers, same zoom, clipped to
+ * the panels of `gridOf()` (the screen's own grid, or the active screen's for the
+ * backdrop behind every screen).
+ */
+function glassLayer(host, gridOf) {
+  const el = h('div', { class: 'glass-layer', 'aria-hidden': 'true' });
+  const mk = () => {
+    const img = h('div', { class: 'slide-img' });
+    const s = h('div', { class: 'slide' }, img);
+    el.append(s);
+    return { el: s, img };
+  };
+  const layers = [mk(), mk()];
+  let front = 0,
+    lastPath = '',
+    watched = null;
+  host.append(el);
+  // Panels move when their layout is computed, or (stacked on phones) when one above changes
+  // size: watch the grid and its panels, so the clip is only re-cut when something moved.
+  const ro = new ResizeObserver(() => layer.clip());
+  const mo = new MutationObserver(() => layer.watch());
+  const layer = {
+    el,
+    /** Called by the slideshow with the loaded image, right before it shows it. */
+    show(img, kb) {
+      // The layer covers the window (photo screens and the backdrop are full-bleed); before it's
+      // laid out — the first photo can load that fast — the window's size is its size.
+      const box = el.getBoundingClientRect();
+      const url = blurredCopy(img, box.width || innerWidth, box.height || innerHeight, cfg.PHOTO_FIT === 'contain' ? 'contain' : 'cover');
+      const back = layers[1 - front];
+      back.img.style.backgroundImage = `url("${(url || img.src).replace(/"/g, '%22')}")`;
+      back.el.classList.toggle('is-raw', !url);
+      back.el.classList.remove('kb');
+      void back.el.offsetWidth;
+      if (kb) {
+        back.el.style.setProperty('--kb-dur', kb.dur);
+        back.el.style.setProperty('--kb-origin', kb.origin);
+        back.el.classList.add('kb');
+      }
+      back.el.classList.add('is-visible');
+      layers[front].el.classList.remove('is-visible');
+      front = 1 - front;
+    },
+    /** Follow the grid's panels (the active screen's, for the backdrop behind every screen). */
+    watch() {
+      const grid = gridOf();
+      if (grid !== watched) {
+        mo.disconnect();
+        if (grid) mo.observe(grid, { childList: true });
+        watched = grid;
+      }
+      ro.disconnect();
+      if (grid) [grid, ...grid.children].forEach((n) => ro.observe(n));
+      layer.clip();
+    },
+    /** Re-cut the clip to where the panels are now. */
+    clip() {
+      const grid = watched;
+      if (!el.isConnected || !grid || el.closest('[hidden]')) return;
+      const base = el.getBoundingClientRect(),
+        g = grid.getBoundingClientRect();
+      const panels = grid.querySelectorAll(':scope > .panel:not(.is-off):not(.is-bare):not(.is-seamless):not(.is-expanded)');
+      const r = panels.length ? parseFloat(getComputedStyle(panels[0]).borderTopLeftRadius) || 0 : 0;
+      // offsetLeft/Top ignore the panels' entry animation (transforms) — the layout box is what counts.
+      const path = [...panels]
+        .map((p) => roundRect(g.left - base.left + p.offsetLeft, g.top - base.top + p.offsetTop, p.offsetWidth, p.offsetHeight, r))
+        .join('');
+      if (path === lastPath) return;
+      lastPath = path;
+      el.style.clipPath = path ? `path('${path}')` : 'inset(50%)';
+      el.style.webkitClipPath = el.style.clipPath;
+    },
+  };
+  glassLayers.add(layer);
+  requestAnimationFrame(() => layer.watch());
+  return layer;
+}
+/** Everything moved at once (a new layout, a new screen, the burn-in shift): re-cut after this frame's layout. */
+const clipGlass = () =>
+  requestAnimationFrame(() =>
+    glassLayers.forEach((l) => {
+      if (!l.el.isConnected) glassLayers.delete(l);
+      else l.watch();
+    }),
+  );
+bus.addEventListener('layout', clipGlass);
+bus.addEventListener('shift', clipGlass);
 
 /* ---------- app/core/boot/70-widgets.js ---------- */
 /* ==========================================================================
@@ -12020,13 +12782,18 @@ function makeCtx(inst) {
   const panelEl = () => inst.panel?.el || null;
   const visibleKeys = new Set([...Object.keys(def.defaults), ...settingKeys(def.settings), ...def.reads, ...SHARED_KEYS]);
   const settings = Object.freeze(Object.fromEntries([...visibleKeys].filter((k) => k in cfg).map((k) => [k, cfg[k]])));
+  const settingsSig = JSON.stringify(settings); // saved feed data belongs to these settings
+  let feedCount = 0;
   const timeouts = new Set(),
     intervals = new Set(),
-    frames = new Set();
+    frames = new Set(),
+    clockJobs = new Map();
+  let clockIds = 0;
   own(() => {
     timeouts.forEach(clearTimeout);
     intervals.forEach(clearInterval);
     frames.forEach(cancelAnimationFrame);
+    clockJobs.forEach((cancel) => cancel());
   });
   const allowed = (path) => {
     const name = String(path).replace(/^\//, '').split(/[/?]/)[0];
@@ -12076,12 +12843,23 @@ function makeCtx(inst) {
       timeouts.delete(id);
       clearTimeout(id);
     },
+    /** Whole seconds run on the shared clock (one wake-up for everything due); shorter ones on a timer. */
     setInterval(fn, ms) {
+      if (ms >= 1000 && ms % 1000 === 0) {
+        const id = `c${++clockIds}`;
+        clockJobs.set(id, every(ms, g(fn)));
+        return id;
+      }
       const id = setInterval(g(fn), ms);
       intervals.add(id);
       return id;
     },
     clearInterval(id) {
+      if (clockJobs.has(id)) {
+        clockJobs.get(id)();
+        clockJobs.delete(id);
+        return;
+      }
       intervals.delete(id);
       clearInterval(id);
     },
@@ -12109,13 +12887,17 @@ function makeCtx(inst) {
     guard: g,
     fail: (err) => inst.fail(err),
 
-    /* Data */
+    /* Data — feeds keep their last good data on the device unless opts.persist === false. */
     /** A polling feed for this widget: createFeed semantics; subscribe with ctx.subscribe. */
-    feed: (loader, intervalMs, opts) => createFeed(loader, intervalMs, opts),
+    feed(loader, intervalMs, opts = {}) {
+      const persist = opts.persist !== false && `${def.id}.${hashKey(`${JSON.stringify(spec)}|${settingsSig}|${feedCount++}`)}`;
+      return createFeed(loader, intervalMs, { ...opts, persist });
+    },
     /** One feed shared by every widget asking for `key` (e.g. News and the ticker). */
-    sharedFeed(key, makeLoader, intervalMs, opts) {
+    sharedFeed(key, makeLoader, intervalMs, opts = {}) {
       const k = `${def.folder || def.id}:${key}`;
-      if (!sharedFeeds.has(k)) sharedFeeds.set(k, createFeed(makeLoader(), intervalMs, opts));
+      const persist = opts.persist !== false && `${def.folder || def.id}.${hashKey(`${key}|${settingsSig}`)}`;
+      if (!sharedFeeds.has(k)) sharedFeeds.set(k, createFeed(makeLoader(), intervalMs, { ...opts, persist }));
       return sharedFeeds.get(k);
     },
     /** fn(data, error) now (if there is data) and on every update; the panel shows Retry while it fails. */
@@ -12495,6 +13277,7 @@ function layoutScreen(def, grid) {
     p.style.setProperty('--h', `${r.h.toFixed(1)}px`);
   }
   grid._layout = { tree, rects, gap, orient };
+  bus.dispatchEvent(new Event('layout')); // e.g. the glass over photos follows the panels
   if (editing && !grid._draft && grid === activeGrid()) refreshEditUI();
 }
 /** A slot the current layout doesn't show (removed, or left out in this orientation): nothing runs there. */
@@ -12527,7 +13310,7 @@ function buildScreen(def) {
   const el = h('section', { class: 'screen', 'data-screen': def.id, 'aria-label': `${def.name} screen` });
   if (def.photo) {
     const ph = h('div', { class: 'screen-photo' });
-    slideshow(ph);
+    slideshow(ph, { glass: () => el.querySelector(':scope > .grid') });
     el.append(ph);
   }
   const grid = h('div', { class: 'grid' });
@@ -12536,7 +13319,14 @@ function buildScreen(def) {
   screensHost.append(el);
   hydrateIcons(el);
   layoutScreen(def, grid);
-  new ResizeObserver(() => layoutScreen(def, grid)).observe(grid);
+  // Re-layout when the grid changes size (it reports its first size right away: skip that one).
+  let seen = `${grid.clientWidth}x${grid.clientHeight}`;
+  new ResizeObserver(() => {
+    const size = `${grid.clientWidth}x${grid.clientHeight}`;
+    if (size === seen) return;
+    seen = size;
+    layoutScreen(def, grid);
+  }).observe(grid);
   grid._def = def;
   // Content-sized ("auto") slots settle once fonts and first data have arrived.
   [1500, 6000].forEach((ms) => setTimeout(() => layoutScreen(def, grid), ms));
@@ -12550,23 +13340,28 @@ function showScreen(i, { direction = 1 } = {}) {
   setExpanded(null, false);
   const def = screenDefs[i];
   let el = builtScreens.get(def.id);
+  const fresh = !el;
   if (!el) {
-    el = buildScreen(def);
+    el = buildScreen(def); // laid out already
     builtScreens.set(def.id, el);
     void el.offsetWidth;
   }
   builtScreens.forEach((s, id) => {
     if (id === def.id) {
+      clearTimeout(s._dormant);
+      s.classList.remove('is-dormant');
       s.style.setProperty('--enter', `${direction * 24}px`);
       s.classList.add('is-active');
     } else if (s.classList.contains('is-active')) {
       s.style.setProperty('--enter', `${-direction * 24}px`);
       s.classList.remove('is-active');
+      // Once it has faded out (0.6 s), stop rendering it.
+      s._dormant = setTimeout(() => s.classList.toggle('is-dormant', !s.classList.contains('is-active')), 700);
     }
   });
   currentIdx = i;
   shownAt = Date.now();
-  layoutScreen(def, el.querySelector(':scope > .grid'));
+  if (!fresh) layoutScreen(def, el.querySelector(':scope > .grid'));
   app.classList.toggle('statusbar-auto', def.statusbar === false);
   app.classList.toggle('has-photo-screen', !!def.photo);
   app.classList.remove('show-bar');
@@ -12592,6 +13387,7 @@ const noteInteraction = () => {
 };
 
 function initScreens() {
+  tabsHost.replaceChildren(); // the snapshot's picture of them, if any
   tabsHost.hidden = screenDefs.length < 2;
   screenDefs.forEach((d, j) =>
     tabsHost.append(
@@ -12708,7 +13504,7 @@ function initScreens() {
   }
   if (schedule.length) {
     applySchedule();
-    setInterval(applySchedule, 30000);
+    every(30000, applySchedule);
   }
 
   // Auto-rotation (paused for 2 minutes after any touch, while a panel is expanded, or settings are open)
@@ -13480,7 +14276,7 @@ function initNetwork() {
   function updateNetTitle() {
     pingChip.title = [statusText, latencyText].filter(Boolean).join('\n');
   }
-  setInterval(renderStatus, 15000); // sync state changes (signed out, sync unreachable) show up on the dot
+  every(15000, renderStatus); // sync state changes (signed out, sync unreachable) show up on the dot
   window.addEventListener('online', () => {
     renderStatus();
     frames.forEach((f) => f.onOnline());
@@ -13496,7 +14292,7 @@ function initNetwork() {
   // Warm-up request (DNS + TLS handshake) is discarded so the first reading is honest.
   measure().finally(() => {
     ping();
-    setInterval(ping, Math.max(2, cfg.PING_INTERVAL_SEC) * 1000);
+    every(Math.max(2, cfg.PING_INTERVAL_SEC) * 1000, ping);
   });
 }
 
@@ -13505,7 +14301,7 @@ function initNetwork() {
    KIOSK FEATURES — wake lock, fullscreen, idle cursor, burn-in, night mode…
    ========================================================================== */
 function initKiosk() {
-  if (cfg.LOW_POWER) document.body.classList.add('low-power');
+  initPowerMode();
   applyWidgetBg(cfg.WIDGET_BG);
   const rgb = hexToRgb(cfg.THEME_ACCENT);
   if (rgb) {
@@ -13572,11 +14368,12 @@ function initKiosk() {
       [-2, 1],
     ];
     let i = 0;
-    setInterval(() => {
+    every(180000, () => {
       i = (i + 1) % offsets.length;
       document.documentElement.style.setProperty('--shift-x', `${offsets[i][0]}px`);
       document.documentElement.style.setProperty('--shift-y', `${offsets[i][1]}px`);
-    }, 180000);
+      bus.dispatchEvent(new Event('shift'));
+    });
   }
 
   // Night mode: dim / minimal clock / off (tap to wake for 60 s)
@@ -13621,15 +14418,15 @@ function initKiosk() {
     { passive: true, capture: true },
   );
   applyNight();
-  setInterval(applyNight, 15000);
+  every(15000, applyNight);
 
   // Daily full reload (clears memory leaks from long-running embeds)
   const reloadAt = parseHM(cfg.DAILY_RELOAD_AT);
   const bootedAt = Date.now();
   if (reloadAt != null) {
-    setInterval(() => {
-      if (minutesOfDay() === reloadAt && Date.now() - bootedAt > 3600000 && navigator.onLine) location.reload();
-    }, 30000);
+    every(30000, () => {
+      if (minutesOfDay() === reloadAt && Date.now() - bootedAt > 3600000 && canReload()) location.reload();
+    });
   }
 
   window.addEventListener('keydown', (e) => {
@@ -13643,6 +14440,207 @@ function initKiosk() {
       openSettings();
     }
   });
+}
+
+/* ---------- Low-power mode: on, off, or automatic ----------
+   Automatic: on right away for clearly weak hardware (2 cores or less, 1 GB or less);
+   otherwise the first minute's frames are watched once the screen has settled, and a
+   tablet that can't keep ~30 fps switches over. The verdict is remembered for a week. */
+const POWER_KEY = 'omd.lowpower.auto';
+function initPowerMode() {
+  const v = String(cfg.LOW_POWER).trim().toLowerCase();
+  const setting = ['true', '1', 'on', 'yes'].includes(v) ? true : ['false', '0', 'off', 'no'].includes(v) ? false : null;
+  const on = (why) => {
+    document.body.classList.add('low-power');
+    document.body.dataset.power = why;
+  };
+  if (setting === true) return on('setting');
+  if (setting === false) return;
+  const weak = (navigator.hardwareConcurrency || 4) <= 2 || (navigator.deviceMemory != null && navigator.deviceMemory <= 1);
+  if (weak) return on('auto');
+  let saved = null;
+  try {
+    saved = JSON.parse(store.get(POWER_KEY) || 'null');
+  } catch {
+    /* ignore */
+  }
+  if (saved && Date.now() - saved.at < 7 * 864e5) {
+    if (saved.low) on('auto');
+    return;
+  }
+  // Watch 5 s of frames, 20 s after startup (the first screen has settled by then).
+  setTimeout(() => {
+    if (document.hidden) return;
+    const gaps = [];
+    let first = 0,
+      last = 0;
+    const frame = (t) => {
+      if (last) gaps.push(t - last);
+      else first = t;
+      last = t;
+      if (t - first < 5000) requestAnimationFrame(frame);
+      else decide();
+    };
+    const decide = () => {
+      if (gaps.length < 20 || document.hidden) return;
+      const sorted = [...gaps].sort((a, b) => a - b);
+      const median = sorted[Math.floor(sorted.length / 2)],
+        janky = gaps.filter((g) => g > 50).length / gaps.length;
+      const low = median > 34 || janky > 0.25;
+      store.set(POWER_KEY, JSON.stringify({ at: Date.now(), low, median: Math.round(median), janky: +janky.toFixed(2) }));
+      if (low) on('auto');
+    };
+    requestAnimationFrame(frame);
+  }, 20000);
+}
+
+/* ---------- app/core/boot/87-offline.js ---------- */
+/* ==========================================================================
+   OFFLINE — the service worker (app/sw.js) keeps a copy of this page and its
+   fonts, so a reload or a power cut during an internet outage still brings the
+   dashboard up. Widgets show their last good data meanwhile (see createFeed).
+   ?nosw=1 removes the service worker and its copies from this device.
+   ========================================================================== */
+const OFFLINE_CAPABLE = 'serviceWorker' in navigator && window.isSecureContext && /^https?:$/.test(location.protocol);
+function initOffline() {
+  if (!OFFLINE_CAPABLE) return;
+  if (/[?&]nosw=1/.test(location.search)) {
+    navigator.serviceWorker.getRegistrations().then((regs) => regs.forEach((r) => r.unregister()));
+    caches.keys().then((keys) => keys.filter((k) => k.startsWith('omd-') && !k.startsWith('omd-photos')).forEach((k) => caches.delete(k)));
+    return;
+  }
+  // After the first screen is up, so installing never competes with startup.
+  const register = () => navigator.serviceWorker.register('sw.js').catch((e) => console.warn('Offline copy unavailable:', e.message));
+  if (document.readyState === 'complete') setTimeout(register, 2000);
+  else window.addEventListener('load', () => setTimeout(register, 2000), { once: true });
+}
+/** A reload is safe when online, or when the offline copy will answer it. */
+const canReload = () => navigator.onLine || !!navigator.serviceWorker?.controller;
+
+/* ---------- app/core/boot/88-perf.js ---------- */
+/* ==========================================================================
+   PERF OVERLAY — open the dashboard with ?perf=1 to see, on the tablet itself:
+     fps     frames drawn per second (the overlay counts frames only while shown)
+     jank    frames that took longer than 50 ms, in the last 10 s
+     lag     how late a 500 ms timer fired (the main thread was busy) — worst in 10 s
+     boot    ms from navigation until the first screen was mounted
+     nodes   elements on the page · heap: JS memory (Chrome only)
+     req     network requests in the last minute
+   Works in every browser (Safari has no long-task API, so lag is measured with a timer).
+   ========================================================================== */
+function initPerfOverlay() {
+  if (!/[?&]perf=1/.test(location.search)) return;
+  const hud = h('div', { class: 'perf-hud', 'aria-hidden': 'true' });
+  document.body.append(hud);
+  const frames = [],
+    lags = [],
+    reqs = [];
+  let last = performance.now();
+  const frame = (t) => {
+    frames.push([t, t - last]);
+    last = t;
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+  let expected = performance.now() + 500;
+  setInterval(() => {
+    const now = performance.now();
+    lags.push([now, Math.max(0, now - expected)]);
+    expected = now + 500;
+  }, 500);
+  try {
+    new PerformanceObserver((l) => l.getEntries().forEach((e) => reqs.push(e.startTime))).observe({ type: 'resource', buffered: true });
+  } catch {
+    /* old browser */
+  }
+  const boot = Math.round(performance.getEntriesByName('omd:ready')[0]?.startTime ?? 0);
+  const row = (k, v, bad) => h('div', { class: bad ? 'bad' : null }, h('b', null, k), ` ${v}`);
+  setInterval(() => {
+    const now = performance.now();
+    const trim = (a, ms) => {
+      while (a.length && (a[0][0] ?? a[0]) < now - ms) a.shift();
+    };
+    trim(frames, 10000);
+    trim(lags, 10000);
+    trim(reqs, 60000);
+    const fps = frames.filter(([t]) => t > now - 1000).length;
+    const jank = frames.filter(([, d]) => d > 50).length;
+    const lag = Math.round(Math.max(0, ...lags.map(([, l]) => l)));
+    const heap = performance.memory ? `${(performance.memory.usedJSHeapSize / 1e6).toFixed(1)} MB` : '—';
+    hud.replaceChildren(
+      row('fps', fps, fps < 30),
+      row('jank', jank, jank > 3),
+      row('lag', `${lag} ms`, lag > 100),
+      row('boot', `${boot} ms`, boot > 1500),
+      row('nodes', document.getElementsByTagName('*').length),
+      row('heap', heap),
+      row('req', `${reqs.length}/min`),
+      row(
+        'mode',
+        [
+          document.body.classList.contains('low-power') ? `low-power${document.body.dataset.power === 'auto' ? ' (auto)' : ''}` : 'full',
+          navigator.onLine ? 'online' : 'offline',
+        ].join(' · '),
+      ),
+    );
+  }, 1000);
+}
+
+/* ---------- app/core/boot/89-snapshot.js ---------- */
+/* ==========================================================================
+   SNAPSHOT — a picture of the screen, for an instant start next time.
+   Every few minutes (and when the page is hidden or closed) the active screen is
+   saved as plain HTML; app/core/snapshot.js puts it back on the next load, before
+   any code runs, so an old tablet shows the dashboard at once instead of after a
+   second or two of starting up. The live screen replaces it as soon as it's ready.
+   Not saved: embedded pages (iframes), photos held in memory, ids and anything
+   interactive — it's a picture, nothing more. ?nosnap=1 turns it off.
+   ========================================================================== */
+const SNAP_KEY = 'omd.snapshot.v1',
+  SNAP_MAX_BYTES = 1.5e6;
+const BUILD_ID = $('meta[name="omd-build"]')?.content || '';
+function snapshotHtml(screenEl) {
+  const copy = screenEl.cloneNode(true);
+  copy.classList.add('is-snapshot');
+  copy.setAttribute('aria-hidden', 'true');
+  copy.removeAttribute('style');
+  copy.querySelectorAll('iframe, video, audio, script, .perf-hud').forEach((n) => n.remove());
+  copy.querySelectorAll('img').forEach((img) => {
+    if (!/^(https?:|data:)/.test(img.getAttribute('src') || '')) img.remove();
+  });
+  copy.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+  copy.querySelectorAll('[style*="blob:"]').forEach((n) => n.style.removeProperty('background-image'));
+  return copy.outerHTML;
+}
+function saveSnapshot() {
+  const def = screenDefs[currentIdx],
+    el = def && builtScreens.get(def.id);
+  if (!el || !BUILD_ID || VIEW || editing || app.classList.contains('view-phone')) return;
+  if (document.querySelector('.panel.is-expanded') || document.body.classList.contains('is-dark-night')) return;
+  const html = snapshotHtml(el);
+  if (html.length > SNAP_MAX_BYTES) return store.remove(SNAP_KEY);
+  const tabs = tabsHost.hidden ? '' : tabsHost.innerHTML;
+  if (!store.set(SNAP_KEY, JSON.stringify({ build: BUILD_ID, screen: def.id, w: innerWidth, h: innerHeight, at: Date.now(), html, tabs })))
+    store.remove(SNAP_KEY);
+}
+/** Swap the picture for the live screen (called once the first screen is mounted). */
+function dropSnapshot() {
+  const snaps = document.querySelectorAll('.screen.is-snapshot');
+  if (!snaps.length) return;
+  snaps.forEach((n) => n.remove());
+  // The live screen appeared in place of an identical picture: no fade-in this once.
+  requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.remove('from-snapshot')));
+}
+function initSnapshots() {
+  if (/[?&]nosnap=1/.test(location.search)) return store.remove(SNAP_KEY);
+  const later = (fn) => (window.requestIdleCallback ? requestIdleCallback(fn, { timeout: 5000 }) : setTimeout(fn, 200));
+  // First once the data has had time to arrive, then every 10 minutes.
+  setTimeout(() => later(saveSnapshot), 20000);
+  every(10 * 60000, () => later(saveSnapshot));
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) saveSnapshot();
+  });
+  window.addEventListener('pagehide', saveSnapshot);
 }
 
 /* ---------- app/core/boot/90-settings.js ---------- */
@@ -13781,7 +14779,7 @@ function reportUsage() {
   });
 }
 setTimeout(reportUsage, 90000);
-setInterval(reportUsage, 15 * 60000);
+every(15 * 60000, reportUsage);
 
 function usageSection() {
   const s = netmeter.summary();
@@ -14090,7 +15088,7 @@ function applyPhotoBg(on) {
   const bg = $('#bgPhotos');
   if (on && !bg.dataset.started) {
     bg.dataset.started = '1';
-    slideshow(bg, { captions: false });
+    slideshow(bg, { captions: false, glass: () => $('.screen.is-active > .grid') });
   }
   bg.hidden = !on;
 }
@@ -14176,7 +15174,7 @@ function buildSettings() {
             `${retired.join(', ')} ${retired.length > 1 ? 'are' : 'is'} still in the saved settings, where every signed-in screen can read ${retired.length > 1 ? 'them' : 'it'}. API keys are Worker secrets now (README → Secrets): add ${retired.length > 1 ? 'them' : 'it'} there, then Save here to remove ${retired.length > 1 ? 'them' : 'it'} from the settings.`,
           ),
         )
-      : null,
+      : '',
     backgroundField(),
     group('System', 'Screens, status bar, location and the tablet itself', sections.filter((s) => !s.def).map(section)),
     group('Data & accounts', 'Sign-ins, data usage, backups', [
@@ -14401,7 +15399,12 @@ else {
   initKiosk();
   initNetwork();
   initScreens();
+  dropSnapshot();
+  initSnapshots();
 }
+performance.mark('omd:ready');
+initOffline();
+initPerfOverlay();
 
 })();
 </script>

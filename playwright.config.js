@@ -11,7 +11,15 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   reporter: process.env.CI ? [['list'], ['github']] : [['list']],
-  use: { baseURL: 'http://localhost:4173', timezoneId: 'Europe/London', locale: 'en-GB', colorScheme: 'dark', trace: 'retain-on-failure' },
+  // Service workers off by default (test/e2e/offline.e2e.js turns them on): every request stays mockable.
+  use: {
+    baseURL: 'http://localhost:4173',
+    timezoneId: 'Europe/London',
+    locale: 'en-GB',
+    colorScheme: 'dark',
+    trace: 'retain-on-failure',
+    serviceWorkers: 'block',
+  },
   webServer: {
     command:
       'node scripts/build.mjs --out test/.build/index.html --widgets test/fixtures/widgets --config test/fixtures/config.js --no-syntax-check && node test/support/server.js',
