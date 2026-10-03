@@ -16,7 +16,7 @@
   },
   "overrides": [
     {
-      "files": ["app/**/*.js", "test/fixtures/**/*.js"],
+      "files": ["app/**/*.js", "demo/**/*.js", "test/fixtures/**/*.js"],
       "env": { "browser": true, "es2024": true },
       "globals": { "OMD": "readonly" }
     },

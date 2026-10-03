@@ -10,12 +10,12 @@
 
 *Home and Family screens at 800×1333, the portrait tablet size it's tuned for. Demo data; the sample widgets are marked **Demo** until you connect real sources.*
 
-**Contents:** [Quick start](#-first-10-minutes) · [What you get](#what-you-get) · [Where it works](#where-it-works) · [Privacy & your data](#privacy--your-data) · [How sync works](#how-sync-works) · [Cloudflare setup](#cloudflare-setup) · [Calendar](#-google-family-calendar) · [Lists](#-lists-tablet-phones-voice) · [Spotify](#-spotify-now-playing--your-playlists) · [Commute](#-commute-public-transport-car-bike-on-foot) · [Strava](#-strava-your-familys-stats) · [Aqara](#-aqara-sensors-with-google-home) · [Tablet](#-tablet-fully-kiosk-browser) · [Configure](#configure) · [Secrets](#-secrets-api-keys) · [Develop](#local-development) · [Contribute](CONTRIBUTING.md)
+**Contents:** [Live demo](https://roadaddict.github.io/oh-my-dash/?local=1) · [Quick start](#-first-10-minutes) · [What you get](#what-you-get) · [Where it works](#where-it-works) · [Privacy & your data](#privacy--your-data) · [How sync works](#how-sync-works) · [Cloudflare setup](#cloudflare-setup) · [Calendar](#-google-family-calendar) · [Lists](#-lists-tablet-phones-voice) · [Spotify](#-spotify-now-playing--your-playlists) · [Commute](#-commute-public-transport-car-bike-on-foot) · [Strava](#-strava-your-familys-stats) · [Aqara](#-aqara-sensors-with-google-home) · [Tablet](#-tablet-fully-kiosk-browser) · [Configure](#configure) · [Secrets](#-secrets-api-keys) · [Develop](#local-development) · [Contribute](CONTRIBUTING.md)
 
 ---
 
 ## 🚀 First 10 minutes
-*Ten minutes, if Cloudflare hasn't moved the buttons again.* You need a Cloudflare account and an email to sign in with. Just curious? Open `public/index.html` in a browser: demo data, stays on that device.
+*Ten minutes, if Cloudflare hasn't moved the buttons again.* You need a Cloudflare account and an email to sign in with. Just curious? Try the **[live demo](https://roadaddict.github.io/oh-my-dash/?local=1)** (sample data; anything you change stays in your browser), or open `public/index.html` locally.
 
 **Pick one:**
 

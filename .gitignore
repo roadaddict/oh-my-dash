@@ -7,3 +7,4 @@ test/.bench/
 test-results/
 playwright-report/
 test/visual/__screens__/
+_site/
