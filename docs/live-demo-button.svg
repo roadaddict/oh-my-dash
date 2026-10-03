@@ -1,0 +1,8 @@
+<svg width="134" height="39" viewBox="0 0 134 39" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Live demo">
+  <title>Live demo</title>
+  <!-- Same shape as the "Deploy to Cloudflare" button, in the dashboard's black and BVG yellow. -->
+  <rect x="1" y="1" width="132" height="37" rx="3" fill="black" stroke="#F0D722" stroke-width="2"/>
+  <circle cx="22" cy="19.5" r="9" stroke="#F0D722" stroke-width="1.75"/>
+  <path d="M19.5 15.2v8.6l7-4.3z" fill="#F0D722"/>
+  <text x="38" y="24.5" fill="#F0D722" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="500" textLength="82" lengthAdjust="spacingAndGlyphs">Live demo</text>
+</svg>

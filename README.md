@@ -2,7 +2,9 @@
 
 **A family smart display that runs on your own Cloudflare account.** Clock, weather, calendar, shared lists, chores, meal plan, transit, music and smart-home tiles on one dark, glassy dashboard. It's a plain web app, so it works on any device with a browser, and **your data never leaves your Cloudflare account.**
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/roadaddict/oh-my-dash)
+<p>
+  <a href="https://deploy.workers.cloudflare.com/?url=https://github.com/roadaddict/oh-my-dash"><img src="https://deploy.workers.cloudflare.com/button" alt="Deploy to Cloudflare" height="39"></a>&nbsp;&nbsp;&nbsp;<a href="https://roadaddict.github.io/oh-my-dash/?local=1"><img src="docs/live-demo-button.svg" alt="Live demo" height="39"></a>
+</p>
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue) ![Runs on Cloudflare Workers](https://img.shields.io/badge/runs%20on-Cloudflare%20Workers-F38020) ![No build step](https://img.shields.io/badge/build-none-brightgreen) ![Web app: any browser](https://img.shields.io/badge/platform-any%20browser-informational)
 
